@@ -269,7 +269,6 @@ function Reports() {
 
   //Api Calling
 
-
   const deviceApi = async (event) => {
     event.preventDefault();
     setApply(true);
@@ -292,7 +291,7 @@ function Reports() {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        },
+        }
       );
       console.log(response, "&&&&&&&&&&&&&&&&&&");
       setDeviceData(response?.data?.data);
@@ -307,10 +306,7 @@ function Reports() {
       }
       // //console.log({ Error: error });
     }
-  }
-
-
-
+  };
 
   async function reportApi(event) {
     event.preventDefault();
@@ -332,7 +328,7 @@ function Reports() {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        },
+        }
       );
       setReportData(response?.data?.response);
     } catch (error) {
@@ -346,9 +342,7 @@ function Reports() {
       }
       // //console.log({ Error: error });
     }
-  };
-
-
+  }
 
   const TableData = [];
 
@@ -369,8 +363,8 @@ function Reports() {
                 .getDate()
                 .toString()
                 .padStart(2, "0")}-${(timestampDate.getMonth() + 1)
-                  .toString()
-                  .padStart(2, "0")}-${timestampDate.getFullYear()}`;
+                .toString()
+                .padStart(2, "0")}-${timestampDate.getFullYear()}`;
 
               // Format time as "hh:mm A"
               const formattedTime = timestampDate.toLocaleTimeString("en-US", {
@@ -584,8 +578,6 @@ function Reports() {
     });
   };
 
-
-
   const deviceDataLog = () => {
     return deviceData?.map((enterprise) => {
       return enterprise?.State.map((state) => {
@@ -600,27 +592,41 @@ function Reports() {
                 const timestampDate = new Date(timestampInMillis);
 
                 // Format date as "DD-MM-YYYY"
-                const formattedDate = `${timestampDate.getDate().toString().padStart(2, '0')}-${(timestampDate.getMonth() + 1).toString().padStart(2, '0')}-${timestampDate.getFullYear()}`;
+                const formattedDate = `${timestampDate
+                  .getDate()
+                  .toString()
+                  .padStart(2, "0")}-${(timestampDate.getMonth() + 1)
+                  .toString()
+                  .padStart(2, "0")}-${timestampDate.getFullYear()}`;
 
                 // Format time as "hh:mm A"
-                const formattedTime = timestampDate.toLocaleTimeString('en-US', {
-                  hour: '2-digit',
-                  minute: '2-digit',
-                  second: '2-digit',
-                  hour12: true
-                });
+                const formattedTime = timestampDate.toLocaleTimeString(
+                  "en-US",
+                  {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    second: "2-digit",
+                    hour12: true,
+                  }
+                );
                 return (
-                  <tr className="text-gray-700 dark:text-gray-400" key={log._id} >
+                  <tr
+                    className="text-gray-700 dark:text-gray-400"
+                    key={log._id}
+                  >
                     <td className="px-4 py-3 text-sm">
-
                       <span className="ml-2">
                         <span className="">{enterprise.EnterpriseName}</span>
                       </span>
                     </td>
                     <td className="px-4 py-3 text-sm">{state.stateName}</td>
-                    <td className="px-4 py-3 text-sm">{location.locationName}</td>
+                    <td className="px-4 py-3 text-sm">
+                      {location.locationName}
+                    </td>
                     <td className="px-4 py-3 text-sm">{gateway.GatewayName}</td>
-                    <td className="px-4 py-3 text-sm">{optimizer.optimizerName}</td>
+                    <td className="px-4 py-3 text-sm">
+                      {log.OptimizerID.OptimizerID}
+                    </td>
 
                     <td className="px-4 py-3 text-sm">{formattedDate}</td>
                     <td className="px-4 py-3 text-sm">{formattedTime}</td>
@@ -631,7 +637,11 @@ function Reports() {
                           <div className="online"></div>
                         </div>
                         <div>
-                          {log.OptimizerID.isOnline ? <p className="font-semibold">Online</p> : <p className="font-semibold">Offline</p>}
+                          {log.OptimizerID.isOnline ? (
+                            <p className="font-semibold">Online</p>
+                          ) : (
+                            <p className="font-semibold">Offline</p>
+                          )}
                         </div>
                       </div>
                     </td>
@@ -756,10 +766,73 @@ function Reports() {
   }
 
   useEffect(() => {
-    const fakeEvent = { preventDefault: () => { } }; // create a fake event object with preventDefault method
+    const fakeEvent = { preventDefault: () => {} }; // create a fake event object with preventDefault method
     reportApi(fakeEvent);
     deviceApi(fakeEvent);
   }, [currentPage]);
+
+  //Download CSV
+  const downloadFile = async (url, requestBody, defaultFilename) => {
+    try {
+      const response = await axios.post(url, requestBody, {
+        responseType: "blob",
+      });
+      const disposition = response.headers["content-disposition"];
+      const filename = disposition
+      ? disposition.split("filename=")[1]
+      : defaultFilename;
+      
+      const urlBlob = window.URL.createObjectURL(new Blob([response.data]));
+      
+      // console.log(response.data,"=================================");
+      const a = document.createElement("a");
+      a.href = urlBlob;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  const handleDownloadDeviceData = () => {
+    const requestBody = {
+      enterprise_id: EnterpriseId,
+      state_id: StateId,
+      location_id: LocationId,
+      gateway_id: selectedGatewayId,
+      startDate: startDate,
+      endDate: endDate,
+    };
+
+    downloadFile(
+      `${process.env.REACT_APP_API}/api/admin/download/all/devicedata/report`,
+      requestBody,
+      `DeviceDataReport_${new Date().toLocaleString("en-US", {
+        timeZone: "Asia/Kolkata",
+      })}.csv`
+    );
+  };
+
+  const handleDownloadMeterData = () => {
+    const requestBody = {
+      Customer: EnterpriseId,
+      Stateid: StateId,
+      Locationid: LocationId,
+      Gatewayid: SelectedgatewayName,
+      startDate: startDate,
+      endDate: endDate,
+    };
+
+    downloadFile(
+      `${process.env.REACT_APP_API}/api/admin/download/all/meterdata/report`,
+      requestBody,
+      `MeterDataReport_${new Date().toLocaleString("en-US", {
+        timeZone: "Asia/Kolkata",
+      })}.csv`
+    );
+  };
 
   return (
     <div className="flex h-screen bg-gray-50 dark:bg-gray-900">
@@ -954,7 +1027,29 @@ function Reports() {
                                 ))}
                               </select>
                             </div>
+                            <div className="download_btn">
+                              <button
+                                type="button"
+                                className="py-2 px-3 mt-2 focus:outline-none text-white rounded-lg   "
+                                onClick={handleDownloadMeterData}
+                              >
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="24"
+                                  height="24"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="#4a90e2"
+                                  stroke-width="2"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                >
+                                  <path d="M3 15v4c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2v-4M17 9l-5 5-5-5M12 12.8V2.5" />
+                                </svg>
+                              </button>
+                            </div>
                           </div>
+
                           {/* <!-- table data --> */}
                           <table className="w-full whitespace-no-wrap">
                             <thead>
@@ -1058,10 +1153,11 @@ function Reports() {
                             </select>
                           </div>
 
-                          {/* <div className="download_btn">
+                          <div className="download_btn">
                             <button
                               type="button"
                               className="py-2 px-3 mt-2 focus:outline-none text-white rounded-lg   "
+                              onClick={handleDownloadDeviceData}
                             >
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -1077,7 +1173,7 @@ function Reports() {
                                 <path d="M3 15v4c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2v-4M17 9l-5 5-5-5M12 12.8V2.5" />
                               </svg>
                             </button>
-                          </div> */}
+                          </div>
                         </div>
                         {/* <!-- table data --> */}
                         <table className="w-full whitespace-no-wrap">
