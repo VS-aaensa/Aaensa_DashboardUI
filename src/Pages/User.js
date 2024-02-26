@@ -1,0 +1,317 @@
+import React, { useState, useEffect } from "react";
+import LeftMenuList from "../Common/LeftMenuList";
+import TopNavbar from "../Common/TopNavbar";
+import { Link, useNavigate } from "react-router-dom";
+import UserModal from "../Modals/AddModals/UserModal";
+import { userList } from "../Slices/UserSlice";
+import { useDispatch, useSelector } from "react-redux";
+
+function User() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [isModalOpenAddUser, setIsModalOpenAddUser] = useState(false);
+  const [reportData, setReportData] = useState([]);
+  const [trigger, setTrigger] = useState(true);
+  const { status, response, error, loading } = useSelector(
+    (state) => state.userSlice
+  );
+
+  const header = {
+    headers: {
+      Authorization: `Bearer ${window.localStorage.getItem("token")}`,
+    },
+  };
+  //Pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 15;
+  const paginationRange = 1;
+  const handlePageChange = (newPage) => {
+    const totalPages = Math.ceil(reportData.length / itemsPerPage);
+
+    // Ensure the new page is within valid range
+    if (newPage >= 1 && newPage <= totalPages) {
+      setCurrentPage(newPage);
+    }
+  };
+
+  const renderPaginationButtons = () => {
+    const totalPages = Math.ceil(reportData.length / itemsPerPage); // Set the total number of pages
+
+    // Display all buttons if there are less than or equal to 6 pages
+    if (totalPages <= 6) {
+      return Array.from({ length: totalPages }, (_, i) => i + 1).map((i) => (
+        <li key={i}>
+          <button
+            className={`px-3 py-1 rounded-md ${currentPage === i
+                ? "text-white bg-purple-600 border border-r-0 border-purple-600"
+                : "focus:outline-none focus:shadow-outline-purple"
+              }`}
+            onClick={() => handlePageChange(i)}
+          >
+            {i}
+          </button>
+        </li>
+      ));
+    }
+
+    const pages = [];
+    const startPage = Math.max(1, currentPage - paginationRange);
+    const endPage = Math.min(totalPages, startPage + 2 * paginationRange);
+    if (startPage > 1) {
+      pages.push(
+        <li key={1}>
+          <button
+            className="px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple"
+            onClick={() => handlePageChange(1)}
+          >
+            1
+          </button>
+        </li>
+      );
+
+      if (startPage > 2) {
+        pages.push(<span key="startEllipsis">...</span>);
+      }
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(
+        <li key={i}>
+          <button
+            className={`px-3 py-1 rounded-md ${currentPage === i
+                ? "text-white bg-purple-600 border border-r-0 border-purple-600"
+                : "focus:outline-none focus:shadow-outline-purple"
+              }`}
+            onClick={() => handlePageChange(i)}
+          >
+            {i}
+          </button>
+        </li>
+      );
+    }
+
+    if (endPage < totalPages) {
+      if (endPage < totalPages - 1) {
+        pages.push(<span key="endEllipsis">...</span>);
+      }
+
+      pages.push(
+        <li key={totalPages}>
+          <button
+            className="px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple"
+            onClick={() => handlePageChange(totalPages)}
+          >
+            {totalPages}
+          </button>
+        </li>
+      );
+    }
+
+    return pages;
+  };
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const displayedData = reportData.slice(startIndex, endIndex);
+  const openModalAddUser = () => {
+    setIsModalOpenAddUser(true);
+  };
+
+  const closeModalAddUser = () => {
+    setTrigger(true);
+    setIsModalOpenAddUser(false);
+  };
+  //Api Calling
+  useEffect(() => {
+    if (trigger) {
+      dispatch(userList({ header, navigate }));
+      setTrigger(false); // Reset trigger to prevent continuous API calls
+    }
+
+    if (response && Array.isArray(response)) {
+      setReportData(response);
+    }
+  }, [trigger, response, header, navigate, dispatch]);
+
+  return (
+    <div className="flex h-screen bg-gray-50 dark:bg-gray-900">
+      <LeftMenuList />
+      <div className="flex flex-col flex-1 w-full">
+        <TopNavbar />
+
+        <main className="h-full overflow-y-auto">
+          <div className="container px-6 mx-auto grid">
+            <div className="flex justify-between">
+              <h2 className="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
+                User
+              </h2>
+              <div className="px-6 my-6">
+                <button
+                  //   @click="openModaladduser"
+
+                  onClick={openModalAddUser}
+                  className="flex items-center justify-between w-full px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+                >
+                  Add User
+                  <span className="ml-2" aria-hidden="true">
+                    +
+                  </span>
+                </button>
+
+                {isModalOpenAddUser && (
+                  <div className="fixed inset-0 z-30 flex items-end bg-black bg-opacity-50 sm:items-center sm:justify-center">
+                    {/* <!-- Modal --> */}
+
+                    <UserModal closeModal={() => closeModalAddUser()} />
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* <!-- table --> */}
+
+            <div className="w-full overflow-x-auto">
+              <table className="w-full whitespace-no-wrap">
+                <thead>
+                  <tr className="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
+                    <th className="px-4 py-3">User Name</th>
+                    <th className="px-4 py-3">User Type</th>
+                    <th className="px-4 py-3">User Email Id</th>
+                    <th className="px-4 py-3">User phone Number</th>
+                    <th className="px-4 py-3">enterprise Name</th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
+                  {displayedData.map((item, index) => (
+                    <tr
+                      className="text-gray-700 dark:text-gray-400"
+                      key={index}
+                    >
+                      <td className="px-4 py-3">{item.username}</td>
+
+                      <td className="px-4 py-3">{item.type}</td>
+                      <td className="px-4 py-3 text-sm">{item.email}</td>
+
+                      {item.type === "System-integrator" && (
+                        <td className="px-4 py-3 text-sm">
+                          <b>+91</b> {item.systemIntegratorId?.phone}
+                        </td>
+                      )}
+                      {item.type === "EnterpriseUser" && (
+                        <td className="px-4 py-3 text-sm">
+                          <b>+91</b> {item.enterpriseUserId?.phone}
+                        </td>
+                      )}
+
+                      {item.type === "System-integrator" && (
+                        <td className="px-4 py-3">
+                          <div className="flex items-center text-sm">
+                            {/* <!-- Avatar with inset shadow --> */}
+                            <div className="relative hidden w-8 h-8 mr-3 rounded-full md:block">
+                              {/* <img
+                                className="object-cover w-full h-full rounded-full"
+                                src="assets/img/tata-logo (1).png"
+                                alt=""
+                                loading="lazy"
+                              /> */}
+                              <div
+                                className="absolute inset-0 rounded-full shadow-inner"
+                                aria-hidden="true"
+                              ></div>
+                            </div>
+                            <div>
+                              <p className="font-semibold">
+                                ----
+                                {/* {item.systemIntegratorId?.username} */}
+                              </p>
+                            </div>
+                          </div>
+                        </td>
+                      )}
+                      {item.type === "EnterpriseUser" && (
+                        <td className="px-4 py-3">
+                          <div className="flex items-center text-sm">
+                            {/* <!-- Avatar with inset shadow --> */}
+                            <div className="relative hidden w-8 h-8 mr-3 rounded-full md:block">
+                              <div
+                                className="absolute inset-0 rounded-full shadow-inner"
+                                aria-hidden="true"
+                              ></div>
+                            </div>
+                            <div>
+                              <p className="font-semibold">
+                                {item.enterpriseUserId?.username}
+                              </p>
+                            </div>
+                          </div>
+                        </td>
+                      )}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <div className="grid px-4 py-3 text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800">
+              <span className="flex items-center col-span-3">
+                {`Showing ${startIndex + 1}-${reportData.length
+                  } of ${endIndex}`}
+              </span>
+              <span className="col-span-2"></span>
+              {/* Pagination  */}
+
+              <span className="flex col-span-4 mt-2 sm:mt-auto sm:justify-end">
+                <nav aria-label="Table navigation">
+                  <ul className="inline-flex items-center">
+                    <li>
+                      <button
+                        className="px-3 py-1 rounded-md rounded-l-lg focus:outline-none focus:shadow-outline-purple"
+                        aria-label="Previous"
+                        disabled={currentPage === 1}
+                        onClick={() => handlePageChange(currentPage - 1)}
+                      >
+                        <svg
+                          aria-hidden="true"
+                          className="w-4 h-4 fill-current"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                            d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                            clipRule="evenodd"
+                            fillRule="evenodd"
+                          ></path>
+                        </svg>
+                      </button>
+                    </li>
+                    {renderPaginationButtons()}
+                    <li>
+                      <button
+                        className="px-3 py-1 rounded-md rounded-r-lg focus:outline-none focus:shadow-outline-purple"
+                        aria-label="Next"
+                        disabled={currentPage === 10}
+                        onClick={() => handlePageChange(currentPage + 1)}
+                      >
+                        <svg
+                          className="w-4 h-4 fill-current"
+                          aria-hidden="true"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                            d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                            clipRule="evenodd"
+                            fillRule="evenodd"
+                          ></path>
+                        </svg>
+                      </button>
+                    </li>
+                  </ul>
+                </nav>
+              </span>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+  );
+}
+
+export default User;
