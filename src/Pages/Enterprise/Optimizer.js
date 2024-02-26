@@ -532,7 +532,7 @@ function Optimizer() {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
-                {displayedData.map((item, rowIndex) => (
+              {displayedData.map((item, rowIndex) => (
                   <tr
                     key={rowIndex}
                     className="text-gray-700 dark:text-gray-400"
@@ -556,7 +556,7 @@ function Optimizer() {
                     </td>
                     <td className="px-4 py-3 text-sm">
 
-                      {item.BypassMode === "OFF" ? (
+                      {((item.BypassMode === "OFF"||item.BypassMode === "")&&item.isOnline==true) ? (
                         <div className={`toggle_btn`}>
                           <input
                             type="checkbox"
@@ -566,7 +566,6 @@ function Optimizer() {
                               bypass(item.OptimizerID, item.isOnline, item.BypassMode)
                             }
                           />
-
                           <label htmlFor={`toggle-btn-${rowIndex}`} />
                           {isModalbypass && (
                             <ByPassModal
@@ -594,7 +593,7 @@ function Optimizer() {
                             />
                           )}
                         </div>
-                      ) : item.BypassMode === "" ? (<div className={`toggle_btn`}>
+                      ) : item.BypassMode === ""||item.isOnline==false ? (<div className={`toggle_btn`}>
                         <input
                           type="checkbox"
                           defaultChecked={false}
@@ -603,7 +602,6 @@ function Optimizer() {
                         />
                         <label htmlFor={`toggle-btn-${rowIndex}`} />
                         <p className="mt-2 text-xs text-red-500" >
-                          {item.BypassMode}
                         </p>
                         {isModalbypass && (
                           <ByPassModal
@@ -631,8 +629,6 @@ function Optimizer() {
                           )}
                         </div>
                       }
-
-                      {/* ------------------------------------------------------------------------- */}
                     </td>
                     <td>
                       {item.isOnline == true ? (
