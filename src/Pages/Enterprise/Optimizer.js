@@ -270,32 +270,21 @@ function Optimizer() {
                   </button>
                   {/* ------------------------------ */}
 
+                  {isModalOpen && (
+                    <OptimizerModel Data={data} closeModal={() => closeModal()} />
+                  )}
 
-            <h1
-              className=" text-red-500"
-              style={{ color: "red", fontWeight: "bold" }}
-            >
-              {bypassError}
-            </h1>
+                  {/* ----------------------------------- */}
+                </div>
+              </div>
 
-            <table className="w-full whitespace-no-wrap">
-              <thead>
-                <tr className="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
-                  <th className="px-4 py-3">Optimizer ID</th>
-                  <th className="px-4 py-3">Optimizer Name</th>
-                  <th className="px-4 py-3">By Pass</th>
-                  <th className="px-4 py-3">Status</th>
-                  <th className="px-4 py-3">Action</th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
-              {displayedData.map((item, rowIndex) => (
-                  <tr
-                    key={rowIndex}
-                    className="text-gray-700 dark:text-gray-400"
-                  >
-                    <td className="px-4 py-3 text-sm">
-
+              <div className="w-full overflow-x-auto">
+                <nav
+                  className="flex px-5 py-3 text-white bg-purple-600 dark:bg-gray-800 dark:border-gray-700 rounded mb-4"
+                  aria-label="Breadcrumb"
+                >
+                  <ol className="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
+                    <li className="inline-flex items-center">
                       <Link
                         to="/enterprise"
                         onClick={clear}
@@ -327,100 +316,27 @@ function Optimizer() {
                       >
                         State
                       </Link>
-
-                    </td>
-                    <td className="px-4 py-3 text-sm">
-
-                      {((item.BypassMode === "OFF"||item.BypassMode === "")&&item.isOnline==true) ? (
-                        <div className={`toggle_btn`}>
-                          <input
-                            type="checkbox"
-                            defaultChecked={false}
-                            id={`toggle-btn-${rowIndex}`}
-                            onClick={() =>
-                              bypass(item.OptimizerID, item.isOnline, item.BypassMode)
-                            }
-                          />
-                          <label htmlFor={`toggle-btn-${rowIndex}`} />
-                          {isModalbypass && (
-                            <ByPassModal
-                              Data={BypassData}
-                              closeModal={() => closeModal()}
-                            />
-                          )}
-                        </div>
-                      ) : item?.BypassMode === "ON" ? (
-                        <div className={`toggle_btn`}>
-                          <input
-                            type="checkbox"
-                            defaultChecked={true}
-                            id={`toggle-btn-${rowIndex}`}
-                            onClick={() =>
-                              bypass(item.OptimizerID, item.isOnline, item.BypassMode)
-                            }
-                          />
-
-                          <label htmlFor={`toggle-btn-${rowIndex}`} />
-                          {isModalbypass && (
-                            <ByPassModal
-                              Data={BypassData}
-                              closeModal={() => closeModal()}
-                            />
-                          )}
-                        </div>
-                      ) : item.BypassMode === ""||item.isOnline==false ? (<div className={`toggle_btn`}>
-                        <input
-                          type="checkbox"
-                          defaultChecked={false}
-                          id={`toggle-btn-${rowIndex}`}
-                          disabled={true}
+                      <svg
+                        className="rtl:rotate-180 block w-3 h-3 mx-1 text-gray-400 "
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 6 10"
+                      >
+                        <path
+                          stroke="#fff"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="m1 9 4-4-4-4"
                         />
-                        <label htmlFor={`toggle-btn-${rowIndex}`} />
-                        <p className="mt-2 text-xs text-red-500" >
-                        </p>
-                        {isModalbypass && (
-                          <ByPassModal
-                            Data={BypassData}
-                            closeModal={() => closeModal()}
-                          />
-                        )}
-                      </div>) :
-                        <div className={`toggle_btn`}>
-                          <input
-                            type="checkbox"
-                            defaultChecked={false}
-                            id={`toggle-btn-${rowIndex}`}
-                            disabled={true}
-                          />
-                          <label htmlFor={`toggle-btn-${rowIndex}`} />
-                          <p className="mt-2 text-xs text-red-500" >
-                            {item.BypassMode}
-                          </p>
-                          {isModalbypass && (
-                            <ByPassModal
-                              Data={BypassData}
-                              closeModal={() => closeModal()}
-                            />
-                          )}
-                        </div>
-                      }
-                    </td>
-                    <td>
-                      {item.isOnline == true ? (
-                        <span className="bg-green-100 text-green-800 text-xs font-medium me-2 px-4 py-2 rounded-full dark:bg-green-900 dark:text-green-300">
-                          ONLINE
-                        </span>
-                      ) : (
-                        <span className="bg-red-100 text-red-800 text-xs font-medium me-2 px-4 py-2 rounded-full dark:bg-red-900 dark:text-red-300">
-                          OFFLINE
-                        </span>
-                      )}
-                    </td>
-                    <td>
-                      <button
-                        onClick={() => openEditModal(item)}
-                        className="px-2 py-2 border-2 border-purple-600 text-purple-600 rounded-md"
-
+                      </svg>
+                    </li>
+                    <li className="inline-flex items-center">
+                      <Link
+                        to="/location"
+                        onClick={clear}
+                        className="inline-flex items-center text-sm font-medium text-white hover:text-blue-600 dark:text-gray-400 dark:hover:text-white"
                       >
                         Location
                       </Link>
