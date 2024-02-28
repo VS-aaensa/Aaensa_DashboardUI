@@ -2,13 +2,13 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import LeftMenuList from "../Common/LeftMenuList";
 import TopNavbar from "../Common/TopNavbar";
+import Loader from "../utils/Loader";
 import moment from "moment";
 import "daterangepicker";
 import $, { event } from "jquery";
 import { useSelector, useDispatch } from "react-redux";
 import {
-  enterpriseList,
-  clearEnterpriseResonse,
+  enterpriseList, clearEnterpriseResonse,
 } from "../Slices/Enterprise/enterpriseSlice";
 import { stateList, clearResponse } from "../Slices/Enterprise/StateSlices";
 import {
@@ -47,11 +47,9 @@ function Reports() {
   const [StateId, setSelectedStateId] = useState(""); //this is state id
   const [LocationId, setSelectedLocationId] = useState(""); //this is Location id
   const [selectedGatewayId, setSelectedGatewayId] = useState(""); //this is Location id
-  const [selectedInterval, setSelectedInterval] = useState(0);
   const [SelectedgatewayName, setSelectedgatewayName] = useState("");
   //Id's
   // CUSTOMER ------------------
-
   const header = {
     headers: {
       Authorization: `Bearer ${window.localStorage.getItem("token")}`,
@@ -179,7 +177,6 @@ function Reports() {
   };
 
   //Gateway
-  // {_id:ObjectId('6582f9f91980116c336a10f1'),Enterprise_ID:ObjectId('6581306cdd186286653fc290'),State_ID:ObjectId('658024a27c64bcd8e249a07d')}
 
   const { gateway_response, gateway_error } = useSelector(
     (state) => state.gatewaySlice
@@ -256,7 +253,7 @@ function Reports() {
       function (ev, picker) {
         const startDate = picker.startDate.format("M/DD/YYYY hh:mm A");
         const endDate = picker.endDate.format("M/DD/YYYY hh:mm A");
-
+        setCurrentPage(1);
         setStartDate(startDate);
         setEndDate(endDate);
       }
@@ -293,10 +290,8 @@ function Reports() {
           },
         }
       );
-      console.log(response, "&&&&&&&&&&&&&&&&&&");
       setDeviceData(response?.data?.data);
     } catch (error) {
-      console.log(error, " this is error");
       if (
         error.response.data.message === "Invalid token" ||
         error.response.data.message === "Access denied"
@@ -304,11 +299,11 @@ function Reports() {
         window.localStorage.clear();
         window.location.href = "./";
       }
-      // //console.log({ Error: error });
     }
   };
 
   async function reportApi(event) {
+    console.log("this is rendering");
     event.preventDefault();
     setApply(true);
     const token = window.localStorage.getItem("token");
@@ -332,7 +327,6 @@ function Reports() {
       );
       setReportData(response?.data?.response);
     } catch (error) {
-      console.log(error, " this is error");
       if (
         error.response.data.message === "Invalid token" ||
         error.response.data.message === "Access denied"
@@ -340,7 +334,6 @@ function Reports() {
         window.localStorage.clear();
         window.location.href = "./";
       }
-      // //console.log({ Error: error });
     }
   }
 
@@ -363,8 +356,8 @@ function Reports() {
                 .getDate()
                 .toString()
                 .padStart(2, "0")}-${(timestampDate.getMonth() + 1)
-                .toString()
-                .padStart(2, "0")}-${timestampDate.getFullYear()}`;
+                  .toString()
+                  .padStart(2, "0")}-${timestampDate.getFullYear()}`;
 
               // Format time as "hh:mm A"
               const formattedTime = timestampDate.toLocaleTimeString("en-US", {
@@ -596,8 +589,8 @@ function Reports() {
                   .getDate()
                   .toString()
                   .padStart(2, "0")}-${(timestampDate.getMonth() + 1)
-                  .toString()
-                  .padStart(2, "0")}-${timestampDate.getFullYear()}`;
+                    .toString()
+                    .padStart(2, "0")}-${timestampDate.getFullYear()}`;
 
                 // Format time as "hh:mm A"
                 const formattedTime = timestampDate.toLocaleTimeString(
@@ -637,11 +630,7 @@ function Reports() {
                           <div className="online"></div>
                         </div>
                         <div>
-                          {log.OptimizerID.isOnline ? (
-                            <p className="font-semibold">Online</p>
-                          ) : (
-                            <p className="font-semibold">Offline</p>
-                          )}
+                          {log.DeviceStatus ? <p className="font-semibold">Online</p> : <p className="font-semibold">Offline</p>}
                         </div>
                       </div>
                     </td>
@@ -718,8 +707,6 @@ function Reports() {
       });
     });
   };
-
-  // //console.log(TableData,"table");
   // State to manage the selected option
   const [selectedOption, setSelectedOption] = useState("Actual");
 
@@ -745,7 +732,6 @@ function Reports() {
   let intervalInSeconds = 0;
   useEffect(() => {
     intervalInSeconds = optionIntervals[selectedOption];
-    //console.log(`Selected Interval: ${intervalInSeconds} seconds`);
   }, [selectedOption, optionIntervals]);
 
   // Array of options
@@ -757,19 +743,23 @@ function Reports() {
   function handleNextClick(event) {
     event.preventDefault();
     setCurrentPage((prevPage) => Math.max(prevPage + 1, 1));
+    callbothApi(event);
   }
 
   function handlePrevClick(event) {
     event.preventDefault();
-    // console.log(currentPage,"thisis ----------")
     setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
+    callbothApi(event);
   }
-
-  useEffect(() => {
-    const fakeEvent = { preventDefault: () => {} }; // create a fake event object with preventDefault method
-    reportApi(fakeEvent);
-    deviceApi(fakeEvent);
-  }, [currentPage]);
+  const callbothApi = (event) => {
+    reportApi(event);
+    deviceApi(event);
+  }
+  // useEffect(() => {
+  //   const fakeEvent = { preventDefault: () => { } }; // create a fake event object with preventDefault method
+  //   reportApi(fakeEvent);
+  //   deviceApi(fakeEvent);
+  // }, [currentPage]);
 
   //Download CSV
   const downloadFile = async (url, requestBody, defaultFilename) => {
@@ -779,11 +769,11 @@ function Reports() {
       });
       const disposition = response.headers["content-disposition"];
       const filename = disposition
-      ? disposition.split("filename=")[1]
-      : defaultFilename;
-      
+        ? disposition.split("filename=")[1]
+        : defaultFilename;
+
       const urlBlob = window.URL.createObjectURL(new Blob([response.data]));
-      
+
       // console.log(response.data,"=================================");
       const a = document.createElement("a");
       a.href = urlBlob;
@@ -835,203 +825,331 @@ function Reports() {
   };
 
   return (
-    <div className="flex h-screen bg-gray-50 dark:bg-gray-900">
-      <LeftMenuList />
-      <div className="flex flex-col flex-1 w-full">
-        <TopNavbar />
-        <main className="h-full pb-16 overflow-y-auto">
-          <div className="container grid px-6 mx-auto">
-            <h2 className="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-              Reports
-            </h2>
-            {/* <!-- CTA -->
+    <>
+      {/* {loading && <Loader />} */}
+      <div className="flex h-screen bg-gray-50 dark:bg-gray-900">
+        <LeftMenuList />
+        <div className="flex flex-col flex-1 w-full">
+          <TopNavbar />
+          <main className="h-full pb-16 overflow-y-auto">
+            <div className="container grid px-6 mx-auto">
+              <h2 className="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
+                Reports
+              </h2>
+              {/* <!-- CTA -->
     
 
           <!-- With avatar -->
           <!-- <h4 className="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">
             Table Data
           </h4> --> */}
-            <div className="w-full mb-8 overflow-hidden rounded-lg shadow-xs relative">
-              <form action="">
-                <div className="mb-6 flex space-x-3 p-3">
-                  <label className="block mt-4 text-sm w-56">
-                    <span className="text-gray-700 dark:text-gray-400">
-                      Customer
-                    </span>
-                    <select
-                      className="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
-                      name="customer"
-                      value={formData.customer}
-                      onChange={handleFormChange}
-                      onFocus={customer}
-                    >
-                      <option></option>
-                      {EnterpriseList.map((enterprise, index) => (
-                        <option key={index}>{enterprise.EnterpriseName}</option>
-                      ))}
-                    </select>
-                  </label>
-
-                  <label className="block mt-4 text-sm w-56">
-                    <span className="text-gray-700 dark:text-gray-400">
-                      State
-                    </span>
-                    <select
-                      className="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
-                      name="state"
-                      value={formData.state}
-                      onChange={handleFormChange1}
-                      onFocus={State}
-                    >
-                      <option></option>
-                      {statelist.map((item, index) => (
-                        <option key={index}>{item.State_ID.name}</option>
-                      ))}
-                    </select>
-                  </label>
-
-                  <label className="block mt-4 text-sm w-56">
-                    <span className="text-gray-700 dark:text-gray-400">
-                      Location
-                    </span>
-                    <select
-                      className="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
-                      name="location"
-                      value={formData.location}
-                      onChange={handleFormChange2}
-                      onFocus={Location}
-                    >
-                      <option></option>
-                      {LocationList.map((item, index) => (
-                        <option key={index}>{item.LocationName}</option>
-                      ))}
-                    </select>
-                  </label>
-
-                  <label className="block mt-4 text-sm w-56">
-                    <span className="text-gray-700 dark:text-gray-400">
-                      Gateway Id
-                    </span>
-                    <select
-                      className="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
-                      name="gatewayId"
-                      value={formData.gatewayId}
-                      onChange={handleFormChange3}
-                      onFocus={Gateway}
-                    >
-                      <option></option>
-                      {gatewayList.map((item, index) => (
-                        <option key={index}>{item.GatewayID}</option>
-                      ))}
-                    </select>
-                  </label>
-                  <div>
-                    <label className="block mt-4 text-sm">
+              <div className="w-full mb-8 overflow-hidden rounded-lg shadow-xs relative">
+                <form action="">
+                  <div className="mb-6 flex space-x-3 p-3">
+                    <label className="block mt-4 text-sm w-56">
                       <span className="text-gray-700 dark:text-gray-400">
-                        Date
+                        Customer
                       </span>
+                      <select
+                        className="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
+                        name="customer"
+                        value={formData.customer}
+                        onChange={handleFormChange}
+                        onFocus={customer}
+                      >
+                        <option></option>
+                        {EnterpriseList.map((enterprise, index) => (
+                          <option key={index}>{enterprise.EnterpriseName}</option>
+                        ))}
+                      </select>
+                    </label>
 
-                      <input
-                        name="datetimes"
-                        defaultValue="01/01/2018 - 01/15/2018"
-                        className="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                        placeholder=" date end"
-                      />
+                    <label className="block mt-4 text-sm w-56">
+                      <span className="text-gray-700 dark:text-gray-400">
+                        State
+                      </span>
+                      <select
+                        className="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
+                        name="state"
+                        value={formData.state}
+                        onChange={handleFormChange1}
+                        onFocus={State}
+                      >
+                        <option></option>
+                        {statelist.map((item, index) => (
+                          <option key={index}>{item.State_ID.name}</option>
+                        ))}
+                      </select>
+                    </label>
+
+                    <label className="block mt-4 text-sm w-56">
+                      <span className="text-gray-700 dark:text-gray-400">
+                        Location
+                      </span>
+                      <select
+                        className="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
+                        name="location"
+                        value={formData.location}
+                        onChange={handleFormChange2}
+                        onFocus={Location}
+                      >
+                        <option></option>
+                        {LocationList.map((item, index) => (
+                          <option key={index}>{item.LocationName}</option>
+                        ))}
+                      </select>
+                    </label>
+
+                    <label className="block mt-4 text-sm w-56">
+                      <span className="text-gray-700 dark:text-gray-400">
+                        Gateway Id
+                      </span>
+                      <select
+                        className="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
+                        name="gatewayId"
+                        value={formData.gatewayId}
+                        onChange={handleFormChange3}
+                        onFocus={Gateway}
+                      >
+                        <option></option>
+                        {gatewayList.map((item, index) => (
+                          <option key={index}>{item.GatewayID}</option>
+                        ))}
+                      </select>
+                    </label>
+                    <div>
+                      <label className="block mt-4 text-sm">
+                        <span className="text-gray-700 dark:text-gray-400">
+                          Date
+                        </span>
+
+                        <input
+                          name="datetimes"
+                          defaultValue="01/01/2018 - 01/15/2018"
+                          className="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                          placeholder=" date end"
+                        />
+                      </label>
+                    </div>
+
+                    <label
+                      htmlFor=""
+                      className="block mt-8 text-sm "
+                      style={{ paddingTop: "1%" }}
+                    >
+                      <button
+                        type="button"
+                        onClick={(event) => {
+                          event.preventDefault();
+                          reportApi(event);
+                          deviceApi(event);
+                        }}
+                        className="py-2 px-3 mt-2 focus:outline-none text-white rounded-lg bg-purple-600 active:bg-purple-600"
+                      >
+                        Apply
+                      </button>
                     </label>
                   </div>
+                </form>
 
-                  <label
-                    htmlFor=""
-                    className="block mt-8 text-sm "
-                    style={{ paddingTop: "1%" }}
-                  >
-                    <button
-                      type="button"
-                      onClick={(event) => {
-                        event.preventDefault();
-                        reportApi(event);
-                        deviceApi(event);
-                      }}
-                      className="py-2 px-3 mt-2 focus:outline-none text-white rounded-lg bg-purple-600 active:bg-purple-600"
-                    >
-                      Apply
-                    </button>
-                  </label>
-                </div>
-              </form>
+                <div className="w-full overflow-x-auto">
+                  {/* <!-- tab --> */}
+                  <div className="w-2/3">
+                    <div className="relative right-0">
+                      {/* -------------- */}
+                      <ul
+                        className="relative flex flex-wrap p-1 list-none rounded-xl bg-blue-gray-50/60"
+                        data-tabs="tabs"
+                        role="list"
+                      >
+                        <div className="inline-block bg-blue-100 dark:bg-purple-600 p-2 rounded-md shadow-md">
+                          <label className="inline-flex items-center text-gray-600 dark:text-gray-400">
+                            <input
+                              type="radio"
+                              className="text-purple-600 form-radio focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
+                              name="userType"
+                              defaultValue="meterData" // Corrected value
+                              onChange={() => handleRadioChange("meterData")} // Corrected value
+                            />
+                            <span className="ml-2 text-blue-500">Meter Data</span>
+                          </label>
+                        </div>
 
-              <div className="w-full overflow-x-auto">
-                {/* <!-- tab --> */}
-                <div className="w-2/3">
-                  <div className="relative right-0">
-                    {/* -------------- */}
-                    <ul
-                      className="relative flex flex-wrap p-1 list-none rounded-xl bg-blue-gray-50/60"
-                      data-tabs="tabs"
-                      role="list"
-                    >
-                      <div className="inline-block bg-blue-100 dark:bg-purple-600 p-2 rounded-md shadow-md">
-                        <label className="inline-flex items-center text-gray-600 dark:text-gray-400">
-                          <input
-                            type="radio"
-                            className="text-purple-600 form-radio focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
-                            name="userType"
-                            defaultValue="meterData" // Corrected value
-                            onChange={() => handleRadioChange("meterData")} // Corrected value
-                          />
-                          <span className="ml-2 text-blue-500">Meter Data</span>
-                        </label>
-                      </div>
+                        <div className="inline-block bg-blue-100 dark:bg-purple-600 p-2 rounded-md shadow-md ml-2">
+                          <label className="inline-flex items-center text-gray-600 dark:text-gray-400">
+                            <input
+                              type="radio"
+                              className="text-purple-600 form-radio focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
+                              name="userType"
+                              defaultValue="deviceData" // Corrected value
+                              onChange={() => handleRadioChange("deviceData")} // Corrected value
+                            />
+                            <span className="ml-2 text-blue-500">
+                              Device Data
+                            </span>
+                          </label>
+                        </div>
+                      </ul>
 
-                      <div className="inline-block bg-blue-100 dark:bg-purple-600 p-2 rounded-md shadow-md ml-2">
-                        <label className="inline-flex items-center text-gray-600 dark:text-gray-400">
-                          <input
-                            type="radio"
-                            className="text-purple-600 form-radio focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
-                            name="userType"
-                            defaultValue="deviceData" // Corrected value
-                            onChange={() => handleRadioChange("deviceData")} // Corrected value
-                          />
-                          <span className="ml-2 text-blue-500">
-                            Device Data
-                          </span>
-                        </label>
-                      </div>
-                    </ul>
+                      {/* -----meter data ------ */}
+                      {apply && userType === "meterData" && (
+                        <div data-tab-content="" className=" px-2 py-4">
+                          <div
+                            className="block opacity-100"
+                            id="matadeta"
+                            role="tabpanel"
+                          >
+                            <div className="flex justify-between items-center">
+                              <div className="w-56 flex justify-between items-center ">
+                                <h4 className="classtitle mr-4">Interval</h4>
 
-                    {/* -----meter data ------ */}
-                    {apply && userType === "meterData" && (
-                      <div data-tab-content="" className=" px-2 py-4">
+                                <select
+                                  className="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
+                                  value={selectedOption}
+                                  onChange={(e) =>
+                                    setSelectedOption(e.target.value)
+                                  }
+                                >
+                                  {" "}
+                                  <options></options>
+                                  {options.map((option, index) => (
+                                    <option key={index} value={option}>
+                                      {option}
+                                    </option>
+                                  ))}
+                                </select>
+                              </div>
+                              <div className="download_btn">
+                                <button
+                                  type="button"
+                                  className="py-2 px-3 mt-2 focus:outline-none text-white rounded-lg   "
+                                  onClick={handleDownloadMeterData}
+                                >
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="#4a90e2"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                  >
+                                    <path d="M3 15v4c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2v-4M17 9l-5 5-5-5M12 12.8V2.5" />
+                                  </svg>
+                                </button>
+                              </div>
+                            </div>
+
+                            {/* <!-- table data --> */}
+                            <table className="w-full whitespace-no-wrap">
+                              <thead>
+                                <tr className="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
+                                  <th className="px-4 py-3">Enterprise</th>
+                                  <th className="px-4 py-3">State</th>
+                                  <th className="px-4 py-3">Location</th>
+                                  <th className="px-4 py-3">Gateway ID</th>
+                                  <th className="px-4 py-3">Date</th>
+                                  <th className="px-4 py-3">Time</th>
+                                  <th className="px-4 py-3">KWH</th>
+                                  <th className="px-4 py-3">KVAH</th>
+                                  <th className="px-4 py-3">PF</th>
+                                  <th className="px-4 py-3">Ph1Voltage</th>
+                                  <th className="px-4 py-3">Ph1Current</th>
+                                  <th className="px-4 py-3">Ph2Voltage</th>
+                                  <th className="px-4 py-3">Ph2Current</th>
+                                  <th className="px-4 py-3">Ph3Voltage</th>
+                                  <th className="px-4 py-3">Ph3Current</th>
+                                </tr>
+                              </thead>
+                              <tbody className="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
+                                {generateRows()}
+                              </tbody>
+                            </table>
+                          </div>
+
+                          {/* <!-- device data --> */}
+
+                          <div
+                            className="block opacity-100"
+                            id="matadeta"
+                            role="tabpanel"
+                          >
+                            <div className="grid px-4 py-3 text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800">
+                              <span className="flex items-center col-span-3">
+                                {`Page No.  ${currentPage} `}
+                              </span>
+                              <span className="col-span-2"></span>
+                              {/* Pagination  */}
+
+                              <span className="flex col-span-4 mt-2 sm:mt-auto sm:justify-end">
+                                <nav aria-label="Table navigation">
+                                  <ul className="inline-flex items-center">
+                                    <li>
+                                      <button
+                                        className="py-2 px-3 mt-2 focus:outline-none text-white rounded-lg bg-purple-600 active:bg-purple-600"
+                                        style={{ marginRight: "10px" }}
+                                        aria-label="Previous"
+                                        onClick={(event) => {
+                                          handlePrevClick(event);
+                                        }}
+                                      >
+                                        Prev
+                                      </button>
+                                    </li>
+                                    {/* {renderPaginationButtons()} */}
+                                    <li>
+                                      <button
+                                        className="py-2 px-3 mt-2 focus:outline-none text-white rounded-lg bg-purple-600 active:bg-purple-600"
+                                        aria-label="Next"
+                                        onClick={(event) => {
+                                          handleNextClick(event);
+                                        }}
+                                      >
+                                        Next
+                                      </button>
+                                    </li>
+                                  </ul>
+                                </nav>
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {userType === "deviceData" && apply && (
                         <div
-                          className="block opacity-100"
-                          id="matadeta"
+                          // className="hidden opacity-0"
+
                           role="tabpanel"
                         >
                           <div className="flex justify-between items-center">
                             <div className="w-56 flex justify-between items-center ">
                               <h4 className="classtitle mr-4">Interval</h4>
-
-                              <select
-                                className="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
-                                value={selectedOption}
-                                onChange={(e) =>
-                                  setSelectedOption(e.target.value)
-                                }
-                              >
-                                {" "}
-                                <options></options>
-                                {options.map((option, index) => (
-                                  <option key={index} value={option}>
-                                    {option}
-                                  </option>
-                                ))}
+                              <select className="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray">
+                                {/* <option></option> */}
+                                <option>Actual</option>
+                                <option>1 Minute</option>
+                                <option>15s</option>
+                                <option>30s</option>
+                                <option>5 Minutes</option>
+                                <option>10 Minutes</option>
+                                <option>15 Minutes</option>
+                                <option>30 Minutes</option>
+                                <option>1 Hour</option>
+                                <option>2 Hour</option>
+                                <option>4 Hour</option>
+                                <option>8 Hour</option>
+                                <option>12 Hour</option>
                               </select>
                             </div>
+
                             <div className="download_btn">
                               <button
                                 type="button"
                                 className="py-2 px-3 mt-2 focus:outline-none text-white rounded-lg   "
-                                onClick={handleDownloadMeterData}
+                                onClick={handleDownloadDeviceData}
                               >
                                 <svg
                                   xmlns="http://www.w3.org/2000/svg"
@@ -1049,7 +1167,6 @@ function Reports() {
                               </button>
                             </div>
                           </div>
-
                           {/* <!-- table data --> */}
                           <table className="w-full whitespace-no-wrap">
                             <thead>
@@ -1058,199 +1175,75 @@ function Reports() {
                                 <th className="px-4 py-3">State</th>
                                 <th className="px-4 py-3">Location</th>
                                 <th className="px-4 py-3">Gateway ID</th>
+                                <th className="px-4 py-3">Optimizer ID</th>
                                 <th className="px-4 py-3">Date</th>
                                 <th className="px-4 py-3">Time</th>
-                                <th className="px-4 py-3">KWH</th>
-                                <th className="px-4 py-3">KVAH</th>
-                                <th className="px-4 py-3">PF</th>
-                                <th className="px-4 py-3">Ph1Voltage</th>
-                                <th className="px-4 py-3">Ph1Current</th>
-                                <th className="px-4 py-3">Ph2Voltage</th>
-                                <th className="px-4 py-3">Ph2Current</th>
-                                <th className="px-4 py-3">Ph3Voltage</th>
-                                <th className="px-4 py-3">Ph3Current</th>
+                                <th className="px-4 py-3">Status</th>
+                                <th className="px-4 py-3">Grill temp</th>
+                                <th className="px-4 py-3">Room temp</th>
+                                <th className="px-4 py-3">Humidity</th>
+                                <th className="px-4 py-3">Mode</th>
                               </tr>
                             </thead>
                             <tbody className="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
-                              {generateRows()}
+                              {deviceDataLog()}
                             </tbody>
                           </table>
-                        </div>
+                          <div
+                            className="block opacity-100"
+                            id="matadeta"
+                            role="tabpanel"
+                          >
+                            <div className="grid px-4 py-3 text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800">
+                              <span className="flex items-center col-span-3">
+                                {`Page No.  ${currentPage} `}
+                              </span>
+                              <span className="col-span-2"></span>
+                              {/* Pagination  */}
 
-                        {/* <!-- device data --> */}
-
-                        <div
-                          className="block opacity-100"
-                          id="matadeta"
-                          role="tabpanel"
-                        >
-                          <div className="grid px-4 py-3 text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800">
-                            <span className="flex items-center col-span-3">
-                              {`Page No.  ${currentPage} `}
-                            </span>
-                            <span className="col-span-2"></span>
-                            {/* Pagination  */}
-
-                            <span className="flex col-span-4 mt-2 sm:mt-auto sm:justify-end">
-                              <nav aria-label="Table navigation">
-                                <ul className="inline-flex items-center">
-                                  <li>
-                                    <button
-                                      className="py-2 px-3 mt-2 focus:outline-none text-white rounded-lg bg-purple-600 active:bg-purple-600"
-                                      style={{ marginRight: "10px" }}
-                                      aria-label="Previous"
-                                      onClick={(event) => {
-                                        handlePrevClick(event);
-                                      }}
-                                    >
-                                      Prev
-                                    </button>
-                                  </li>
-                                  {/* {renderPaginationButtons()} */}
-                                  <li>
-                                    <button
-                                      className="py-2 px-3 mt-2 focus:outline-none text-white rounded-lg bg-purple-600 active:bg-purple-600"
-                                      aria-label="Next"
-                                      onClick={(event) => {
-                                        handleNextClick(event);
-                                      }}
-                                    >
-                                      Next
-                                    </button>
-                                  </li>
-                                </ul>
-                              </nav>
-                            </span>
+                              <span className="flex col-span-4 mt-2 sm:mt-auto sm:justify-end">
+                                <nav aria-label="Table navigation">
+                                  <ul className="inline-flex items-center">
+                                    <li>
+                                      <button
+                                        className="py-2 px-3 mt-2 focus:outline-none text-white rounded-lg bg-purple-600 active:bg-purple-600"
+                                        style={{ marginRight: "10px" }}
+                                        aria-label="Previous"
+                                        onClick={(event) => {
+                                          handlePrevClick(event);
+                                        }}
+                                      >
+                                        Prev
+                                      </button>
+                                    </li>
+                                    {/* {renderPaginationButtons()} */}
+                                    <li>
+                                      <button
+                                        className="py-2 px-3 mt-2 focus:outline-none text-white rounded-lg bg-purple-600 active:bg-purple-600"
+                                        aria-label="Next"
+                                        onClick={(event) => {
+                                          handleNextClick(event);
+                                        }}
+                                      >
+                                        Next
+                                      </button>
+                                    </li>
+                                  </ul>
+                                </nav>
+                              </span>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    )}
-
-                    {userType === "deviceData" && apply && (
-                      <div
-                        // className="hidden opacity-0"
-
-                        role="tabpanel"
-                      >
-                        <div className="flex justify-between items-center">
-                          <div className="w-56 flex justify-between items-center ">
-                            <h4 className="classtitle mr-4">Interval</h4>
-                            <select className="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray">
-                              {/* <option></option> */}
-                              <option>Actual</option>
-                              <option>1 Minute</option>
-                              <option>15s</option>
-                              <option>30s</option>
-                              <option>5 Minutes</option>
-                              <option>10 Minutes</option>
-                              <option>15 Minutes</option>
-                              <option>30 Minutes</option>
-                              <option>1 Hour</option>
-                              <option>2 Hour</option>
-                              <option>4 Hour</option>
-                              <option>8 Hour</option>
-                              <option>12 Hour</option>
-                            </select>
-                          </div>
-
-                          <div className="download_btn">
-                            <button
-                              type="button"
-                              className="py-2 px-3 mt-2 focus:outline-none text-white rounded-lg   "
-                              onClick={handleDownloadDeviceData}
-                            >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="#4a90e2"
-                                stroke-width="2"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                              >
-                                <path d="M3 15v4c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2v-4M17 9l-5 5-5-5M12 12.8V2.5" />
-                              </svg>
-                            </button>
-                          </div>
-                        </div>
-                        {/* <!-- table data --> */}
-                        <table className="w-full whitespace-no-wrap">
-                          <thead>
-                            <tr className="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
-                              <th className="px-4 py-3">Enterprise</th>
-                              <th className="px-4 py-3">State</th>
-                              <th className="px-4 py-3">Location</th>
-                              <th className="px-4 py-3">Gateway ID</th>
-                              <th className="px-4 py-3">Optimizer ID</th>
-                              <th className="px-4 py-3">Date</th>
-                              <th className="px-4 py-3">Time</th>
-                              <th className="px-4 py-3">Status</th>
-                              <th className="px-4 py-3">Grill temp</th>
-                              <th className="px-4 py-3">Room temp</th>
-                              <th className="px-4 py-3">Humidity</th>
-                              <th className="px-4 py-3">Mode</th>
-                            </tr>
-                          </thead>
-                          <tbody className="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
-                            {deviceDataLog()}
-                          </tbody>
-                        </table>
-                        <div
-                          className="block opacity-100"
-                          id="matadeta"
-                          role="tabpanel"
-                        >
-                          <div className="grid px-4 py-3 text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800">
-                            <span className="flex items-center col-span-3">
-                              {`Page No.  ${currentPage} `}
-                            </span>
-                            <span className="col-span-2"></span>
-                            {/* Pagination  */}
-
-                            <span className="flex col-span-4 mt-2 sm:mt-auto sm:justify-end">
-                              <nav aria-label="Table navigation">
-                                <ul className="inline-flex items-center">
-                                  <li>
-                                    <button
-                                      className="py-2 px-3 mt-2 focus:outline-none text-white rounded-lg bg-purple-600 active:bg-purple-600"
-                                      style={{ marginRight: "10px" }}
-                                      aria-label="Previous"
-                                      onClick={(event) => {
-                                        handlePrevClick(event);
-                                      }}
-                                    >
-                                      Prev
-                                    </button>
-                                  </li>
-                                  {/* {renderPaginationButtons()} */}
-                                  <li>
-                                    <button
-                                      className="py-2 px-3 mt-2 focus:outline-none text-white rounded-lg bg-purple-600 active:bg-purple-600"
-                                      aria-label="Next"
-                                      onClick={(event) => {
-                                        handleNextClick(event);
-                                      }}
-                                    >
-                                      Next
-                                    </button>
-                                  </li>
-                                </ul>
-                              </nav>
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    )}
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </main>
+          </main>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 

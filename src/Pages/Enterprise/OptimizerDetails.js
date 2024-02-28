@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import LeftMenuList from "../../Common/LeftMenuList";
 import TopNavbar from "../../Common/TopNavbar";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import Loader from "../../utils/Loader";
 import { useSelector, useDispatch } from "react-redux";
 import { OptimizerDetails , clearAdd_optimizer_response,clearAdd_optimizer_error} from "../../Slices/Enterprise/OptimizerSlice";
 
@@ -100,17 +100,13 @@ function OptimizerDetail() {
     // Initial fetch
     fetchData();
   
-    // // Set up an interval to fetch data every 30 seconds
-    // const intervalId = setInterval(() => {
-    //   fetchData();
-    // }, 30000); // 30 seconds in milliseconds
-  
-    // // Clean up the interval on component unmount
-    // return () => clearInterval(intervalId);
+    
   }, []); // Add dependencies if necessary
   
 
   return (
+    <>
+    {loading &&<Loader/>}
     <div className="flex h-screen bg-gray-50 dark:bg-gray-900">
       <LeftMenuList />
       <div className="flex flex-col flex-1 w-full">
@@ -411,6 +407,7 @@ function OptimizerDetail() {
         </main>
       </div>
     </div>
+    </>
   );
 }
 

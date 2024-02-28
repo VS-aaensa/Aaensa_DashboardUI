@@ -31,10 +31,8 @@ export const Addenterprise = createAsyncThunk(
     console.log(data);
     try {
       const response = await ADDENTERPRISE(data, header);
-      console.log(response, "--------=============");
       return response.data;
     } catch (error) {
-      // console.log(error,"this error -------------------");
       if (
         error.response.data.message === "Invalid token" ||
         error.response.data.message === "Access denied"
@@ -50,13 +48,10 @@ export const Addenterprise = createAsyncThunk(
 export const EditEnterprise = createAsyncThunk(
   "EditEnterprise",
   async ({ EnterpriseId, data, header }, { rejectWithValue }) => {
-    // console.log(data);
     try {
       const response = await EDITENTERPRISE(EnterpriseId, data, header);
-      //  console.log(response,"--------=============");
       return response.data;
     } catch (error) {
-      // console.log(error,"this error -------------------");
       if (
         error.response.data.message === "Invalid token" ||
         error.response.data.message === "Access denied"
@@ -72,13 +67,10 @@ export const EditEnterprise = createAsyncThunk(
 export const Delete = createAsyncThunk(
   "Delete",
   async ({ deleteData, header }, { rejectWithValue }) => {
-    // console.log(deleteData);
     try {
       const response = await DELETE(deleteData, header);
-      //  console.log(response,"--------=============");
       return response.data;
     } catch (error) {
-      // console.log(error,"this error -------------------");
       if (
         error.response.data.message === "Invalid token" ||
         error.response.data.message === "Access denied"

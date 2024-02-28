@@ -3,16 +3,11 @@ import { LOCATIONTABLE, ADDLOCATION } from "../../api/api";
 
 export const locationList = createAsyncThunk(
   "LocationList",
-
-
   async ({ data, EnterpriseId, StateId, header }, { rejectWithValue }) => {
     try {
       const response = await LOCATIONTABLE(EnterpriseId, StateId, header);
-      // console.log(response,"-----------------------------------------");
       return response.data;
     } catch (error) {
-
-      // console.log(error,"==================");
       if (
         error.response.data.message === "Invalid token" ||
         error.response.data.message === "Access denied"
@@ -33,11 +28,8 @@ export const locationModel = createAsyncThunk(
 
     try {
       const response = await ADDLOCATION(data, header);
-      // console.log(response,"-----------------------------------------");
       return response.data;
     } catch (error) {
-
-      // console.log(error,"==================");
       if (
         error.response.data.message === "Invalid token" ||
         error.response.data.message === "Access denied"

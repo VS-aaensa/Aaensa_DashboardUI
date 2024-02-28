@@ -3,17 +3,15 @@ import LeftMenuList from "../../Common/LeftMenuList";
 import TopNavbar from "../../Common/TopNavbar";
 import EnterpriseModal from "../../Modals/AddModals/EnterpriseModal";
 import EnterpriseEditModal from "../../Modals/EditModals/EnterpriseEditmodel";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { updateEnterpriseId } from "../../Slices/enterpriseDataSlice";
-import {
-  enterpriseList,
-  clearDelete_response
-} from "../../Slices/Enterprise/enterpriseSlice";
+import {enterpriseList,clearDelete_response} from "../../Slices/Enterprise/enterpriseSlice";
 import { clearResponse, clearError } from "../../Slices/Enterprise/StateSlices";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import DeleteModal from "../../Modals/DeleteModals/DeleteModal";
+import Loader from "../../utils/Loader";
+
 
 function Enterprise() {
   const dispatch = useDispatch();
@@ -194,8 +192,10 @@ function Enterprise() {
   function notify() {
     toast.success("Enterprise added successfully");
   }
-
+// <></>
   return (
+    <>
+    {loading &&<Loader/>}
     <div className="flex h-screen bg-gray-50 dark:bg-gray-900">
       <LeftMenuList />
       <div className="flex flex-col flex-1 w-full">
@@ -472,6 +472,7 @@ function Enterprise() {
         //  transition: Bounce
       />
     </div>
+    </>
   );
 }
 

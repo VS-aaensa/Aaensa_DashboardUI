@@ -9,6 +9,7 @@ import GatewaySlice from "../Slices/Enterprise/GatewaySlice";
 import OptimizerSlice  from "../Slices/Enterprise/OptimizerSlice";
 import SettingsSlice from "../Slices/SettingsSlice";
 import ByPassSlice from "../Slices/Enterprise/ByPassSlice";
+import { ReportSlice } from "../Slices/ReportSlices";
 export const store = configureStore({
   reducer: {
     EnterpriseData: EnterpriseSliceReducer,
@@ -20,6 +21,7 @@ export const store = configureStore({
     gatewaySlice:GatewaySlice,
     optimizerSlice:OptimizerSlice,
     settingsSlice:SettingsSlice,
-    byPassSlice:ByPassSlice
+    byPassSlice:ByPassSlice,
+    reportSlice:ReportSlice,
   },
 });

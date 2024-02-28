@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Delete,clearDelete_response, clearDelete_error } from "../../Slices/Enterprise/enterpriseSlice";
 
 function DeleteModals({ closeModal, Data }) {
+  console.log("this delete model");
   const header = {
     headers: {
       Authorization: `Bearer ${window.localStorage.getItem("token")}`,
@@ -14,8 +15,8 @@ function DeleteModals({ closeModal, Data }) {
   const dispatch = useDispatch();
   async function allDelete() {
     const deleteData = Data;
-
     dispatch(Delete({ deleteData, header }));
+    closeModal();
   }
   useEffect(() => {
     if (allDelete_response) {
