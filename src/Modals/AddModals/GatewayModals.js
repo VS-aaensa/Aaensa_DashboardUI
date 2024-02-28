@@ -112,7 +112,7 @@ function GatewayModals({ closeModal, data1 }) {
                   onClick={closeModal}
                 >
                   <svg
-                    class="w-4 h-4"
+                    className="w-4 h-4"
                     fill="currentColor"
                     viewBox="0 0 20 20"
                     role="img"

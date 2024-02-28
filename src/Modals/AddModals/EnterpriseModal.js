@@ -39,8 +39,6 @@ const EnterpriseModal = ({ closeModal }) => {
   const { status, add_enterprise_response, add_enterprise_error, loading } = useSelector(
     (state) => state.enterpriseSlice
   );
-console.log(add_enterprise_error,"--------___________________");
-// console.log(add_enterprise_response,"responseeeeeeeeeeeeeeeeeeeeeee");
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
@@ -68,7 +66,6 @@ console.log(add_enterprise_error,"--------___________________");
     const phonePattern = /^\d{10}$/;
     setIsValidPhone(phonePattern.test(newPhone));
   };
-console.log(isValidPhone);
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setEnterpriseData((prevData) => ({
@@ -110,7 +107,6 @@ console.log(isValidPhone);
         setErrorLog([]);
       }, 2000);
       dispatch(clearEnterprise_Add_error());
-      // console.log(add_enterprise_error,"$$$$$$$$$$$$$$$$$$$$$$$$$");
     }
     if(add_enterprise_response){
       dispatch(clearAdd_enterprise_response());

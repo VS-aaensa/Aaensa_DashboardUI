@@ -2,14 +2,13 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import LeftMenuList from "../Common/LeftMenuList";
 import TopNavbar from "../Common/TopNavbar";
+import Loader from "../utils/Loader";
 import moment from "moment";
 import "daterangepicker";
 import $, { event } from "jquery";
 import { useSelector, useDispatch } from "react-redux";
 import {
-  enterpriseList,
-  clearEnterpriseResonse,
-} from "../Slices/Enterprise/enterpriseSlice";
+  enterpriseList, clearEnterpriseResonse,} from "../Slices/Enterprise/enterpriseSlice";
 import { stateList, clearResponse } from "../Slices/Enterprise/StateSlices";
 import {
   locationList,
@@ -47,7 +46,6 @@ function Reports() {
   const [StateId, setSelectedStateId] = useState(""); //this is state id
   const [LocationId, setSelectedLocationId] = useState(""); //this is Location id
   const [selectedGatewayId, setSelectedGatewayId] = useState(""); //this is Location id
-  const [selectedInterval, setSelectedInterval] = useState(0);
   const [SelectedgatewayName, setSelectedgatewayName] = useState("");
   //Id's
   // CUSTOMER ------------------
@@ -179,7 +177,6 @@ function Reports() {
   };
 
   //Gateway
-  // {_id:ObjectId('6582f9f91980116c336a10f1'),Enterprise_ID:ObjectId('6581306cdd186286653fc290'),State_ID:ObjectId('658024a27c64bcd8e249a07d')}
 
   const { gateway_response, gateway_error } = useSelector(
     (state) => state.gatewaySlice
@@ -256,7 +253,7 @@ function Reports() {
       function (ev, picker) {
         const startDate = picker.startDate.format("M/DD/YYYY hh:mm A");
         const endDate = picker.endDate.format("M/DD/YYYY hh:mm A");
-
+        setCurrentPage(1);
         setStartDate(startDate);
         setEndDate(endDate);
       }
@@ -293,10 +290,8 @@ function Reports() {
           },
         }
       );
-      console.log(response, "&&&&&&&&&&&&&&&&&&");
       setDeviceData(response?.data?.data);
     } catch (error) {
-      console.log(error, " this is error");
       if (
         error.response.data.message === "Invalid token" ||
         error.response.data.message === "Access denied"
@@ -304,11 +299,11 @@ function Reports() {
         window.localStorage.clear();
         window.location.href = "./";
       }
-      // //console.log({ Error: error });
     }
   };
 
   async function reportApi(event) {
+    console.log("this is rendering");
     event.preventDefault();
     setApply(true);
     const token = window.localStorage.getItem("token");
@@ -332,7 +327,6 @@ function Reports() {
       );
       setReportData(response?.data?.response);
     } catch (error) {
-      console.log(error, " this is error");
       if (
         error.response.data.message === "Invalid token" ||
         error.response.data.message === "Access denied"
@@ -340,7 +334,6 @@ function Reports() {
         window.localStorage.clear();
         window.location.href = "./";
       }
-      // //console.log({ Error: error });
     }
   }
 
@@ -637,11 +630,7 @@ function Reports() {
                           <div className="online"></div>
                         </div>
                         <div>
-                          {log.OptimizerID.isOnline ? (
-                            <p className="font-semibold">Online</p>
-                          ) : (
-                            <p className="font-semibold">Offline</p>
-                          )}
+                        {log.DeviceStatus ? <p className="font-semibold">Online</p> : <p className="font-semibold">Offline</p>}
                         </div>
                       </div>
                     </td>
@@ -718,8 +707,6 @@ function Reports() {
       });
     });
   };
-
-  // //console.log(TableData,"table");
   // State to manage the selected option
   const [selectedOption, setSelectedOption] = useState("Actual");
 
@@ -835,6 +822,8 @@ function Reports() {
   };
 
   return (
+    <>
+    {loading &&<Loader/>}
     <div className="flex h-screen bg-gray-50 dark:bg-gray-900">
       <LeftMenuList />
       <div className="flex flex-col flex-1 w-full">
@@ -1251,6 +1240,7 @@ function Reports() {
         </main>
       </div>
     </div>
+    </>
   );
 }
 
