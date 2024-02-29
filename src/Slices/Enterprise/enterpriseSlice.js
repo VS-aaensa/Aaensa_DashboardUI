@@ -28,7 +28,6 @@ export const enterpriseList = createAsyncThunk(
 export const Addenterprise = createAsyncThunk(
   "AddEnterprise",
   async ({ data, header }, { rejectWithValue }) => {
-    console.log(data);
     try {
       const response = await ADDENTERPRISE(data, header);
       return response.data;

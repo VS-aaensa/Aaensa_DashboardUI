@@ -29,8 +29,7 @@ function MeterDetails() {
   // let formattedTime="";
 
   const { status, gateway_details_response, gateway_details_error, loading } = useSelector((state) => state.gatewaySlice);
-  console.log(gateway_details_error);
-  const Gateway_ID = window.localStorage.getItem("Gateway_id")
+ const Gateway_ID = window.localStorage.getItem("Gateway_id")
   const header = {
     headers: {
       Authorization: `Bearer ${window.localStorage.getItem("token")}`,
@@ -55,7 +54,6 @@ function MeterDetails() {
       })
       // Extract date and time from the timestamp
       const timestampInMillis = parseInt(gateway_details_response.data.TimeStamp) * 1000;
-      // console.log(timestampInMillis, "&&&&&&&&&&&&&&&&&&&&&&&");
       // Create a new Date object using the timestamp
       const timestampDate = new Date(timestampInMillis);
 
@@ -88,8 +86,7 @@ function MeterDetails() {
       setErrorMessage(gateway_details_error);
     }
   }, [gateway_details_response, gateway_details_error])
-  // console.log(formattedDate, formattedTime, "))))))))))))))))))))))))");
-  return (
+   return (
     <div className="flex h-screen bg-gray-50 dark:bg-gray-900">
       <LeftMenuList />
       <div className="flex flex-col flex-1 w-full">

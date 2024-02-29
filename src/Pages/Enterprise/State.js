@@ -75,7 +75,6 @@ useEffect(()=>{
   };
 
   const handleInputChange = async (Id, StateName) => {
-    console.log(StateName);
     window.localStorage.setItem("STATENAME", StateName);
     window.localStorage.setItem("State_Id", Id);
     window.location.href = "/location";
@@ -180,13 +179,11 @@ useEffect(()=>{
 
     return pages;
   };
-  // console.log(statelist,"-----===========");
-
+ 
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const displayedData = statelist.slice(startIndex, endIndex);
-  // console.log(displayedData);
-
+ 
   return (
     <>
       {loading && <Loader />}

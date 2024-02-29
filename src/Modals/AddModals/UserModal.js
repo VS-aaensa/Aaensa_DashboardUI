@@ -50,14 +50,11 @@ const UserModal = ({ closeModal }) => {
     // Check if selectedEnterprise is not undefined before accessing its properties
     if (selectedEnterprise && selectedEnterprise._id) {
       // Log the selected enterprise ID
-      console.log(selectedEnterprise._id);
 
       // Set the selected enterprise ID in the state
       setSelectedEnterpriseId(selectedEnterprise._id);
     } else {
       // Handle the case where selectedEnterprise or its _id property is undefined
-      console.error("Selected enterprise or its ID is undefined");
-      console.log(selectedEnterpriseId);
     }
 
     setEnterpriseData((prevData) => ({
@@ -104,32 +101,14 @@ if (add_enterprise_user_error) {
 } else {
   closeModal();
 }
-    // try {
-      
-
-    //   // Now, check for errors after the async operation
-     
-    // } catch (error) {
-    //   // Handle any additional errors if necessary
-    //   console.error("Error dispatching addEnterpriseList:", error);
-    // }
-  };
+   };
 
   const handleAddButtonClick = async (e) => {
     e.preventDefault();
     // Log the user data
 
     dispatch(addSystemIntegrator({ dataa, navigate, header }));
-
-    // if (add_SyetemIntegrator_error) {
-    //   setErrorLog(add_SyetemIntegrator_error);
-    //   setTimeout(() => {
-    //     setErrorLog([]);
-    //   }, 2000);
-    // } else {
-    //   closeModal();
-    // }
-  };
+ };
 
   const handleRadioChange = (value) => {
     setUserType(value);
@@ -137,10 +116,7 @@ if (add_enterprise_user_error) {
   useEffect(() => {
     async function reportApi() {
       dispatch(EnterpriseName({ header }));
-      // if (add_enterprise_name) {
-      //   setEnterpriseList(add_enterprise_name.data.data);
-      // }
-    }
+       }
     reportApi();
   }, []);
 

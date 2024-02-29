@@ -1,27 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import LeftMenuList from "../Common/LeftMenuList";
 import TopNavbar from "../Common/TopNavbar";
 import Loader from "../utils/Loader";
 import moment from "moment";
 import "daterangepicker";
-import $, { event } from "jquery";
+import $ from "jquery";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  enterpriseList, clearEnterpriseResonse,
-} from "../Slices/Enterprise/enterpriseSlice";
+import {enterpriseList} from "../Slices/Enterprise/enterpriseSlice";
 import { stateList, clearResponse } from "../Slices/Enterprise/StateSlices";
-import {
-  locationList,
-  clearLocationResponse,
-} from "../Slices/Enterprise/LocationSlice";
-import {
-  GatewayList,
-  clearGatewaysResponse,
-} from "../Slices/Enterprise/GatewaySlice";
+import { locationList,clearLocationResponse,} from "../Slices/Enterprise/LocationSlice";
+import { GatewayList, clearGatewaysResponse,} from "../Slices/Enterprise/GatewaySlice";
+import { MeterData,DeviceData} from "../Slices/ReportSlices";
 function Reports() {
   const dispatch = useDispatch();
-  const token = window.localStorage.getItem("token");
   const [formData, setFormData] = useState({
     customer: "",
     state: "",
@@ -43,6 +35,8 @@ function Reports() {
   const handleRadioChange = (value) => {
     setUserType(value);
   };
+  const [page,setPage] =useState("");
+  const initialRender = useRef(true);
   const [EnterpriseId, setSelectedEnterpriseId] = useState(""); //this is enterprise id
   const [StateId, setSelectedStateId] = useState(""); //this is state id
   const [LocationId, setSelectedLocationId] = useState(""); //this is Location id
@@ -55,7 +49,7 @@ function Reports() {
       Authorization: `Bearer ${window.localStorage.getItem("token")}`,
     },
   };
-  const { customer_response, error } = useSelector(
+  const { customer_response } = useSelector(
     (state) => state.enterpriseSlice
   );
   const customer = async () => {
@@ -85,7 +79,6 @@ function Reports() {
     // Check if selectedEnterprise is not undefined before accessing its properties
     if (selectedEnterprise && selectedEnterprise._id) {
       // Log the selected enterprise ID
-      console.log(selectedEnterprise._id);
 
       // Set the selected enterprise ID in the state
       setSelectedEnterpriseId(selectedEnterprise._id);
@@ -99,7 +92,7 @@ function Reports() {
 
   // STATE--------------------
 
-  const { status, state_response, state_error, loading } = useSelector(
+  const {  state_response,  loading } = useSelector(
     (state) => state.stateSlices
   );
 
@@ -126,7 +119,6 @@ function Reports() {
     // Check if selectedEnterprise is not undefined before accessing its properties
     if (selectedState && selectedState.State_ID._id) {
       // Log the selected enterprise ID
-      console.log(selectedState.State_ID._id, "stateId");
 
       // Set the selected enterprise ID in the state
       setSelectedStateId(selectedState.State_ID._id);
@@ -140,7 +132,7 @@ function Reports() {
   // endstate
 
   //Location
-  const { location_response, location_error } = useSelector(
+  const { location_response } = useSelector(
     (state) => state.locationSlice
   );
 
@@ -164,7 +156,6 @@ function Reports() {
     // Check if selectedEnterprise is not undefined before accessing its properties
     if (selectedLocation && selectedLocation._id) {
       // Log the selected enterprise ID
-      console.log(selectedLocation._id, "LocationId");
 
       // Set the selected enterprise ID in the state
       setSelectedLocationId(selectedLocation._id);
@@ -178,7 +169,7 @@ function Reports() {
 
   //Gateway
 
-  const { gateway_response, gateway_error } = useSelector(
+  const { gateway_response } = useSelector(
     (state) => state.gatewaySlice
   );
 
@@ -197,7 +188,6 @@ function Reports() {
     // Check if selectedEnterprise is not undefined before accessing its properties
     if (selectedGateway && selectedGateway.GatewayID) {
       // Log the selected enterprise ID
-      console.log(selectedGateway.GatewayID, "GatewayId");
 
       // Set the selected enterprise ID in the state
       setSelectedGatewayId(selectedGateway.GatewayID);
@@ -220,10 +210,6 @@ function Reports() {
       setStateList(state_response.AllEntState);
     }
 
-    if (location_error) {
-      // setErrorMessage(location_error.message);
-    }
-
     if (location_response && location_response.AllEntStateLocation) {
       setLocationList(location_response.AllEntStateLocation);
     }
@@ -233,9 +219,6 @@ function Reports() {
     }
   }, [customer_response, state_response, location_response, gateway_response]);
 
-  const tabStyle = {
-    cursor: "pointer",
-  };
 
   // Date and Time
   useEffect(() => {
@@ -264,78 +247,54 @@ function Reports() {
     };
   }, []);
 
-  //Api Calling
+//Api Calling
+const {   meterData_response, meterData_error,deviceData_response,deviceData_error,loading1 } = useSelector(
+  (state) => state.reportSlice
+);
+const deviceApi = async (event) => {
+  event.preventDefault();
+  setApply(true);
+  const Page = currentPage
+const data =  {
+enterprise_id: EnterpriseId,
+state_id: StateId,
+location_id: LocationId,
+gateway_id: selectedGatewayId,
+startDate: startDate,
+endDate: endDate,
+}
+  dispatch(DeviceData({Page,data,header}));
+};
 
-  const deviceApi = async (event) => {
-    event.preventDefault();
-    setApply(true);
+//Report Api
 
-    const token = window.localStorage.getItem("token");
-
-    try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_API}/api/admin/get/all/device/data?page=${currentPage}&pageSize=20`,
-
-        {
-          enterprise_id: EnterpriseId,
-          state_id: StateId,
-          location_id: LocationId,
-          gateway_id: selectedGatewayId,
-          startDate: startDate,
-          endDate: endDate,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      setDeviceData(response?.data?.data);
-    } catch (error) {
-      if (
-        error.response.data.message === "Invalid token" ||
-        error.response.data.message === "Access denied"
-      ) {
-        window.localStorage.clear();
-        window.location.href = "./";
-      }
-    }
+async function reportApi(event) {
+  event.preventDefault();
+  setApply(true);
+const Page  = currentPage;
+  const data = {
+    Customer: EnterpriseId,
+    Stateid: StateId,
+    Locationid: LocationId,
+    Gatewayid: SelectedgatewayName,
+    startDate: startDate,
+    endDate: endDate,
   };
+  dispatch(MeterData({Page,data,header}));
 
-  async function reportApi(event) {
-    console.log("this is rendering");
-    event.preventDefault();
-    setApply(true);
-    const token = window.localStorage.getItem("token");
 
-    try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_API}/api/admin/get/all/meter/data?page=${currentPage}&pageSize=100`,
-        {
-          Customer: EnterpriseId,
-          Stateid: StateId,
-          Locationid: LocationId,
-          Gatewayid: SelectedgatewayName,
-          startDate: startDate,
-          endDate: endDate,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      setReportData(response?.data?.response);
-    } catch (error) {
-      if (
-        error.response.data.message === "Invalid token" ||
-        error.response.data.message === "Access denied"
-      ) {
-        window.localStorage.clear();
-        window.location.href = "./";
-      }
+}
+
+useEffect(()=>{
+    if(meterData_response){
+      setReportData(meterData_response?.response);
+      setPage(meterData_response.pagination.page);
     }
-  }
+    if(deviceData_response){
+      setDeviceData(deviceData_response?.data);
+      setPage(deviceData_response.pagination.page);
+    }
+},[meterData_response,deviceData_response])
 
   const TableData = [];
 
@@ -743,23 +702,22 @@ function Reports() {
   function handleNextClick(event) {
     event.preventDefault();
     setCurrentPage((prevPage) => Math.max(prevPage + 1, 1));
-    callbothApi(event);
   }
 
   function handlePrevClick(event) {
     event.preventDefault();
     setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
-    callbothApi(event);
   }
-  const callbothApi = (event) => {
-    reportApi(event);
-    deviceApi(event);
-  }
-  // useEffect(() => {
-  //   const fakeEvent = { preventDefault: () => { } }; // create a fake event object with preventDefault method
-  //   reportApi(fakeEvent);
-  //   deviceApi(fakeEvent);
-  // }, [currentPage]);
+  useEffect(() => {
+    // Skip the useEffect on initial render
+    if (initialRender.current) {
+      initialRender.current = false;
+      return;
+    }
+    const fakeEvent = { preventDefault: () => { } }; // create a fake event object with preventDefault method
+    reportApi(fakeEvent);
+    deviceApi(fakeEvent);
+  }, [currentPage]);
 
   //Download CSV
   const downloadFile = async (url, requestBody, defaultFilename) => {
@@ -773,8 +731,6 @@ function Reports() {
         : defaultFilename;
 
       const urlBlob = window.URL.createObjectURL(new Blob([response.data]));
-
-      // console.log(response.data,"=================================");
       const a = document.createElement("a");
       a.href = urlBlob;
       a.download = filename;
@@ -782,7 +738,6 @@ function Reports() {
       a.click();
       document.body.removeChild(a);
     } catch (error) {
-      console.error("Error:", error);
     }
   };
 
@@ -826,7 +781,7 @@ function Reports() {
 
   return (
     <>
-      {/* {loading && <Loader />} */}
+      {loading1 && <Loader />}
       <div className="flex h-screen bg-gray-50 dark:bg-gray-900">
         <LeftMenuList />
         <div className="flex flex-col flex-1 w-full">
@@ -1019,7 +974,7 @@ function Reports() {
                                   ))}
                                 </select>
                               </div>
-                              <div className="download_btn">
+                              <div className="download_btn"style={{ position: "sticky", top: "0", zIndex: "1000" }}>
                                 <button
                                   type="button"
                                   className="py-2 px-3 mt-2 focus:outline-none text-white rounded-lg   "
@@ -1032,9 +987,9 @@ function Reports() {
                                     viewBox="0 0 24 24"
                                     fill="none"
                                     stroke="#4a90e2"
-                                    stroke-width="2"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
                                   >
                                     <path d="M3 15v4c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2v-4M17 9l-5 5-5-5M12 12.8V2.5" />
                                   </svg>
@@ -1078,7 +1033,7 @@ function Reports() {
                           >
                             <div className="grid px-4 py-3 text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800">
                               <span className="flex items-center col-span-3">
-                                {`Page No.  ${currentPage} `}
+                                {`Page No.  ${page} `}
                               </span>
                               <span className="col-span-2"></span>
                               {/* Pagination  */}
@@ -1120,8 +1075,6 @@ function Reports() {
 
                       {userType === "deviceData" && apply && (
                         <div
-                          // className="hidden opacity-0"
-
                           role="tabpanel"
                         >
                           <div className="flex justify-between items-center">
@@ -1145,7 +1098,7 @@ function Reports() {
                               </select>
                             </div>
 
-                            <div className="download_btn">
+                            <div className="download_btn" style={{ position: "sticky", top: "0", zIndex: "1000" }}>
                               <button
                                 type="button"
                                 className="py-2 px-3 mt-2 focus:outline-none text-white rounded-lg   "
@@ -1158,9 +1111,9 @@ function Reports() {
                                   viewBox="0 0 24 24"
                                   fill="none"
                                   stroke="#4a90e2"
-                                  stroke-width="2"
-                                  stroke-linecap="round"
-                                  stroke-linejoin="round"
+                                  strokeWidth="2"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
                                 >
                                   <path d="M3 15v4c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2v-4M17 9l-5 5-5-5M12 12.8V2.5" />
                                 </svg>
@@ -1196,7 +1149,7 @@ function Reports() {
                           >
                             <div className="grid px-4 py-3 text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800">
                               <span className="flex items-center col-span-3">
-                                {`Page No.  ${currentPage} `}
+                                {`Page No.  ${page} `}
                               </span>
                               <span className="col-span-2"></span>
                               {/* Pagination  */}

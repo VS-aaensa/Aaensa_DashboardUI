@@ -33,7 +33,6 @@ const EnterpriseEditModal = ({ closeModal, Data }) => {
   const [message, setMessage] = useState("");
   const [open, setOpen] = React.useState(false);
 
-  // console.log(Data, " this data");
   useEffect(() => {
     setEnterpriseData({
       EnterpriseName: Data.EnterpriseName,
@@ -43,13 +42,11 @@ const EnterpriseEditModal = ({ closeModal, Data }) => {
       Phone: Data.ContactInfo.Phone,
     });
     if (edit_enterprise_response.message=="Enterprise updated successfully.") {
-      console.log(edit_enterprise_response,"1234567890");
-      closeModal();
+     closeModal();
       dispatch(clearEdit_enterprise_response());
     }
 
     if (edit_enterprise_error) {
-      // console.log(edit_enterprise_response,"1234567890");
       closeModal();
       dispatch(clearEdit_enterprise_error());
     }
@@ -71,10 +68,8 @@ const EnterpriseEditModal = ({ closeModal, Data }) => {
     }));
   };
   const handleAddEnterprise = (e) => {
-    // async function handleAddEnterprise(e) {
     e.preventDefault();
-    // console.log("Enterprise Data:", enterpriseData);
-    const data = enterpriseData;
+      const data = enterpriseData;
 
 
     dispatch(EditEnterprise({ EnterpriseId, data, header }));

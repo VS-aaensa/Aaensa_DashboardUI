@@ -91,13 +91,11 @@ const EnterpriseModal = ({ closeModal }) => {
       setTimeout(() => {
         setphoneMessage("")
       }, 2000);
-      console.log("wrong Phone No.");
     } else{
       setMessage("Invalid Email");
       setTimeout(() => {
         setMessage("")
       }, 2000);
-      console.log("wrong email");
     }
   }
   useEffect(()=>{

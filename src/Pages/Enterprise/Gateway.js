@@ -36,9 +36,7 @@ function Gateway() {
   const LOCATIONNAME = window.localStorage.getItem("LOCATIONNAME");
 
   const { status, gateway_response, gateway_error, loading } = useSelector(
-    (state) => state.gatewaySlice
-  );
-  console.log({ gateway_response });
+    (state) => state.gatewaySlice);
   const { allDelete_response, allDelete_error } = useSelector(
     (state) => state.enterpriseSlice
   );
@@ -90,7 +88,6 @@ function Gateway() {
   const { bypass_response, bypass_error } = useSelector(
     (state) => state.byPassSlice
   );
-
   const [BypassData, setBypassData] = useState({});
 
   function bypass(Id, mode) {
@@ -139,7 +136,7 @@ function Gateway() {
     setIsDeleteModelOpen(true);
   };
 
-   const closeModal = () => {
+  const closeModal = () => {
     setIsEditModelOpen(false);
     setIsDeleteModelOpen(false);
     setIsModalOpen(false);
@@ -157,7 +154,6 @@ function Gateway() {
       [Id]: !prevStates[Id], // Toggle the state for the specific item
     }));
 
-    console.log(!checkboxStates1[Id]);
     if (!checkboxStates1[Id] == true) {
       try {
         const response = await axios.post(
@@ -172,9 +168,7 @@ function Gateway() {
           }
         );
 
-        console.log(response, "readytoconfig");
       } catch (error) {
-        console.log(error);
       }
     }
   }
@@ -200,8 +194,8 @@ function Gateway() {
         <li key={i}>
           <button
             className={`px-3 py-1 rounded-md ${currentPage === i
-                ? "text-white bg-purple-600 border border-r-0 border-purple-600"
-                : "focus:outline-none focus:shadow-outline-purple"
+              ? "text-white bg-purple-600 border border-r-0 border-purple-600"
+              : "focus:outline-none focus:shadow-outline-purple"
               }`}
             onClick={() => handlePageChange(i)}
           >
@@ -236,8 +230,8 @@ function Gateway() {
         <li key={i}>
           <button
             className={`px-3 py-1 rounded-md ${currentPage === i
-                ? "text-white bg-purple-600 border border-r-0 border-purple-600"
-                : "focus:outline-none focus:shadow-outline-purple"
+              ? "text-white bg-purple-600 border border-r-0 border-purple-600"
+              : "focus:outline-none focus:shadow-outline-purple"
               }`}
             onClick={() => handlePageChange(i)}
           >
@@ -518,7 +512,7 @@ function Gateway() {
                   <tbody className="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
                     {displayedData.map((item, rowIndex) => (
                       <tr className="text-gray-700 dark:text-gray-400"
-                      key={rowIndex}
+                        key={rowIndex}
                       >
                         <td className="px-4 py-3 text-sm">
                           <Link
@@ -550,52 +544,52 @@ function Gateway() {
 
                         <td className="px-4 py-3 text-sm">
                           {(item.BypassMode === "OFF" || item.BypassMode === "") ? (
-                          <div className="toggle_btn">
-                            <input
-                              type="checkbox"
-                              id={`toggle-btn-2-${rowIndex}`}
-                              defaultChecked={ false}
-                              onClick={() => {
-                                bypass(item.GatewayID, item.BypassMode);
-                               
-                              }}
-                            />
-                            <label htmlFor={`toggle-btn-2-${rowIndex}`} />
-                            {isModalbypass && (
-                              <ByPassModal
-                                Data={BypassData}
-                                closeModal={() => closeModal()}
+                            <div className="toggle_btn">
+                              <input
+                                type="checkbox"
+                                id={`toggle-btn-2-${rowIndex}`}
+                                defaultChecked={false}
+                                onClick={() => {
+                                  bypass(item.GatewayID, item.BypassMode);
+
+                                }}
                               />
-                            )}
-                          </div>) : (item?.BypassMode === "ON")?(<div className="toggle_btn">
-                            <input
-                              type="checkbox"
-                              id={`toggle-btn-2-${rowIndex}`}
-                              defaultChecked={true}
-                              onClick={() => {
-                                bypass(item.GatewayID, item.BypassMode);
-                               
-                              }}
-                            />
-                            <label htmlFor={`toggle-btn-2-${rowIndex}`} />
-                            {isModalbypass && (
-                              <ByPassModal
-                                Data={BypassData}
-                                closeModal={() => closeModal()}
+                              <label htmlFor={`toggle-btn-2-${rowIndex}`} />
+                              {isModalbypass && (
+                                <ByPassModal
+                                  Data={BypassData}
+                                  closeModal={() => closeModal()}
+                                />
+                              )}
+                            </div>) : (item?.BypassMode === "ON") ? (<div className="toggle_btn">
+                              <input
+                                type="checkbox"
+                                id={`toggle-btn-2-${rowIndex}`}
+                                defaultChecked={true}
+                                onClick={() => {
+                                  bypass(item.GatewayID, item.BypassMode);
+
+                                }}
                               />
-                            )}
-                          </div>):(<div className="toggle_btn">
-                            <input
-                              type="checkbox"
-                              id={`toggle-btn-2-${rowIndex}`}
-                              defaultChecked={ false}
-                              disabled={true}
-                            />
-                            <label htmlFor={`toggle-btn-2-${rowIndex}`} />
-                            <p className="mt-2 text-xs text-red-500" >
-                              {item.BypassMode}
-                            </p>
-                          </div>)}
+                              <label htmlFor={`toggle-btn-2-${rowIndex}`} />
+                              {isModalbypass && (
+                                <ByPassModal
+                                  Data={BypassData}
+                                  closeModal={() => closeModal()}
+                                />
+                              )}
+                            </div>) : (<div className="toggle_btn">
+                              <input
+                                type="checkbox"
+                                id={`toggle-btn-2-${rowIndex}`}
+                                defaultChecked={false}
+                                disabled={true}
+                              />
+                              <label htmlFor={`toggle-btn-2-${rowIndex}`} />
+                              <p className="mt-2 text-xs text-red-500" >
+                                {item.BypassMode}
+                              </p>
+                            </div>)}
                         </td>
 
                         <td>

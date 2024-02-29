@@ -7,10 +7,8 @@ export const GatewayList = createAsyncThunk(
   async ({ LocationId, header }, { rejectWithValue }) => {
     try {
       const response = await GATEWAYTABLE(LocationId, header);
-      // console.log(response.data,"-----------------------------------------");
-      return response.data;
+     return response.data;
     } catch (error) {
-      // console.log(error,"==================");
       if (
         error.response.data.message === "Invalid token" ||
         error.response.data.message === "Access denied"
@@ -29,11 +27,9 @@ export const GatewayModel = createAsyncThunk(
   async ({ data, header }, { rejectWithValue }) => {
     try {
       const response = await GATEWAYMODEL(data, header);
-      // console.log(response.data, "-----------------------------------------");
-
+     
       return response.data;
     } catch (error) {
-      // console.log(error,"==================");
       if (
         error.response.data.message === "Invalid token" ||
         error.response.data.message === "Access denied"
@@ -52,11 +48,9 @@ export const EditGateway = createAsyncThunk(
   async ({ GatewayId, data, header }, { rejectWithValue }) => {
     try {
       const response = await EDITGATEWAY(GatewayId, data, header);
-      // console.log(response.data, "-----------------------------------------");
-
+     
       return response.data;
     } catch (error) {
-      // console.log(error,"==================");
       if (
         error.response.data.message === "Invalid token" ||
         error.response.data.message === "Access denied"
@@ -75,10 +69,8 @@ export const GatewayDetails = createAsyncThunk(
   async ({ Gateway_ID, header }, { rejectWithValue }) => {
     try {
       const response = await GATEWAYDETAILS(Gateway_ID, header);
-      // console.log(response.data, "-----------------------------------------");
       return response.data;
     } catch (error) {
-      // console.log(error,"==================");
       if (
         error.response.data.message === "Invalid token" ||
         error.response.data.message === "Access denied"

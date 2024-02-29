@@ -8,11 +8,9 @@ export const Bypass = createAsyncThunk(
       try {
        
         const response = await BYPASS(data, header);
-        // console.log(response,"-----------------------------------------");
         return response.data;
       } catch (error) {
-        console.log(error,"==================");
-        if (
+       if (
           error.response.data.message === "Invalid token" ||
           error.response.data.message === "Access denied"
         ) {
@@ -71,5 +69,5 @@ export const Bypass = createAsyncThunk(
       });
     },
   });
-  
+  export const {  clearError,clearResponse } = BypassSlice.actions;
   export default BypassSlice.reducer;

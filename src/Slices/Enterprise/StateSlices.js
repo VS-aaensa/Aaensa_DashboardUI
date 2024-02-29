@@ -8,10 +8,8 @@ export const stateList = createAsyncThunk(
   async ({ EnterpriseId, header }, { rejectWithValue }) => {
     try {
       const response = await STATETABLE(EnterpriseId, header);
-      console.log({response},"from slice");
       return response.data;
     } catch (error) {
-      console.log({error},"from slice");
       if (
         error.response.data.message === "Invalid token" ||
         error.response.data.message === "Access denied"
@@ -53,8 +51,7 @@ export const Addstate = createAsyncThunk(
 
       return response.data;
     } catch (error) {
-      // console.log(error,"++^^&&**");
-      if (
+       if (
         error.response.data.message === "Invalid token" ||
         error.response.data.message === "Access denied"
       ) {
