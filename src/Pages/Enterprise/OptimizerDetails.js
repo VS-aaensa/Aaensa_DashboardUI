@@ -24,11 +24,9 @@ function OptimizerDetail() {
   const [errorMessage, setErrorMessage] = useState([]);
 
   const optimizerId = window.localStorage.getItem("Optimizer_id");
-  // console.log();
-  const { status, add_optimizer_response, add_optimizer_error, loading } = useSelector(
+   const { status, add_optimizer_response, add_optimizer_error, loading } = useSelector(
     (state) => state.optimizerSlice
   );
-  // console.log(add_optimizer_error,"--------");
   const header = {
     headers: {
       Authorization: `Bearer ${window.localStorage.getItem("token")}`,
@@ -44,7 +42,6 @@ function OptimizerDetail() {
     }
 
     if (add_optimizer_response) {
-      console.log(add_optimizer_response);
       const data = add_optimizer_response;
       // Update the state with the fetched data
       setOptimizerDetails({
@@ -57,10 +54,8 @@ function OptimizerDetail() {
         coilTemperature: data.data.coil_temp,
         humidity: data.data.outside_humidity,
       });
-      console.log(data.data.TimeStamp,"&&&&&&&&&&&***********^^^^^^^^^^");
-       // Extract date and time from the timestamp
+      // Extract date and time from the timestamp
        const timestampInMillis = parseInt( data.data.TimeStamp) * 1000;
-       console.log(timestampInMillis, "&&&&&&&&&&&&&&&&&&&&&&&");
        // Create a new Date object using the timestamp
        const timestampDate = new Date(timestampInMillis);
  

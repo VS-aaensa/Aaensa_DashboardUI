@@ -21,8 +21,7 @@ function OptimizerEditModal({ closeModal, Data }) {
       ...prevData,
       [name]: value,
     }));
-    // console.log(`${name}: ${value}`);
-  };
+      };
 
   const OptimizerId = Data.selectedItem.OptimizerID
 

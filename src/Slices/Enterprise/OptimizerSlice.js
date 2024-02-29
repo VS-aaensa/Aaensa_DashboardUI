@@ -13,11 +13,9 @@ export const OptimizerList = createAsyncThunk(
   async ({ GatewayId, header }, { rejectWithValue }) => {
     try {
       const response = await OPTIMIZERTABLE(GatewayId, header);
-      console.log(response.data, "-----------------------------------------");
-      return response.data;
+       return response.data;
     } catch (error) {
-      // console.log(error, "==================");
-      if (
+       if (
         error.response.data.message === "Invalid token" ||
         error.response.data.message === "Access denied"
       ) {
@@ -36,11 +34,9 @@ export const OptimizerModel = createAsyncThunk(
   async ({ data, header }, { rejectWithValue }) => {
     try {
       const response = await ADDOPTIMIZER(data, header);
-      // console.log(response.data,"-----------------------------------------");
       return response.data;
     } catch (error) {
-      // console.log(error,"==================");
-      if (
+       if (
         error.response.data.message === "Invalid token" ||
         error.response.data.message === "Access denied"
       ) {
@@ -61,7 +57,6 @@ export const OptimizerDetails = createAsyncThunk(
       const response = await OPTIMIZERDETAILS(optimizerId, header);
       return response.data;
     } catch (error) {
-      console.log(error, "==================");
       if (
         error.response.data.message === "Invalid token" ||
         error.response.data.message === "Access denied"
@@ -80,7 +75,6 @@ export const EditOptimizer = createAsyncThunk(
   async ({ OptimizerId, data, header }, { rejectWithValue }) => {
     try {
       const response = await EDITOPTIMIZER(OptimizerId, data, header);
-      console.log(response.data, "-----------------------------------------");
       return response.data;
     } catch (error) {
 

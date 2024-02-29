@@ -31,8 +31,7 @@ function Dashboard() {
         const startDate = picker.startDate.format("M/DD/YYYY hh:mm A");
         const endDate = picker.endDate.format("M/DD/YYYY hh:mm A");
 
-        console.log("Start Date:", startDate);
-        console.log("End Date:", endDate);
+       
       }
     );
     // Clean up the date range picker when the component unmounts

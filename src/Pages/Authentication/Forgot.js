@@ -28,11 +28,7 @@ const Forgot = () => {
     secret_token_data,
     loading,
   } = useSelector((state) => state.authSlice);
-  console.log(response);
-  //   console.log(loading);
-  // console.log(forgotpass_error);
-  // console.log(response,"this is response");
-
+ 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
       return;

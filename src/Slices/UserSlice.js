@@ -49,7 +49,6 @@ export const addEnterpriseList = createAsyncThunk(
 export const addSystemIntegrator = createAsyncThunk(
   "user/addSystemIntegrator",
   async ({ dataa, navigate, header }, { rejectWithValue }) => {
-    console.log(dataa, "this is data");
     try {
       const response = await ADDSYSTEMINTEGRATOR(dataa, header);
       return response;
@@ -177,7 +176,6 @@ export const UserSlice = createSlice({
       state.status = "Success";
       state.loading = false;
       state.add_SyetemIntegrator = payload;
-      // console.log(payload, "this is payload");
       state.add_SyetemIntegrator_error = null;
     });
     builder.addCase(addSystemIntegrator.rejected, (state, { payload }) => {
@@ -186,8 +184,7 @@ export const UserSlice = createSlice({
       state.loading = false;
       state.add_SyetemIntegrator = null;
       state.add_SyetemIntegrator_error = payload;
-      // console.log(payload, "this is payload dataaaaaaaa--------");
-    });
+      });
 
     // ENTERPRISE NAME-------------------------------------------------------------------------
 

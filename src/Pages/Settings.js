@@ -109,7 +109,6 @@ function Settings() {
     // Check if selectedEnterprise is not undefined before accessing its properties
     if (selectedEnterprise && selectedEnterprise._id) {
       // Log the selected enterprise ID
-      // console.log(selectedEnterprise._id);
 
       // Set the selected enterprise ID in the state
       setSelectedEnterpriseId(selectedEnterprise._id);
@@ -153,7 +152,6 @@ function Settings() {
     // Check if selectedEnterprise is not undefined before accessing its properties
     if (selectedState && selectedState.State_ID._id) {
       // Log the selected enterprise ID
-      console.log(selectedState.State_ID._id, "stateId");
 
       // Set the selected enterprise ID in the state
       setSelectedStateId(selectedState.State_ID._id);
@@ -193,7 +191,6 @@ function Settings() {
     // Check if selectedEnterprise is not undefined before accessing its properties
     if (selectedLocation && selectedLocation._id) {
       // Log the selected enterprise ID
-      console.log(selectedLocation._id, "LocationId");
       setGroup("location");
       setId(selectedLocation._id);
       // Set the selected enterprise ID in the state
@@ -229,7 +226,6 @@ function Settings() {
     // Check if selectedEnterprise is not undefined before accessing its properties
     if (selectedGateway && selectedGateway.GatewayID) {
       // Log the selected enterprise ID
-      console.log(selectedGateway.GatewayID, "GatewayId");
       setGroup("gateway");
       setId(selectedGateway._id);
       // Set the selected enterprise ID in the state
@@ -262,7 +258,6 @@ function Settings() {
     // Check if selectedEnterprise is not undefined before accessing its properties
     if (selectedOptimizer && selectedOptimizer._id) {
       // Log the selected enterprise ID
-      console.log(selectedOptimizer._id, "OptimizerId");
       setGroup("optimizer");
       setId(selectedOptimizer._id);
       // Set the selected enterprise ID in the state
@@ -320,7 +315,6 @@ function Settings() {
 
   }
   const set = async () => {
-    console.log(data, "----------------");
     try {
       const response = await axios.post(
         `${process.env.REACT_APP_API}/api/hardware/optimizer/setting/value/update`,
@@ -333,7 +327,6 @@ function Settings() {
       );
       if (response.data.success == true) {
 
-        console.log("this is working rrrrrrrrrrrrrrrrr");
         setEnterpriseList([]);
         setStateList([]);
         setLocationList([]);
@@ -355,9 +348,7 @@ function Settings() {
           location: "", gatewayId: "", optimizerId: "", state: "", customer: ""
         }));
       }
-      console.log("Set successful:", response.data);
     } catch (error) {
-      console.error("Error:", error);
     }
   };
 
@@ -394,9 +385,7 @@ function Settings() {
         }));
       }
 
-      console.log("Reset successful:", response.data);
     } catch (error) {
-      console.error("Error:", error);
     }
   }
 
@@ -404,7 +393,6 @@ function Settings() {
 
   const updateSliderValue = (value, setterFunction, fieldName) => {
     setterFunction(parseFloat(value));
-    console.log(`${fieldName} value changed to: ${value}`);
   };
 
   return (

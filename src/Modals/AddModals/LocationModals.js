@@ -45,7 +45,6 @@ function LocationModals({ closeModal }) {
   };
 
   async function AddLocation() {
-    // console.log("lkdisdidi00000000000000000");
     dispatch(locationModel({ data, header }));
 
   }

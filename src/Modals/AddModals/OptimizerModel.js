@@ -20,7 +20,6 @@ function OptimizerModels({ closeModal, Data }) {
       ...prevData,
       [name]: value,
     }));
-    // console.log(`${name}: ${value}`);
   };
 
   const data = {
@@ -32,7 +31,6 @@ function OptimizerModels({ closeModal, Data }) {
   const { status, add_optimizerlist_response, add_optimizerlist_error, loading } = useSelector(
     (state) => state.optimizerSlice
   );
-  console.log(add_optimizerlist_response, "++++++++++++++++++++++++++");
   const header = {
     headers: {
       Authorization: `Bearer ${window.localStorage.getItem("token")}`,

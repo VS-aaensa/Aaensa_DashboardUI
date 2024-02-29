@@ -6,8 +6,7 @@ export const userLogin = createAsyncThunk(
   async ({ data, navigate }, { rejectWithValue }) => {
     try {
       const response = await LOGIN(data);
-      // console.log({response});
-      if (response?.data?.success === true) {
+       if (response?.data?.success === true) {
         window.localStorage.setItem("token", response.data.token);
         window.localStorage.setItem("loggedIn", true);
         navigate("/dashboard");
@@ -15,8 +14,7 @@ export const userLogin = createAsyncThunk(
 
       return response.data;
     } catch (error) {
-      console.log("AuthSliceError===>",error.response.data);
-      return rejectWithValue(error.response.data);
+     return rejectWithValue(error.response.data);
     }
   }
 );
@@ -27,9 +25,7 @@ export const forgotPassword = createAsyncThunk(
     try {
       const response = await FORGOTPASS(data);
 
-      // console.log(response)
-
-      if (response?.data?.success === true) {
+       if (response?.data?.success === true) {
         window.localStorage.setItem("token", response.data.token);
         window.localStorage.setItem("loggedIn", true);
         setTimeout(() => {
@@ -38,8 +34,7 @@ export const forgotPassword = createAsyncThunk(
       }
       return response.data;
     } catch (error) {
-      console.log(error);
-
+    
       return rejectWithValue(error.response.data);
     }
   }
@@ -116,8 +111,7 @@ export const AuthSlice = createSlice({
       state.token = payload?.data?.token;
       state.response = payload;
       
-      // console.log(state.response,"this is payload");
-    });
+      });
     builder.addCase(forgotPassword.rejected, (state, { payload }) => {
       // Add user to the state array
       state.status = "Failed";

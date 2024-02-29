@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Bypass } from "../../Slices/Enterprise/ByPassSlice";
+import { Bypass,clearError,clearResponse } from "../../Slices/Enterprise/ByPassSlice";
 import { useSelector, useDispatch } from "react-redux";
 
 const YourComponent = ({ Data, closeModal }) => {
   const dispatch = useDispatch();
   const [selectedDateTime, setSelectedDateTime] = useState("");
   const [activeTab, setActiveTab] = useState("instant");
-  console.log(Data);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
@@ -16,8 +16,6 @@ const YourComponent = ({ Data, closeModal }) => {
   const { bypass_response, bypass_error } = useSelector(
     (state) => state.byPassSlice
   );
-  console.log({bypass_response},"this is bypass response");
-  console.log({bypass_error},"this is bypass error");
 
   const header = {
     headers: {
@@ -38,12 +36,11 @@ const YourComponent = ({ Data, closeModal }) => {
       // If the user clicks "OK", perform the apply action
       // alert("Applying...");
       schedule(event);
-      closeModal();
+      // closeModal();
     }
   }
   function schedule(event) {
     event.preventDefault();
-    console.log("Schedule");
     window.localStorage.setItem("Schedule", "Schedule");
     const data = {
       is_schedule: true,
@@ -52,18 +49,9 @@ const YourComponent = ({ Data, closeModal }) => {
       group: Data.group,
       id: Data.id,
     };
-
     dispatch(Bypass({ data, header }));
 
-    if (bypass_error) {
-      // setErrorMessage(bypass_error.message);
-      closeModal();
-    }
-
-    if (bypass_response) {
-      console.log(bypass_response);
-      closeModal();
-    }
+   
   }
 
   function instantConfirmation(event) {
@@ -75,13 +63,12 @@ const YourComponent = ({ Data, closeModal }) => {
       // If the user clicks "OK", perform the apply action
       // alert("Applying...");
       instant(event);
-      closeModal();
+      // closeModal();
     }
   }
 
   function instant(event) {
     event.preventDefault();
-    console.log("Instant");
     window.localStorage.setItem("Instant", "Instant");
     const data = {
       is_schedule: false,
@@ -91,18 +78,19 @@ const YourComponent = ({ Data, closeModal }) => {
       id: Data.id,
     };
     dispatch(Bypass({ data, header }));
-
-    if (bypass_error) {
-      // setErrorMessage(bypass_error.message);
-      closeModal();
-    }
-
-    if (bypass_response) {
-      console.log(bypass_response);
-      closeModal();
-    }
   }
-
+useEffect(()=>{
+  if (bypass_error) {
+    setErrorMessage(bypass_error.message);
+    setTimeout(() => {
+      setErrorMessage("");
+    }, 4000);
+    dispatch(clearError());
+  }
+  if (bypass_response) {
+    closeModal();
+  }
+},[bypass_error,bypass_response])
   //Date & Time
 
   const handleDateTimeChange = (event) => {
@@ -112,19 +100,18 @@ const YourComponent = ({ Data, closeModal }) => {
     const parsedDate = new Date(newDate);
 
     // Format the date and time
-    const formattedDateTime = `${
-      parsedDate.getMonth() + 1
-    }/${parsedDate.getDate()}/${parsedDate.getFullYear()}, ${parsedDate.toLocaleTimeString(
-      "en-US"
-    )}`;
+    const formattedDateTime = `${parsedDate.getMonth() + 1
+      }/${parsedDate.getDate()}/${parsedDate.getFullYear()}, ${parsedDate.toLocaleTimeString(
+        "en-US"
+      )}`;
 
     setSelectedDateTime(formattedDateTime);
 
-    console.log("Selected DateTime:", formattedDateTime);
   };
 
   return (
     <div>
+
       {/* <button onClick={openModalTwo}>Open Modal</button> */}
       <div className="fixed inset-0 z-30 flex items-end bg-black bg-opacity-50 sm:items-center sm:justify-center">
         <div
@@ -153,15 +140,19 @@ const YourComponent = ({ Data, closeModal }) => {
             </button>
           </header>
           <div className="mt-4 mb-6">
-            <p className="mb-2 text-lg font-semibold text-gray-700 dark:text-gray-300"></p>
+            <h1
+              className=" text-red-500"
+              style={{ color: "red", fontWeight: "bold" }}
+            >
+              {errorMessage}
+            </h1>
             <ul
               className="relative flex flex-wrap p-1 list-none rounded-xl"
               role="list"
             >
               <li
-                className={`z-30 flex-auto text-center ${
-                  activeTab === "schedule" ? "active" : ""
-                }`}
+                className={`z-30 flex-auto text-center ${activeTab === "schedule" ? "active" : ""
+                  }`}
               >
                 <Link
                   className="z-30 flex items-center justify-center w-full h-full px-3 py-1 mb-0  transition-all ease-in-out border-0 rounded-lg cursor-pointer text-slate-700 bg-inherit p-3"
@@ -173,9 +164,8 @@ const YourComponent = ({ Data, closeModal }) => {
               </li>
 
               <li
-                className={`z-30 flex-auto text-center ${
-                  activeTab === "instant" ? "active" : ""
-                }`}
+                className={`z-30 flex-auto text-center ${activeTab === "instant" ? "active" : ""
+                  }`}
               >
                 <Link
                   className="z-30 flex items-center justify-center w-full px-3 py-1 mb-0 transition-all ease-in-out border-0 rounded-lg cursor-pointer text-slate-700 bg-inherit p-3"
@@ -188,9 +178,8 @@ const YourComponent = ({ Data, closeModal }) => {
             </ul>
             <div className="px-2 py-4">
               <div
-                className={`block opacity-100 ${
-                  activeTab === "schedule" ? "" : "hidden"
-                }`}
+                className={`block opacity-100 ${activeTab === "schedule" ? "" : "hidden"
+                  }`}
                 role="tabpanel"
               >
                 <form>
@@ -219,9 +208,8 @@ const YourComponent = ({ Data, closeModal }) => {
                 </form>
               </div>
               <div
-                className={`block opacity-100 ${
-                  activeTab === "instant" ? "" : "hidden"
-                }`}
+                className={`block opacity-100 ${activeTab === "instant" ? "" : "hidden"
+                  }`}
                 role="tabpanel"
               >
                 <div className="text-center">

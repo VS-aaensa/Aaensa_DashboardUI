@@ -4,7 +4,6 @@ import {GatewayModel,clearGatewayerror,clearGatewayResponse,} from "../../Slices
 
 function GatewayModals({ closeModal, data1 }) {
   const dispatch = useDispatch();
-  const token = window.localStorage.getItem("token");
   const [onboardingDate, setOnboardingDate] = useState("");
   const [gatewayId, setGatewayId] = useState("");
   const [ssid, setSSID] = useState("SC20Linux");
@@ -19,7 +18,7 @@ function GatewayModals({ closeModal, data1 }) {
     setStateFunction(value);
 
     // Check password validation
-    if (e.target.name === "password") {
+    if (e.target.name === "password"&& value !== "12345678") {
       const isValid = validatePassword(value);
       if (!isValid) {
         setPasswordError("Password must contain minimum 8 characters and only '@', '_', '!', '#', '*'.");
@@ -32,7 +31,7 @@ function GatewayModals({ closeModal, data1 }) {
     }
 
     // Check SSID validation
-    if (e.target.name === "ssid") {
+    if (e.target.name === "ssid"&& value !== "SC20Linux") {
       const isValidSSID = validateSSID(value);
       if (!isValidSSID) {
         setSSIDError("SSID must contain minimum 8 characters.");
@@ -45,12 +44,12 @@ function GatewayModals({ closeModal, data1 }) {
     }
   };
   const validateSSID = (ssid) => {
-    return ssid.length >= 8;
+    return ssid.length >= 8 || ssid === "SC20Linux";
   };
 
   const validatePassword = (password) => {
     const regex = /^[@_!#*]+$/;
-    return password.length >= 8 && regex.test(password);
+    return (password.length >= 8 && regex.test(password)||password === "12345678" );
   };
 
   const EnterpriseId = window.localStorage.getItem("Enterprise_Id");
@@ -120,8 +119,8 @@ function GatewayModals({ closeModal, data1 }) {
                   >
                     <path
                       d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                      clip-rule="evenodd"
-                      fill-rule="evenodd"
+                      clipRule="evenodd"
+                      fillRule="evenodd"
                     ></path>
                   </svg>
                 </button>

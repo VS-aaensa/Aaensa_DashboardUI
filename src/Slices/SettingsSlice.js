@@ -7,11 +7,9 @@ export const Set = createAsyncThunk(
     async ({ data, header }, { rejectWithValue }) => {
       try {
         const response = await SET(data, header);
-        console.log(response.data,"-----------------------------------------");
-        return response.data;
+       return response.data;
       } catch (error) {
-        console.log(error,"==================");
-        if (
+       if (
           error.response.data.message === "Invalid token" ||
           error.response.data.message === "Access denied"
         ) {
@@ -29,10 +27,8 @@ export const Set = createAsyncThunk(
     async ({ Data, header }, { rejectWithValue }) => {
       try {
         const response = await RESET(Data, header);
-        // console.log(response.data,"-----------------------------------------");
-        return response.data;
+         return response.data;
       } catch (error) {
-        // console.log(error,"==================");
         if (
           error.response.data.message === "Invalid token" ||
           error.response.data.message === "Access denied"
@@ -51,10 +47,8 @@ export const Set = createAsyncThunk(
     async ({header }, { rejectWithValue }) => {
       try {
         const response = await ENTERPRISETABLE( header);
-        // console.log(response.data,"-----------------------------------------");
         return response.data;
       } catch (error) {
-        // console.log(error,"==================");
         if (
           error.response.data.message === "Invalid token" ||
           error.response.data.message === "Access denied"
@@ -73,10 +67,8 @@ export const Set = createAsyncThunk(
     async ({EnterpriseId,header }, { rejectWithValue }) => {
       try {
         const response = await STATETABLE(EnterpriseId, header);
-        // console.log(response.data,"-----------------------------------------");
         return response.data;
       } catch (error) {
-        // console.log(error,"==================");
         if (
           error.response.data.message === "Invalid token" ||
           error.response.data.message === "Access denied"
@@ -95,10 +87,8 @@ export const Set = createAsyncThunk(
     async ({EnterpriseId,StateId,header }, { rejectWithValue }) => {
       try {
         const response = await LOCATIONTABLE(EnterpriseId,StateId, header);
-        // console.log(response.data,"-----------------------------------------");
         return response.data;
       } catch (error) {
-        // console.log(error,"==================");
         if (
           error.response.data.message === "Invalid token" ||
           error.response.data.message === "Access denied"
@@ -117,11 +107,9 @@ export const Set = createAsyncThunk(
     async ({LocationId,header }, { rejectWithValue }) => {
       try {
         const response = await GATEWAYTABLE(LocationId, header);
-        // console.log(response.data,"-----------------------------------------");
         return response.data;
       } catch (error) {
-        // console.log(error,"==================");
-        if (
+         if (
           error.response.data.message === "Invalid token" ||
           error.response.data.message === "Access denied"
         ) {
@@ -139,11 +127,9 @@ export const Set = createAsyncThunk(
     async ({header }, { rejectWithValue }) => {
       try {
         const response = await OPTIMIZERTABLE( header);
-        // console.log(response.data,"-----------------------------------------");
         return response.data;
       } catch (error) {
-        // console.log(error,"==================");
-        if (
+         if (
           error.response.data.message === "Invalid token" ||
           error.response.data.message === "Access denied"
         ) {

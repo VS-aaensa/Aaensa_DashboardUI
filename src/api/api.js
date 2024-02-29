@@ -88,5 +88,5 @@ export const ADDSYSTEMINTEGRATOR = (userData, header) =>
   export const DELETE =(deleteData, header) => api.post(`/api/admin/delete/all`,deleteData, header);
 
   //Report
-  export const METERDATA =(currentPage,data, header) => api.post(`/api/admin/get/all/meter/data?page=${currentPage}&pageSize=100`,data, header);
-  export const DEVICEDATA =(currentPage,data, header) => api.post(`/api/admin/get/all/device/data?page=${currentPage}&pageSize=20`,data, header);
+  export const METERDATA =(Page,data, header) => api.post(`/api/admin/get/all/meter/data?page=${Page}&pageSize=100`,data, header);
+  export const DEVICEDATA =(Page,data, header) => api.post(`/api/admin/get/all/device/data?page=${Page}&pageSize=20`,data, header);

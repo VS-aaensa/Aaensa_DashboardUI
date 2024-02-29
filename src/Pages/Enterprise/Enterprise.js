@@ -33,8 +33,7 @@ function Enterprise() {
   const { status, customer_response,allDelete_response,allDelete_error, error, loading } = useSelector(
     (state) => state.enterpriseSlice
   );
-  // console.log(response," this is response----------------------");
-
+ 
   const handleInputChange = async (item) => {
     window.localStorage.setItem("ENTERPRISENAME", item.EnterpriseName);
     window.localStorage.setItem("ENTERPRISEUSER", item.ContactInfo.Name);
@@ -175,12 +174,10 @@ function Enterprise() {
     dispatch(clearError());
 
     if (customer_response && Array.isArray(customer_response)) {
-      // console.log(response,"---------------------------");
       setEnterpriseTableData(customer_response);
     }
 
     if (allDelete_response) {
-      console.log(allDelete_response,"---------------------------");
           setTrigger(true);
     }
     dispatch(clearDelete_response());

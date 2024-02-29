@@ -16,19 +16,16 @@ function StateModals({ closeModal }) {
   };
   const { add_state_error, add_state_response, add_statelist_response, error, loading } =
     useSelector((state) => state.stateSlices);
-//  console.log(add_statelist_response);
   useEffect(() => {
     dispatch(AddstateList({ header }));
   }, []);
   useEffect(() => {
     if (add_statelist_response) {
-      // console.log("hello");
       setgetStateList(add_statelist_response);
     }
     if (add_state_response ) {
       closeModal();
       dispatch(clearAdd_state_response());
-      console.log(add_state_response);
  }
 //  if (add_state_error ) {
 //   closeModal();

@@ -8,8 +8,8 @@ function GatewayEditModel({ closeModal, selectedItem, Data }) {
 
   const token = window.localStorage.getItem("token");
   const [GatewayData, setGatewayData] = useState({
-    SSID: "",
-    PASS: "",
+    SSID: selectedItem.NetworkSSID,
+    PASS: selectedItem.NetworkPassword,
   });
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -27,8 +27,7 @@ function GatewayEditModel({ closeModal, selectedItem, Data }) {
       Authorization: `Bearer ${window.localStorage.getItem("token")}`,
     },
   };
-  // console.log(GatewayData);
-
+ 
   const LocationID = window.localStorage.getItem("Location_id");
   const data = {
     EnterpriseInfo: LocationID,
@@ -45,13 +44,11 @@ function GatewayEditModel({ closeModal, selectedItem, Data }) {
   };
   useEffect(()=>{
     if (edit_gateway_response.message == "Gateway updated successfully.") {
-      // console.log("entering");
-      closeModal();
+     closeModal();
       dispatch(clearEdit_gateway_response());
     }
     if (edit_gateway_error) {
-      // console.log("entering");
-      closeModal();
+       closeModal();
       dispatch(clearEdit_gateway_error());
     }
 
