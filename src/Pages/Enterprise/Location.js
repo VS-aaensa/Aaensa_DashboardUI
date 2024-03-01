@@ -29,6 +29,7 @@ function Location() {
   const { status, location_response, location_error, loading } = useSelector(
     (state) => state.locationSlice
   );
+  console.log({location_response});
   const { allDelete_response, allDelete_error } = useSelector(
     (state) => state.enterpriseSlice
   );
@@ -465,7 +466,7 @@ function Location() {
                           </div>) :(item.BypassMode === "IN_PROGRESS_true")? (<div className="toggle_btn">
                             <input
                               type="checkbox"
-                              defaultChecked={false}
+                              defaultChecked={true}
                               id={`toggle-btn-${rowIndex}`}
                               onClick={() => {
                                 bypass(item._id, false);
@@ -481,7 +482,7 @@ function Location() {
                           </div>):(<div className="toggle_btn">
                             <input
                               type="checkbox"
-                              defaultChecked={false}
+                              defaultChecked={true}
                               id={`toggle-btn-${rowIndex}`}
                               onClick={() => {
                                 bypass(item._id, true);
@@ -498,23 +499,23 @@ function Location() {
 
                         </td>
                         <td>
-                        {item.BypassMode === "OFF"||item.BypassMode === "IN_PROGRESS"|| item.BypassMode === "" ?(<div className={`toggle_btn`}>
+                        {item.BypassMode === "OFF"||item.BypassMode === "IN_PROGRESS_true"||item.BypassMode === "IN_PROGRESS_false"|| item.BypassMode === "" ?(<div className={`toggle_btn`}>
                           <input
                             type="checkbox"
                             defaultChecked={false}
-                            id={`toggle-btn-${rowIndex}`}
+                            id={`toggle-btn-2-${rowIndex}`}
                             disabled={true}
                           />
-                          <label htmlFor={`toggle-btn-${rowIndex}`} />
+                          <label htmlFor={`toggle-btn-2-${rowIndex}`} />
                          
                         </div>):(<div className={`toggle_btn`}>
                           <input
                             type="checkbox"
                             defaultChecked={true}
-                            id={`toggle-btn-${rowIndex}`}
+                            id={`toggle-btn-2-${rowIndex}`}
                             disabled={true}
                           />
-                          <label htmlFor={`toggle-btn-${rowIndex}`} />
+                          <label htmlFor={`toggle-btn-2-${rowIndex}`} />
                          
                         </div>)}
                         
