@@ -584,7 +584,7 @@ function Gateway() {
                               <input
                                 type="checkbox"
                                 id={`toggle-btn-2-${rowIndex}`}
-                                defaultChecked={false}
+                                defaultChecked={true}
                                 onClick={() => {
                                   bypass(item.GatewayID,false);
 
@@ -601,7 +601,7 @@ function Gateway() {
                               <input
                                 type="checkbox"
                                 id={`toggle-btn-2-${rowIndex}`}
-                                defaultChecked={false}
+                                defaultChecked={true}
                                 onClick={() => {
                                   bypass(item.GatewayID,true);
                                 }}
@@ -619,20 +619,20 @@ function Gateway() {
                           {item.BypassMode === "OFF" ||item.BypassMode === "IN_PROGRESS_true"||item.BypassMode === "IN_PROGRESS_false" || item.BypassMode === "" ? (<div className="toggle_btn">
                             <input
                               type="checkbox"
-                              id={`toggle-btn-2-${rowIndex}`}
+                              id={`toggle-btn-3-${rowIndex}`}
                               defaultChecked={false}
                               disabled={true}
                             />
-                            <label htmlFor={`toggle-btn-2-${rowIndex}`} />
+                            <label htmlFor={`toggle-btn-3-${rowIndex}`} />
 
                           </div>) : (<div className="toggle_btn">
                             <input
                               type="checkbox"
-                              id={`toggle-btn-2-${rowIndex}`}
+                              id={`toggle-btn-3-${rowIndex}`}
                               defaultChecked={true}
                               disabled={true}
                             />
-                            <label htmlFor={`toggle-btn-2-${rowIndex}`} />
+                            <label htmlFor={`toggle-btn-3-${rowIndex}`} />
 
                           </div>)}
 

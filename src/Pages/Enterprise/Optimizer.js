@@ -18,7 +18,6 @@ function Optimizer() {
   const LOCATIONNAME = window.localStorage.getItem("LOCATIONNAME");
   const dispatch = useDispatch();
   const token = window.localStorage.getItem("token");
-  const [checkboxStates, setCheckboxStates] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModelOpen, setIsEditModelOpen] = useState(false);
   const [isModalbypass, setIsModalbypass] = useState(false);
@@ -28,7 +27,6 @@ function Optimizer() {
   const [errorMessage, setErrorMessage] = useState("");
   const [isDeleteModelOpen, setIsDeleteModelOpen] = useState(false);
   const [selectedDeleteItem, setSelectedDeleteItem] = useState(null);
-  const [bypassError, setBypassError] = useState("");
   const GatewayId = window.localStorage.getItem("Gateway_id");
   const { optimizer_response, optimizer_error, loading } = useSelector(
     (state) => state.optimizerSlice
@@ -466,13 +464,6 @@ function Optimizer() {
                 </nav>
               </div>
 
-              <h1
-                className=" text-red-500"
-                style={{ color: "red", fontWeight: "bold" }}
-              >
-                {bypassError}
-              </h1>
-
               <table className="w-full whitespace-no-wrap">
                 <thead>
                   <tr className="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
@@ -589,25 +580,25 @@ function Optimizer() {
                           <input
                             type="checkbox"
                             defaultChecked={false}
-                            id={`toggle-btn-${rowIndex}`}
+                            id={`toggle-btn-2-${rowIndex}`}
                             disabled={true}
                           />
-                          <label htmlFor={`toggle-btn-${rowIndex}`} />
+                          <label htmlFor={`toggle-btn-2-${rowIndex}`} />
                          
                         </div>):(<div className={`toggle_btn`}>
                           <input
                             type="checkbox"
                             defaultChecked={true}
-                            id={`toggle-btn-${rowIndex}`}
+                            id={`toggle-btn-2-${rowIndex}`}
                             disabled={true}
                           />
-                          <label htmlFor={`toggle-btn-${rowIndex}`} />
+                          <label htmlFor={`toggle-btn-2-${rowIndex}`} />
                          
                         </div>)}
                         
                       </td>
                       <td>
-                        {item.isOnline == true ? (
+                        {item.isOnline === true ? (
                           <span className="bg-green-100 text-green-800 text-xs font-medium me-2 px-4 py-2 rounded-full dark:bg-green-900 dark:text-green-300">
                             ONLINE
                           </span>
