@@ -16,7 +16,6 @@ const YourComponent = ({ Data, closeModal }) => {
   const { bypass_response, bypass_error } = useSelector(
     (state) => state.byPassSlice
   );
-console.log(Data);
   const header = {
     headers: {
       Authorization: `Bearer ${window.localStorage.getItem("token")}`,

@@ -31,7 +31,6 @@ function Optimizer() {
   const { optimizer_response, optimizer_error, loading } = useSelector(
     (state) => state.optimizerSlice
   );
-  console.log({optimizer_response});
   const { allDelete_response, allDelete_error } = useSelector(
     (state) => state.enterpriseSlice
   );
