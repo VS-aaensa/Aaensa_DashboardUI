@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import { EditGateway,clearEdit_gateway_response,clearEdit_gateway_error } from "../../Slices/Enterprise/GatewaySlice";
 
 function GatewayEditModel({ closeModal, selectedItem, Data }) {
   const dispatch = useDispatch();
 
-  const token = window.localStorage.getItem("token");
+  const [errorMessage, setErrorMessage] = useState([]);
   const [GatewayData, setGatewayData] = useState({
     SSID: selectedItem.NetworkSSID,
     PASS: selectedItem.NetworkPassword,
@@ -22,6 +21,7 @@ function GatewayEditModel({ closeModal, selectedItem, Data }) {
   const { status, edit_gateway_response, edit_gateway_error, loading } = useSelector(
     (state) => state.gatewaySlice
   );
+  console.log(edit_gateway_error,"-----------------------");
   const header = {
     headers: {
       Authorization: `Bearer ${window.localStorage.getItem("token")}`,
@@ -43,12 +43,16 @@ function GatewayEditModel({ closeModal, selectedItem, Data }) {
     dispatch(EditGateway({ GatewayId,data, header }));
   };
   useEffect(()=>{
-    if (edit_gateway_response.message == "Gateway updated successfully.") {
-     closeModal();
+    if (edit_gateway_response.message === "Gateway updated successfully.") {
       dispatch(clearEdit_gateway_response());
+       closeModal();
     }
     if (edit_gateway_error) {
-       closeModal();
+      //  closeModal();
+      setErrorMessage(edit_gateway_error);
+      setTimeout(() => {
+        setErrorMessage([]);
+      }, 2000);
       dispatch(clearEdit_gateway_error());
     }
 
@@ -60,8 +64,7 @@ function GatewayEditModel({ closeModal, selectedItem, Data }) {
       style={{ maxHeight: "auto", overflowY: "auto" }}
       className="fixed inset-0 z-30 flex items-end bg-black bg-opacity-50 sm:items-center sm:justify-center"
       onClick={closeModal}
-      // onKeyDown={closeModal}
-    >
+      >
       <div
         onClick={(e) => e.stopPropagation()}
         className="w-full px-6 py-4 overflow-hidden bg-white rounded-t-lg dark:bg-gray-800 sm:rounded-lg sm:m-4 sm:max-w-xl"
@@ -154,6 +157,14 @@ function GatewayEditModel({ closeModal, selectedItem, Data }) {
                 className="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input"
                 placeholder="Add SSID"
               />
+               {errorMessage.key === "NetworkSSID" && (
+                <p
+                  className="mt-2 text-xs text-red-500"
+                  style={{ color: "red" }}
+                >
+                  {errorMessage.message}
+                </p>
+              )}
             </label>
 
             <label className="block mt-4 text-sm">
@@ -166,6 +177,14 @@ function GatewayEditModel({ closeModal, selectedItem, Data }) {
                 className="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                 placeholder="Add Password"
               />
+              {errorMessage.key === "NetworkPassword" && (
+                <p
+                  className="mt-2 text-xs text-red-500"
+                  style={{ color: "red" }}
+                >
+                  {errorMessage.message}
+                </p>
+              )}
             </label>
           </form>
         </div>

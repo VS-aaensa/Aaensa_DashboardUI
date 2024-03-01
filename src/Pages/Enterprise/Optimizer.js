@@ -5,10 +5,10 @@ import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import Loader from "../../utils/Loader";
 import OptimizerModel from "../../Modals/AddModals/OptimizerModel";
-import { OptimizerList,clearError,clearOptimizerResponse,} from "../../Slices/Enterprise/OptimizerSlice";
+import { OptimizerList, clearError, clearOptimizerResponse, } from "../../Slices/Enterprise/OptimizerSlice";
 import ByPassModal from "../../Modals/AddModals/ByPassModal";
 import OptimizerEditModal from "../../Modals/EditModals/OptimizerEditModal";
-import { clearDelete_response,} from "../../Slices/Enterprise/enterpriseSlice";
+import { clearDelete_response, } from "../../Slices/Enterprise/enterpriseSlice";
 import DeleteModal from "../../Modals/DeleteModals/DeleteModal";
 
 function Optimizer() {
@@ -18,6 +18,7 @@ function Optimizer() {
   const LOCATIONNAME = window.localStorage.getItem("LOCATIONNAME");
   const dispatch = useDispatch();
   const token = window.localStorage.getItem("token");
+  const [checkboxStates, setCheckboxStates] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModelOpen, setIsEditModelOpen] = useState(false);
   const [isModalbypass, setIsModalbypass] = useState(false);
@@ -28,11 +29,11 @@ function Optimizer() {
   const [isDeleteModelOpen, setIsDeleteModelOpen] = useState(false);
   const [selectedDeleteItem, setSelectedDeleteItem] = useState(null);
   const [bypassError, setBypassError] = useState("");
-  
   const GatewayId = window.localStorage.getItem("Gateway_id");
   const { optimizer_response, optimizer_error, loading } = useSelector(
     (state) => state.optimizerSlice
   );
+  console.log({optimizer_response});
   const { allDelete_response, allDelete_error } = useSelector(
     (state) => state.enterpriseSlice
   );
@@ -74,24 +75,16 @@ function Optimizer() {
 
   const [BypassData, setBypassData] = useState({});
 
-  function bypass(Id, online, mode) {
-    setIsModalbypass(online);
-    // setIsOnline(online);
-    if (online == false) {
-      setIsModalbypass(false);
-      setBypassError("This Optimizer is not Online");
-      setTimeout(() => {
-        setBypassError("");
-      }, 3000);
-    }
-
+  function bypass(Id,mode) {
+    
 
     const Data = {
       group: "optimizer",
       id: Id,
-      state: (mode === "OFF" || mode === "") ? true : false,
+      state: mode,
     };
     setBypassData(Data);
+    setIsModalbypass(true);
   }
 
   const handleInputChange = async (item) => {
@@ -485,7 +478,8 @@ function Optimizer() {
                   <tr className="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
                     <th className="px-4 py-3">Optimizer ID</th>
                     <th className="px-4 py-3">Optimizer Name</th>
-                    <th className="px-4 py-3">By Pass</th>
+                    <th className="px-4 py-3"> Set ByPass</th>
+                    <th className="px-4 py-3">ByPass Status</th>
                     <th className="px-4 py-3">Status</th>
                     <th className="px-4 py-3">Action</th>
                   </tr>
@@ -516,14 +510,14 @@ function Optimizer() {
                       <td className="px-4 py-3 text-sm">
 
                         {
-                          ((item.BypassMode === "OFF" || item.BypassMode === "") && item.isOnline == true) ? (
+                          (item.BypassMode === "OFF" || item.BypassMode === "")  ? (
                             <div className={`toggle_btn`}>
                               <input
                                 type="checkbox"
                                 defaultChecked={false}
                                 id={`toggle-btn-${rowIndex}`}
                                 onClick={() =>
-                                  bypass(item.OptimizerID, item.isOnline, item.BypassMode)
+                                  bypass(item.OptimizerID,true)
                                 }
                               />
                               <label htmlFor={`toggle-btn-${rowIndex}`} />
@@ -534,14 +528,14 @@ function Optimizer() {
                                 />
                               )}
                             </div>
-                          ) : (item?.BypassMode === "ON" && item.isOnline == true) ? (
+                          ) : (item?.BypassMode === "ON" ) ? (
                             <div className={`toggle_btn`}>
                               <input
                                 type="checkbox"
                                 defaultChecked={true}
                                 id={`toggle-btn-${rowIndex}`}
                                 onClick={() =>
-                                  bypass(item.OptimizerID, item.isOnline, item.BypassMode)
+                                  bypass(item.OptimizerID, false)
                                 }
                               />
 
@@ -553,60 +547,64 @@ function Optimizer() {
                                 />
                               )}
                             </div>
-                          ) : (item.BypassMode === "ON" && item.isOnline == false) ? (
-                            <div className={`toggle_btn`}>
-                              <input
-                                type="checkbox"
-                                defaultChecked={true}
-                                id={`toggle-btn-${rowIndex}`}
-                                disabled={true}
-                              />
-                              <label htmlFor={`toggle-btn-${rowIndex}`} />
-                              <p className="mt-2 text-xs text-red-500" >
-                              </p>
-                              {isModalbypass && (
-                                <ByPassModal
-                                  Data={BypassData}
-                                  closeModal={() => closeModal()}
-                                />
-                              )}
-                            </div>) : (item.BypassMode === "" || item.isOnline == false) ? (
-                              <div className={`toggle_btn`}>
-                                <input
-                                  type="checkbox"
-                                  defaultChecked={false}
-                                  id={`toggle-btn-${rowIndex}`}
-                                  disabled={true}
-                                />
-                                <label htmlFor={`toggle-btn-${rowIndex}`} />
-                                <p className="mt-2 text-xs text-red-500" >
-                                </p>
-                                {isModalbypass && (
-                                  <ByPassModal
-                                    Data={BypassData}
-                                    closeModal={() => closeModal()}
-                                  />
-                                )}
-                              </div>) :
-                            <div className={`toggle_btn`}>
-                              <input
-                                type="checkbox"
-                                defaultChecked={false}
-                                id={`toggle-btn-${rowIndex}`}
-                                disabled={true}
-                              />
-                              <label htmlFor={`toggle-btn-${rowIndex}`} />
-                              <p className="mt-2 text-xs text-red-500" >
-                                {item.BypassMode}
-                              </p>
-                              {isModalbypass && (
-                                <ByPassModal
-                                  Data={BypassData}
-                                  closeModal={() => closeModal()}
-                                />
-                              )}
-                            </div>
+                          ) :(item.BypassMode === "IN_PROGRESS_true")?(<div className={`toggle_btn`}>
+                          <input
+                            type="checkbox"
+                            defaultChecked={true}
+                            id={`toggle-btn-${rowIndex}`}
+                            onClick={() =>
+                              bypass(item.OptimizerID, false)
+                            }
+                          />
+
+                          <label htmlFor={`toggle-btn-${rowIndex}`} />
+                          {isModalbypass && (
+                            <ByPassModal
+                              Data={BypassData}
+                              closeModal={() => closeModal()}
+                            />
+                          )}
+                        </div>):(<div className={`toggle_btn`}>
+                          <input
+                            type="checkbox"
+                            defaultChecked={true}
+                            id={`toggle-btn-${rowIndex}`}
+                            onClick={() =>
+                              bypass(item.OptimizerID, true)
+                            }
+                          />
+
+                          <label htmlFor={`toggle-btn-${rowIndex}`} />
+                          {isModalbypass && (
+                            <ByPassModal
+                              Data={BypassData}
+                              closeModal={() => closeModal()}
+                            />
+                          )}
+                        </div>)                         
                         }
+                      </td>
+                      <td>
+                        {item.BypassMode === "OFF"||item.BypassMode === "IN_PROGRESS_true"||item.BypassMode === "IN_PROGRESS_false"|| item.BypassMode === "" ?(<div className={`toggle_btn`}>
+                          <input
+                            type="checkbox"
+                            defaultChecked={false}
+                            id={`toggle-btn-${rowIndex}`}
+                            disabled={true}
+                          />
+                          <label htmlFor={`toggle-btn-${rowIndex}`} />
+                         
+                        </div>):(<div className={`toggle_btn`}>
+                          <input
+                            type="checkbox"
+                            defaultChecked={true}
+                            id={`toggle-btn-${rowIndex}`}
+                            disabled={true}
+                          />
+                          <label htmlFor={`toggle-btn-${rowIndex}`} />
+                         
+                        </div>)}
+                        
                       </td>
                       <td>
                         {item.isOnline == true ? (
