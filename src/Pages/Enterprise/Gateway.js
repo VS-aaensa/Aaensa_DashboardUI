@@ -38,7 +38,6 @@ function Gateway() {
   const { status, gateway_response, gateway_error, loading } = useSelector(
     (state) => state.gatewaySlice);
 
-  console.log({ gateway_response });
   const { allDelete_response, allDelete_error } = useSelector(
     (state) => state.enterpriseSlice
   );

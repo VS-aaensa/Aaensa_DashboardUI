@@ -29,7 +29,6 @@ function Location() {
   const { status, location_response, location_error, loading } = useSelector(
     (state) => state.locationSlice
   );
-  console.log({location_response});
   const { allDelete_response, allDelete_error } = useSelector(
     (state) => state.enterpriseSlice
   );
