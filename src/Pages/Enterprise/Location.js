@@ -76,18 +76,18 @@ function Location() {
 
   //bypass
 
-  const [checkboxStates, setCheckboxStates] = useState({});
   const { bypass_response, bypass_error } = useSelector(
     (state) => state.byPassSlice
   );
 
   const [BypassData, setBypassData] = useState({});
 
-  function bypass(Id, mode) {
+  function bypass(Id,mode) {
+    
     const Data = {
       group: "location",
       id: Id,
-      state: (mode === "OFF" || mode === "") ? true : false,
+      state: mode,
     };
     setBypassData(Data);
     setIsModalbypass(true);
@@ -96,9 +96,6 @@ function Location() {
   const openModal = () => {
     setIsModalOpen(true);
   };
-  function openModalbypass() {
-    setIsModalbypass(true);
-  }
   const handleDeleteChange = async (item) => {
     const deleteData = {
       group: "location",
@@ -403,7 +400,8 @@ function Location() {
                       <th className="px-4 py-3">Location Name</th>
                       <th className="px-4 py-3">No of Gateway/Optimizer</th>
                       {/* <th className="px-4 py-3">Energy Saved this month</th> */}
-                      <th className="px-4 py-3">By Pass</th>
+                      <th className="px-4 py-3"> Set ByPass</th>
+                      <th className="px-4 py-3">ByPass Status</th>
                       <th className="px-4 py-3">Action</th>
                     </tr>
                   </thead>
@@ -438,7 +436,7 @@ function Location() {
                               defaultChecked={false}
                               id={`toggle-btn-${rowIndex}`}
                               onClick={() => {
-                                bypass(item._id, item.BypassMode);
+                                bypass(item._id,true);
                               }}
                             />
                             <label htmlFor={`toggle-btn-${rowIndex}`} />
@@ -454,7 +452,7 @@ function Location() {
                               defaultChecked={true}
                               id={`toggle-btn-${rowIndex}`}
                               onClick={() => {
-                                bypass(item._id, item.BypassMode);
+                                bypass(item._id,false);
                               }}
                             />
                             <label htmlFor={`toggle-btn-${rowIndex}`} />
@@ -464,21 +462,63 @@ function Location() {
                                 closeModal={() => closeModal()}
                               />
                             )}
-                          </div>) : (<div className="toggle_btn">
+                          </div>) :(item.BypassMode === "IN_PROGRESS_true")? (<div className="toggle_btn">
                             <input
                               type="checkbox"
                               defaultChecked={false}
                               id={`toggle-btn-${rowIndex}`}
-                              disabled={true}
+                              onClick={() => {
+                                bypass(item._id, false);
+                              }}
                             />
                             <label htmlFor={`toggle-btn-${rowIndex}`} />
-                            <p className="mt-2 text-xs text-red-500" >
-                              {item.BypassMode}
-                            </p>
+                            {isModalbypass && (
+                              <ByPassModal
+                                Data={BypassData}
+                                closeModal={() => closeModal()}
+                              />
+                            )}
+                          </div>):(<div className="toggle_btn">
+                            <input
+                              type="checkbox"
+                              defaultChecked={false}
+                              id={`toggle-btn-${rowIndex}`}
+                              onClick={() => {
+                                bypass(item._id, true);
+                              }}
+                            />
+                            <label htmlFor={`toggle-btn-${rowIndex}`} />
+                            {isModalbypass && (
+                              <ByPassModal
+                                Data={BypassData}
+                                closeModal={() => closeModal()}
+                              />
+                            )}
                           </div>)}
 
                         </td>
-
+                        <td>
+                        {item.BypassMode === "OFF"||item.BypassMode === "IN_PROGRESS"|| item.BypassMode === "" ?(<div className={`toggle_btn`}>
+                          <input
+                            type="checkbox"
+                            defaultChecked={false}
+                            id={`toggle-btn-${rowIndex}`}
+                            disabled={true}
+                          />
+                          <label htmlFor={`toggle-btn-${rowIndex}`} />
+                         
+                        </div>):(<div className={`toggle_btn`}>
+                          <input
+                            type="checkbox"
+                            defaultChecked={true}
+                            id={`toggle-btn-${rowIndex}`}
+                            disabled={true}
+                          />
+                          <label htmlFor={`toggle-btn-${rowIndex}`} />
+                         
+                        </div>)}
+                        
+                      </td>
                         <td>
                           <button className="px-2 py-2 border-2 border-red-600 text-purple-600 rounded-md"
                             onClick={() => openDeleteModal(item)}

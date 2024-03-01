@@ -37,6 +37,8 @@ function Gateway() {
 
   const { status, gateway_response, gateway_error, loading } = useSelector(
     (state) => state.gatewaySlice);
+
+  console.log({ gateway_response });
   const { allDelete_response, allDelete_error } = useSelector(
     (state) => state.enterpriseSlice
   );
@@ -92,11 +94,10 @@ function Gateway() {
 
   function bypass(Id, mode) {
 
-
     const Data = {
       group: "gateway",
       id: Id,
-      state: (mode === "OFF" || mode === "") ? true : false,
+      state: mode,
     };
     setBypassData(Data);
     setIsModalbypass(true);
@@ -505,7 +506,8 @@ function Gateway() {
                       <th className="px-4 py-3">No of Optimizer</th>
                       {/* <th className="px-4 py-3">Energy Saved</th> */}
                       <th className="px-4 py-3">Ready To Config</th>
-                      <th className="px-4 py-3">By Pass</th>
+                      <th className="px-4 py-3"> Set ByPass</th>
+                      <th className="px-4 py-3">ByPass Status</th>
                       <th className="px-4 py-3">Action</th>
                     </tr>
                   </thead>
@@ -550,7 +552,7 @@ function Gateway() {
                                 id={`toggle-btn-2-${rowIndex}`}
                                 defaultChecked={false}
                                 onClick={() => {
-                                  bypass(item.GatewayID, item.BypassMode);
+                                  bypass(item.GatewayID,true);
 
                                 }}
                               />
@@ -567,7 +569,7 @@ function Gateway() {
                                 id={`toggle-btn-2-${rowIndex}`}
                                 defaultChecked={true}
                                 onClick={() => {
-                                  bypass(item.GatewayID, item.BypassMode);
+                                  bypass(item.GatewayID,false);
 
                                 }}
                               />
@@ -578,20 +580,64 @@ function Gateway() {
                                   closeModal={() => closeModal()}
                                 />
                               )}
-                            </div>) : (<div className="toggle_btn">
+                            </div>) : (item.BypassMode === "IN_PROGRESS_true")?(<div className="toggle_btn">
                               <input
                                 type="checkbox"
                                 id={`toggle-btn-2-${rowIndex}`}
                                 defaultChecked={false}
-                                disabled={true}
+                                onClick={() => {
+                                  bypass(item.GatewayID,false);
+
+                                }}
                               />
                               <label htmlFor={`toggle-btn-2-${rowIndex}`} />
-                              <p className="mt-2 text-xs text-red-500" >
-                                {item.BypassMode}
-                              </p>
+                              {isModalbypass && (
+                                <ByPassModal
+                                  Data={BypassData}
+                                  closeModal={() => closeModal()}
+                                />
+                              )}
+                            </div>):(<div className="toggle_btn">
+                              <input
+                                type="checkbox"
+                                id={`toggle-btn-2-${rowIndex}`}
+                                defaultChecked={false}
+                                onClick={() => {
+                                  bypass(item.GatewayID,true);
+                                }}
+                              />
+                              <label htmlFor={`toggle-btn-2-${rowIndex}`} />
+                              {isModalbypass && (
+                                <ByPassModal
+                                  Data={BypassData}
+                                  closeModal={() => closeModal()}
+                                />
+                              )}
                             </div>)}
                         </td>
+                        <td>
+                          {item.BypassMode === "OFF" ||item.BypassMode === "IN_PROGRESS_true"||item.BypassMode === "IN_PROGRESS_false" || item.BypassMode === "" ? (<div className="toggle_btn">
+                            <input
+                              type="checkbox"
+                              id={`toggle-btn-2-${rowIndex}`}
+                              defaultChecked={false}
+                              disabled={true}
+                            />
+                            <label htmlFor={`toggle-btn-2-${rowIndex}`} />
 
+                          </div>) : (<div className="toggle_btn">
+                            <input
+                              type="checkbox"
+                              id={`toggle-btn-2-${rowIndex}`}
+                              defaultChecked={true}
+                              disabled={true}
+                            />
+                            <label htmlFor={`toggle-btn-2-${rowIndex}`} />
+
+                          </div>)}
+
+
+                        </td>
                         <td>
                           <button
                             onClick={() => openEditModal(item)}

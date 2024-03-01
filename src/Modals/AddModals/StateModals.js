@@ -37,6 +37,7 @@ function StateModals({ closeModal }) {
       setTimeout(() => {
         setErrorMessage("");
       }, 3000);
+      dispatch(clearAdd_state_error());
     }
 
   }, [dispatch,add_statelist_response,add_state_error,add_state_response,add_state_error])
