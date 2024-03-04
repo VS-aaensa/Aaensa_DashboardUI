@@ -327,25 +327,29 @@ function Settings() {
       );
       if (response.data.success == true) {
 
-        setEnterpriseList([]);
-        setStateList([]);
-        setLocationList([]);
-        setGatewayList([]);
+        // setEnterpriseList([]);
+        // setStateList([]);
+        // setLocationList([]);
+        // setGatewayList([]);
         setOptimizerList([]);
-        setSelectedEnterpriseId("");
-        setSelectedStateId("");
-        setSelectedLocationId("");
-        setSelectedGatewayId("");
+        // setSelectedEnterpriseId("");
+        // setSelectedStateId("");
+        // setSelectedLocationId("");
+        // setSelectedGatewayId("");
         setSelectedOptimizerId("");
-        dispatch(clearEnterpriseResonse());
-        dispatch(clearResponse());
-        dispatch(clearLocationResponse());
-        dispatch(clearGatewaysResponse());
+        // dispatch(clearEnterpriseResonse());
+        // dispatch(clearResponse());
+        // dispatch(clearLocationResponse());
+        // dispatch(clearGatewaysResponse());
         dispatch(clearOptimizerResponse());
 
         setFormData((prevFormData) => ({
           ...prevFormData,
-          location: "", gatewayId: "", optimizerId: "", state: "", customer: ""
+          // location: "",
+          //  gatewayId: "",
+            optimizerId: "",
+            //  state: "",
+              // customer: ""
         }));
       }
     } catch (error) {
@@ -364,24 +368,27 @@ function Settings() {
         }
       );
       if (response.data.success === true) {
-        setEnterpriseList([]);
-        setStateList([]);
-        setLocationList([]);
-        setGatewayList([]);
+        // setEnterpriseList([]);
+        // setStateList([]);
+        // setLocationList([]);
+        // setGatewayList([]);
         setOptimizerList([]);
-        setSelectedEnterpriseId("");
-        setSelectedStateId("");
-        setSelectedLocationId("");
-        setSelectedGatewayId("");
+        // setSelectedEnterpriseId("");
+        // setSelectedStateId("");
+        // setSelectedLocationId("");
+        // setSelectedGatewayId("");
         setSelectedOptimizerId("");
-        dispatch(clearEnterpriseResonse());
-        dispatch(clearResponse());
-        dispatch(clearLocationResponse());
-        dispatch(clearGatewaysResponse());
+        // dispatch(clearEnterpriseResonse());
+        // dispatch(clearResponse());
+        // dispatch(clearLocationResponse());
+        // dispatch(clearGatewaysResponse());
         dispatch(clearOptimizerResponse());
         setFormData((prevFormData) => ({
           ...prevFormData,
-          location: "", gatewayId: "", optimizerId: "", state: "", customer: ""
+          // location: "",
+          //  gatewayId: "",
+            optimizerId: "",
+            //  state: "", customer: ""
         }));
       }
 
@@ -514,8 +521,8 @@ function Settings() {
                           className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 flex"
                           htmlFor="firstPowerOnObservationTime"
                         >
-                          First Power On Observation Time
-                          <Tooltip text="After First Power On Intenlliserver Active Time">
+                          First Power On Observation Time in minutes
+                          <Tooltip text="After First Power On Intenlliserver Active Time in minutes">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               width="20"
@@ -566,8 +573,8 @@ function Settings() {
                           className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 flex"
                           htmlFor="maxObservatioTime"
                         >
-                          Max Observation Time
-                          <Tooltip text="In first Start Up and any other situation Intelliserver Maximum Observation Time">
+                          Max Observation Time in minutes
+                          <Tooltip text="In first Start Up and any other situation Intelliserver Maximum Observation Time in minutes">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               width="20"
@@ -618,8 +625,8 @@ function Settings() {
                           className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 flex"
                           htmlFor="optimizationOnTime"
                         >
-                          Optimization On Time
-                          <Tooltip text="When the Thermostat Comming Frequesntly Intelliserver Optimization ON Time">
+                          Optimization On Time in minutes
+                          <Tooltip text="When the Thermostat Comming Frequesntly Intelliserver Optimization ON Time in minutes">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               width="20"
@@ -670,7 +677,7 @@ function Settings() {
                           className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 flex"
                           htmlFor="thermostatMonitoringInterval"
                         >
-                          Thermostat Monitoring Interval
+                          Thermostat Monitoring Interval in seconds
                           <Tooltip text="When Thermostat Turn Off the Compressor after 2:45 Min Intelliserver Turn Off Monitoring Interval">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -722,8 +729,8 @@ function Settings() {
                           className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 flex"
                           htmlFor="thermostatMonitoringTimeIncrement"
                         >
-                          Thermostat Monitoring Time Increment
-                          <Tooltip text="Thermostate Monitoring Time Incremen">
+                          Thermostat Monitoring Time Increment in seconds
+                          <Tooltip text="Thermostate Monitoring Time Increment in seconds ">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               width="20"
@@ -774,8 +781,8 @@ function Settings() {
                           className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 flex"
                           htmlFor="steadyStateTimeRoomTempTolerance"
                         >
-                          Steady State Time Room Temperature Tolerance
-                          <Tooltip text="Steady State Time Room Temperature Tolerance">
+                          Steady State Time Room Temperature Tolerance °C
+                          <Tooltip text="Steady State Time Room Temperature Tolerance °C">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               width="20"
@@ -826,8 +833,8 @@ function Settings() {
                           className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 flex"
                           htmlFor="steadyStateCoilTempTolerance"
                         >
-                          STEADY STATECOIL TEMP TOLERANCE
-                          <Tooltip text="Steady State Time Room Temperature Tolerance">
+                          STEADY STATE COIL TEMP TOLERANCE °C
+                          <Tooltip text="Steady State Time Room Temperature Tolerance °C">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               width="20"
