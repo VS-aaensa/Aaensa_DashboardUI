@@ -27,6 +27,7 @@ function OptimizerDetail() {
    const { status, add_optimizer_response, add_optimizer_error, loading } = useSelector(
     (state) => state.optimizerSlice
   );
+  console.log({add_optimizer_response});
   const header = {
     headers: {
       Authorization: `Bearer ${window.localStorage.getItem("token")}`,
@@ -52,7 +53,7 @@ function OptimizerDetail() {
         optimizerMode: data.data.optimizer_mode,
         roomTemperature: data.data.room_temp,
         coilTemperature: data.data.coil_temp,
-        humidity: data.data.outside_humidity,
+        humidity: data.data.humidity,
       });
       // Extract date and time from the timestamp
        const timestampInMillis = parseInt( data.data.TimeStamp) * 1000;

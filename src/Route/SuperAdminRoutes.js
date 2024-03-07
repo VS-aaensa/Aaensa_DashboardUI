@@ -6,7 +6,7 @@ import {
 } from "react-router-dom";
 import Forgot from "../Pages/Authentication/Forgot";
 import Login from "../Pages/Authentication/Login";
-import Reports from "../Pages/Reports";
+import Reports from "../Pages/Report/Reports";
 import User from "../Pages/User";
 import Gateway from "../Pages/Enterprise/Gateway";
 import State from "../Pages/Enterprise/State";

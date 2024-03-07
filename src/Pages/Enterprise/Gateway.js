@@ -7,7 +7,6 @@ import GatewayModals from "../../Modals/AddModals/GatewayModals";
 import GatewayEditModel from "../../Modals/EditModals/GatewayEditModel";
 import { GatewayList, clearError, clearGatewaysResponse, } from "../../Slices/Enterprise/GatewaySlice";
 import Loader from "../../utils/Loader";
-import { Bypass } from "../../Slices/Enterprise/ByPassSlice";
 import ByPassModal from "../../Modals/AddModals/ByPassModal";
 import axios from "axios";
 import {

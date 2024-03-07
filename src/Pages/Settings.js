@@ -8,6 +8,8 @@ import { stateList, clearResponse } from "../Slices/Enterprise/StateSlices";
 import { locationList, clearLocationResponse } from "../Slices/Enterprise/LocationSlice";
 import { GatewayList, clearGatewaysResponse } from "../Slices/Enterprise/GatewaySlice";
 import { OptimizerList, clearOptimizerResponse } from "../Slices/Enterprise/OptimizerSlice";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Tooltip = ({ text, children }) => {
   const [showTooltip, setShowTooltip] = useState(false);
@@ -326,33 +328,17 @@ function Settings() {
         }
       );
       if (response.data.success == true) {
-
-        // setEnterpriseList([]);
-        // setStateList([]);
-        // setLocationList([]);
-        // setGatewayList([]);
+        showToast(response.data.message, "success");
         setOptimizerList([]);
-        // setSelectedEnterpriseId("");
-        // setSelectedStateId("");
-        // setSelectedLocationId("");
-        // setSelectedGatewayId("");
         setSelectedOptimizerId("");
-        // dispatch(clearEnterpriseResonse());
-        // dispatch(clearResponse());
-        // dispatch(clearLocationResponse());
-        // dispatch(clearGatewaysResponse());
         dispatch(clearOptimizerResponse());
-
         setFormData((prevFormData) => ({
           ...prevFormData,
-          // location: "",
-          //  gatewayId: "",
             optimizerId: "",
-            //  state: "",
-              // customer: ""
         }));
       }
     } catch (error) {
+      showToast(error.response.data.message, "error");
     }
   };
 
@@ -368,31 +354,18 @@ function Settings() {
         }
       );
       if (response.data.success === true) {
-        // setEnterpriseList([]);
-        // setStateList([]);
-        // setLocationList([]);
-        // setGatewayList([]);
+        showToast(response.data.message, "success");
         setOptimizerList([]);
-        // setSelectedEnterpriseId("");
-        // setSelectedStateId("");
-        // setSelectedLocationId("");
-        // setSelectedGatewayId("");
         setSelectedOptimizerId("");
-        // dispatch(clearEnterpriseResonse());
-        // dispatch(clearResponse());
-        // dispatch(clearLocationResponse());
-        // dispatch(clearGatewaysResponse());
         dispatch(clearOptimizerResponse());
         setFormData((prevFormData) => ({
           ...prevFormData,
-          // location: "",
-          //  gatewayId: "",
             optimizerId: "",
-            //  state: "", customer: ""
         }));
       }
 
     } catch (error) {
+      showToast(error.response.data.message, "error");
     }
   }
 
@@ -400,6 +373,14 @@ function Settings() {
 
   const updateSliderValue = (value, setterFunction, fieldName) => {
     setterFunction(parseFloat(value));
+  };
+
+  // pop-up
+  const showToast = (message, type) => {
+    toast[type](message, {
+      position: "bottom-left",
+      autoClose: 3000,
+    });
   };
 
   return (
@@ -897,6 +878,7 @@ function Settings() {
                         Reset
                       </button>
                     </div>
+                    <ToastContainer />
                   </div>
                 </div>
               </form>
