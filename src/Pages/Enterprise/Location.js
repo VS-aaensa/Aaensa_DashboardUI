@@ -26,7 +26,7 @@ function Location() {
   const StateId = window.localStorage.getItem("State_Id");
   const EnterpriseId = window.localStorage.getItem("Enterprise_Id");
 
-  const { status, location_response, location_error, loading } = useSelector(
+  const {  location_response, location_error, loading } = useSelector(
     (state) => state.locationSlice
   );
   const { allDelete_response, allDelete_error } = useSelector(

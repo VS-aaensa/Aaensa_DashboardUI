@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import LeftMenuList from "../../Common/LeftMenuList";
 import TopNavbar from "../../Common/TopNavbar";
-import { Link } from "react-router-dom";
+import { Link} from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import GatewayModals from "../../Modals/AddModals/GatewayModals";
 import GatewayEditModel from "../../Modals/EditModals/GatewayEditModel";
@@ -10,7 +10,6 @@ import Loader from "../../utils/Loader";
 import ByPassModal from "../../Modals/AddModals/ByPassModal";
 import axios from "axios";
 import {
-  Delete,
   clearDelete_response,
 } from "../../Slices/Enterprise/enterpriseSlice";
 import DeleteModal from "../../Modals/DeleteModals/DeleteModal";
@@ -34,10 +33,10 @@ function Gateway() {
   const STATENAME = window.localStorage.getItem("STATENAME");
   const LOCATIONNAME = window.localStorage.getItem("LOCATIONNAME");
 
-  const { status, gateway_response, gateway_error, loading } = useSelector(
+  const {  gateway_response, gateway_error, loading } = useSelector(
     (state) => state.gatewaySlice);
 
-  const { allDelete_response, allDelete_error } = useSelector(
+  const { allDelete_response } = useSelector(
     (state) => state.enterpriseSlice
   );
 
@@ -80,14 +79,13 @@ function Gateway() {
     EnterpriseUser: ENTERPRISEUSER,
     State: STATENAME,
     Location: LOCATIONNAME
-
   }
 
   //bypass
-  const [checkboxStates, setCheckboxStates] = useState({});
-  const { bypass_response, bypass_error } = useSelector(
-    (state) => state.byPassSlice
-  );
+  // const [checkboxStates, setCheckboxStates] = useState({});
+  // const { bypass_response, bypass_error } = useSelector(
+  //   (state) => state.byPassSlice
+  // );
   const [BypassData, setBypassData] = useState({});
 
   function bypass(Id, mode) {
@@ -105,9 +103,18 @@ function Gateway() {
     window.localStorage.setItem("Gateway_id", item.GatewayID);
     window.localStorage.setItem("GATEWAYNAME", item.GatewayID);
     if (route === "/optimizer") {
+      console.log("this is optimizer wala working ");
+      // return (<Link 
+      // to="/optimizer"
+      // > </Link>)
       window.location.href = '/optimizer';
+      // navigate ("/optimizer");
     } else if (route === "/gatewaydetails") {
-      window.location.href = '/gatewaydetails';
+      return (<Link
+        to="/gatewaydetails"
+      > </Link>)
+      // window.location.href = '/gatewaydetails';
+      // navigate ("/gatewaydetails");
     }
   };
 
@@ -153,7 +160,7 @@ function Gateway() {
       [Id]: !prevStates[Id], // Toggle the state for the specific item
     }));
 
-    if (!checkboxStates1[Id] == true) {
+    if (!checkboxStates1[Id] === true) {
       try {
         const response = await axios.post(
           `${process.env.REACT_APP_API}/api/hardware/device/ready/to/config/${Id}`,
@@ -550,7 +557,7 @@ function Gateway() {
                                 id={`toggle-btn-2-${rowIndex}`}
                                 defaultChecked={false}
                                 onClick={() => {
-                                  bypass(item.GatewayID,true);
+                                  bypass(item.GatewayID, true);
 
                                 }}
                               />
@@ -567,7 +574,7 @@ function Gateway() {
                                 id={`toggle-btn-2-${rowIndex}`}
                                 defaultChecked={true}
                                 onClick={() => {
-                                  bypass(item.GatewayID,false);
+                                  bypass(item.GatewayID, false);
 
                                 }}
                               />
@@ -578,13 +585,13 @@ function Gateway() {
                                   closeModal={() => closeModal()}
                                 />
                               )}
-                            </div>) : (item.BypassMode === "IN_PROGRESS_true")?(<div className="toggle_btn">
+                            </div>) : (item.BypassMode === "IN_PROGRESS_true") ? (<div className="toggle_btn">
                               <input
                                 type="checkbox"
                                 id={`toggle-btn-2-${rowIndex}`}
                                 defaultChecked={true}
                                 onClick={() => {
-                                  bypass(item.GatewayID,false);
+                                  bypass(item.GatewayID, false);
 
                                 }}
                               />
@@ -595,13 +602,13 @@ function Gateway() {
                                   closeModal={() => closeModal()}
                                 />
                               )}
-                            </div>):(<div className="toggle_btn">
+                            </div>) : (<div className="toggle_btn">
                               <input
                                 type="checkbox"
                                 id={`toggle-btn-2-${rowIndex}`}
                                 defaultChecked={true}
                                 onClick={() => {
-                                  bypass(item.GatewayID,true);
+                                  bypass(item.GatewayID, true);
                                 }}
                               />
                               <label htmlFor={`toggle-btn-2-${rowIndex}`} />
@@ -614,7 +621,7 @@ function Gateway() {
                             </div>)}
                         </td>
                         <td>
-                          {item.BypassMode === "OFF" ||item.BypassMode === "IN_PROGRESS_true"||item.BypassMode === "IN_PROGRESS_false" || item.BypassMode === "" ? (<div className="toggle_btn">
+                          {item.BypassMode === "OFF" || item.BypassMode === "IN_PROGRESS_true" || item.BypassMode === "IN_PROGRESS_false" || item.BypassMode === "" ? (<div className="toggle_btn">
                             <input
                               type="checkbox"
                               id={`toggle-btn-3-${rowIndex}`}
