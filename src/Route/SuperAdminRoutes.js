@@ -19,7 +19,6 @@ import MeterDetails from "../Pages/MeterDetails";
 import ProtectedRouteOne from "./protectedroute/ProtectedRouteOne";
 import Enterprise from "../Pages/Enterprise/Enterprise";
 function SuperAdminRoutes() {
-  console.log("getting here in routs");
   return (
     <Router>
       <Routes>

@@ -16,8 +16,8 @@ export const ENTERPRISETABLE = (header) =>
 export const ADDENTERPRISE = (data, header) =>
   api.post("/api/admin/add/enterprise", data, header);
 
-  // EDIT ENTERPRISE
-  export const EDITENTERPRISE = (EnterpriseId, data, header) => api.post(`/api/admin/update/enterprise/${EnterpriseId}`, data, header);
+// EDIT ENTERPRISE
+export const EDITENTERPRISE = (EnterpriseId, data, header) => api.post(`/api/admin/update/enterprise/${EnterpriseId}`, data, header);
 
 // STATE TABLE API
 export const STATETABLE = (EnterpriseId, header) =>
@@ -25,40 +25,40 @@ export const STATETABLE = (EnterpriseId, header) =>
 // STATE MODEL
 export const ADDSTATELIST = (header) =>
   api.get(`/api/admin/get/all/states`, header);
-  //    ADD STATE MODEL
-export const ADDSTATE = (data,header) =>
-api.post(`/api/admin/add/enterprise/state`,data, header);
+//    ADD STATE MODEL
+export const ADDSTATE = (data, header) =>
+  api.post(`/api/admin/add/enterprise/state`, data, header);
 
 // LOCATION TABLE API
-export const LOCATIONTABLE =(EnterpriseId,StateId, header) => api.get(`/api/admin/get/enterprise/state/location/list/${EnterpriseId}/${StateId}`, header);
+export const LOCATIONTABLE = (EnterpriseId, StateId, header) => api.get(`/api/admin/get/enterprise/state/location/list/${EnterpriseId}/${StateId}`, header);
 
 // ADD LOCATION MODEL
-export const ADDLOCATION = (data,header) =>
-api.post(`/api/admin/add/enterprise/state/location`,data, header);
+export const ADDLOCATION = (data, header) =>
+  api.post(`/api/admin/add/enterprise/state/location`, data, header);
 
 // GATEWAY TABLE API
-export const GATEWAYTABLE =(LocationId, header) => api.get(`/api/admin/get/enterprise/state/location/gateway/list/${LocationId}`, header);
+export const GATEWAYTABLE = (LocationId, header) => api.get(`/api/admin/get/enterprise/state/location/gateway/list/${LocationId}`, header);
 
 // ADD GATEWAY 
-export const GATEWAYMODEL =(data, header) => api.post(`/api/admin/add/gateway`,data, header);
+export const GATEWAYMODEL = (data, header) => api.post(`/api/admin/add/gateway`, data, header);
 
 // GATEWAY DETAILS
-export const GATEWAYDETAILS =(Gateway_ID, header) => api.get(`/api/admin/get/gateway/details/${Gateway_ID}`, header);
+export const GATEWAYDETAILS = (Gateway_ID, header) => api.get(`/api/admin/get/gateway/details/${Gateway_ID}`, header);
 
 // EDIT GATEWAY
-export const EDITGATEWAY =(GatewayId,data, header) => api.post(`/api/admin/update/gateway/${GatewayId}`,data, header);
+export const EDITGATEWAY = (GatewayId, data, header) => api.post(`/api/admin/update/gateway/${GatewayId}`, data, header);
 
 // OPTIMIZER TABLE API
-export const OPTIMIZERTABLE =(GatewayId, header) => api.get(`/api/admin/get/enterprise/state/location/gateway/optimizer/list/${GatewayId}`, header);
+export const OPTIMIZERTABLE = (GatewayId, header) => api.get(`/api/admin/get/enterprise/state/location/gateway/optimizer/list/${GatewayId}`, header);
 
 // ADD OPTIMIZER
-export const ADDOPTIMIZER =(data, header) => api.post(`/api/admin/add/optimizer`,data, header);
+export const ADDOPTIMIZER = (data, header) => api.post(`/api/admin/add/optimizer`, data, header);
 
 //EDIT OPTIMIZER
-export const EDITOPTIMIZER =(OptimizerId, data, header) => api.post(`/api/admin/update/optimizer/${OptimizerId}`,data, header);
+export const EDITOPTIMIZER = (OptimizerId, data, header) => api.post(`/api/admin/update/optimizer/${OptimizerId}`, data, header);
 
 // OPTIMIZERDETAILS
-export const OPTIMIZERDETAILS =(optimizerId, header) => api.get(`/api/admin/get/optimizer/details/${optimizerId}`, header);
+export const OPTIMIZERDETAILS = (optimizerId, header) => api.get(`/api/admin/get/optimizer/details/${optimizerId}`, header);
 
 
 // FOR USER PAGE TABLE API
@@ -77,16 +77,17 @@ export const ADDSYSTEMINTEGRATOR = (userData, header) =>
 
 
 
-  // Settings
-  export const SET =(data, header) => api.post(`/api/hardware/optimizer/setting/value/update`,data, header);
-  export const RESET =(Data, header) => api.post(`/api/hardware/reset/optimizer`,Data, header);
+// Settings
+export const SET = (data, header) => api.post(`/api/hardware/optimizer/setting/value/update`, data, header);
+export const RESET = (Data, header) => api.post(`/api/hardware/reset/optimizer`, Data, header);
+export const GETCURRENTDATA = (selectedOptimizerName, header) => api.post(`/api/hardware/get/optimizer/current/settings/${selectedOptimizerName}`, {}, header);
 
-  // BY PASS
-  export const BYPASS =(data, header) => api.post(`/api/hardware/bypass/optimizers`,data, header);
+// BY PASS
+export const BYPASS = (data, header) => api.post(`/api/hardware/bypass/optimizers`, data, header);
 
-  //DELETE
-  export const DELETE =(deleteData, header) => api.post(`/api/admin/delete/all`,deleteData, header);
+//DELETE
+export const DELETE = (deleteData, header) => api.post(`/api/admin/delete/all`, deleteData, header);
 
-  //Report
-  export const METERDATA =(Page,data, header) => api.post(`/api/admin/get/all/meter/data?page=${Page}&pageSize=100`,data, header);
-  export const DEVICEDATA =(Page,data, header) => api.post(`/api/admin/get/all/device/data?page=${Page}&pageSize=20`,data, header);
+//Report
+export const METERDATA = (Page, data, header) => api.post(`/api/admin/get/all/meter/data?page=${Page}&pageSize=100`, data, header);
+export const DEVICEDATA = (Page, data, header) => api.post(`/api/admin/get/all/device/data?page=${Page}&pageSize=20`, data, header);
