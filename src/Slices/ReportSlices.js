@@ -6,8 +6,10 @@ export const MeterData = createAsyncThunk(
   async ({Page, data, header }, { rejectWithValue }) => {
     try {
       const response = await METERDATA(Page, data, header);
+      console.log({response});
       return response?.data;
     } catch (error) {
+      console.log({error});
       if (
         error.response.data.message === "Invalid token" ||
         error.response.data.message === "Access denied"
@@ -25,7 +27,6 @@ export const DeviceData = createAsyncThunk(
 
 
   async ({ Page,data, header }, { rejectWithValue }) => {
-
     try {
       const response = await DEVICEDATA(Page,data, header);
       return response?.data;

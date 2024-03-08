@@ -12,7 +12,6 @@ const YourComponent = ({ Data, closeModal }) => {
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
-  const [checkboxStates, setCheckboxStates] = useState({});
   const { bypass_response, bypass_error } = useSelector(
     (state) => state.byPassSlice
   );

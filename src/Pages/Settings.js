@@ -3,11 +3,25 @@ import LeftMenuList from "../Common/LeftMenuList";
 import TopNavbar from "../Common/TopNavbar";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
-import { enterpriseList, clearEnterpriseResonse } from "../Slices/Enterprise/enterpriseSlice";
+import {
+  enterpriseList,
+} from "../Slices/Enterprise/enterpriseSlice";
 import { stateList, clearResponse } from "../Slices/Enterprise/StateSlices";
-import { locationList, clearLocationResponse } from "../Slices/Enterprise/LocationSlice";
-import { GatewayList, clearGatewaysResponse } from "../Slices/Enterprise/GatewaySlice";
-import { OptimizerList, clearOptimizerResponse } from "../Slices/Enterprise/OptimizerSlice";
+import {
+  locationList,
+  clearLocationResponse,
+} from "../Slices/Enterprise/LocationSlice";
+import {
+  GatewayList,
+  clearGatewaysResponse,
+} from "../Slices/Enterprise/GatewaySlice";
+import {
+  OptimizerList,
+  clearOptimizerResponse,
+} from "../Slices/Enterprise/OptimizerSlice";
+import { GetCurrentData } from "../Slices/SettingsSlice";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Tooltip = ({ text, children }) => {
   const [showTooltip, setShowTooltip] = useState(false);
@@ -43,7 +57,7 @@ function Settings() {
     optimizerId: "",
   });
 
-  const [apply, setApply] = useState(false);
+  const [triggerData, setTriggerData] = useState(true);
 
   const [EnterpriseList, setEnterpriseList] = useState([]);
   const [statelist, setStateList] = useState([]);
@@ -54,8 +68,9 @@ function Settings() {
   const [StateId, setSelectedStateId] = useState(""); //this is state id
   const [LocationId, setSelectedLocationId] = useState(""); //this is Location id
   const [GatewayId, setSelectedGatewayId] = useState(""); //this is Gateway id
-  const [selectedGatewayName, setSelectedGatewayName] = useState(""); //this is Gateway id
+  const [selectedGatewayName, setSelectedGatewayName] = useState(""); //this is Gateway Name
   const [selectedOptimizerId, setSelectedOptimizerId] = useState(""); //this is Optimizer id
+  const [selectedOptimizerName, setSelectedOptimizerName] = useState(""); //this is Optimizer Name
 
   // Setting UI
   const [firstPowerOnObservationTime, setFirstPowerOnObservationTime] =
@@ -64,11 +79,24 @@ function Settings() {
   const [optimizationOnTime, setOptimizationOnTime] = useState(40);
   const [thermostatMonitoringInterval, setThermostatMonitoringInterval] =
     useState(45);
-  const [thermostatMonitoringTimeIncrement,setThermostatMonitoringTimeIncrement] = useState(5);
-  const [steadyStateTimeRoomTempTolerance,setSteadyStateTimeRoomTempTolerance] = useState(1);
-  const [steadyStateCoilTempTolerance, setSteadyStateCoilTempTolerance] = useState(0.1);
+  const [
+    thermostatMonitoringTimeIncrement,
+    setThermostatMonitoringTimeIncrement,
+  ] = useState(5);
+  const [
+    steadyStateTimeRoomTempTolerance,
+    setSteadyStateTimeRoomTempTolerance,
+  ] = useState(1);
+  const [steadyStateCoilTempTolerance, setSteadyStateCoilTempTolerance] =
+    useState(0.1);
   const [group, setGroup] = useState("");
   const [id, setId] = useState("");
+
+  //Setting Slice
+  const { add_getCurentData_response, add_getCurentData_error } = useSelector(
+    (state) => state.settingsSlice
+  );
+
   // CUSTOMER ------------------
 
   const header = {
@@ -93,10 +121,8 @@ function Settings() {
     dispatch(clearGatewaysResponse());
     dispatch(clearOptimizerResponse());
 
-
     dispatch(enterpriseList({ header }));
   };
-
 
   const handleFormChange = (e) => {
     const { name, value } = e.target;
@@ -137,8 +163,6 @@ function Settings() {
     dispatch(clearOptimizerResponse());
 
     dispatch(stateList({ EnterpriseId, header }));
-
-
   };
 
   const handleFormChange1 = (e) => {
@@ -177,7 +201,6 @@ function Settings() {
     dispatch(clearOptimizerResponse());
 
     dispatch(locationList({ EnterpriseId, StateId, header }));
-
   };
 
   const handleFormChange2 = (e) => {
@@ -230,7 +253,6 @@ function Settings() {
       setId(selectedGateway._id);
       // Set the selected enterprise ID in the state
       setSelectedGatewayId(selectedGateway.GatewayID);
-      setSelectedGatewayName(selectedGateway._id);
     }
 
     setFormData((prevData) => ({
@@ -241,7 +263,7 @@ function Settings() {
 
   // Optimizer
 
-  const { optimizer_response, optimizer_error } = useSelector(
+  const { optimizer_response} = useSelector(
     (state) => state.optimizerSlice
   );
 
@@ -255,6 +277,8 @@ function Settings() {
     const selectedOptimizer = optimizerList.find(
       (item) => item.OptimizerID === value
     );
+
+    setSelectedOptimizerName(selectedOptimizer.OptimizerID);
     // Check if selectedEnterprise is not undefined before accessing its properties
     if (selectedOptimizer && selectedOptimizer._id) {
       // Log the selected enterprise ID
@@ -269,51 +293,86 @@ function Settings() {
     }));
   };
   // End Id's
-  useEffect((() => {
+  useEffect(() => {
     if (customer_response && Array.isArray(customer_response)) {
+      setTriggerData(true);
       setEnterpriseList(customer_response);
     }
     if (state_response && Array.isArray(state_response.AllEntState)) {
+      setTriggerData(true);
       setStateList(state_response.AllEntState);
     }
-
 
     if (location_error) {
       // setErrorMessage(location_error.message);
     }
 
-
     if (location_response && location_response.AllEntStateLocation) {
+      setTriggerData(true);
       setLocationList(location_response.AllEntStateLocation);
     }
 
     if (gateway_response && gateway_response.AllEntStateLocationGateway) {
-
+      setTriggerData(true);
       setGatewayList(gateway_response.AllEntStateLocationGateway);
     }
-    if (optimizer_response && optimizer_response.AllEntStateLocationGatewayOptimizer) {
+    if (
+      optimizer_response &&
+      optimizer_response.AllEntStateLocationGatewayOptimizer
+    ) {
       setOptimizerList(optimizer_response.AllEntStateLocationGatewayOptimizer);
+      setTriggerData(false);
     }
-  }), [customer_response, state_response, location_response, gateway_response, optimizer_response])
 
+    if (add_getCurentData_response.success === true) {
+      setTriggerData(true);
+      const data = add_getCurentData_response.data;
+
+      setOptimizationOnTime(parseInt(data.OptimizationOnTime) / 60);
+      setFirstPowerOnObservationTime(
+        parseInt(data.firstPowerOnObservationTime) / 60
+      );
+      setMaxObservatioTime(parseInt(data.maxObservatioTime) / 60);
+      setThermostatMonitoringInterval(
+        parseInt(data.thermostatMonitoringInterval)
+      );
+      setThermostatMonitoringTimeIncrement(
+        parseInt(data.thermostatMonitoringTimeIncrement)
+      );
+      setSteadyStateTimeRoomTempTolerance(
+        parseInt(data.steadyStateTimeRoomTempTolerance)
+      );
+      setSteadyStateCoilTempTolerance(
+        parseInt(data.steadyStateCoilTempTolerance)
+      );
+      // dispatch(clearCurrentResponse());
+    }
+  }, [
+    customer_response,
+    state_response,
+    location_response,
+    gateway_response,
+    optimizer_response,
+    add_getCurentData_response,
+    add_getCurentData_error,
+  ]);
 
   const data = {
     group: group,
     id: id,
-    firstPowerOnObservationTime: firstPowerOnObservationTime*60,
-    maxObservatioTime: maxObservatioTime*60,
-    OptimizationOnTime: optimizationOnTime*60,
+    firstPowerOnObservationTime: firstPowerOnObservationTime * 60,
+    maxObservatioTime: maxObservatioTime * 60,
+    OptimizationOnTime: optimizationOnTime * 60,
     thermostatMonitoringInterval: thermostatMonitoringInterval,
     thermostatMonitoringTimeIncrement: thermostatMonitoringTimeIncrement,
     steadyStateTimeRoomTempTolerance: steadyStateTimeRoomTempTolerance,
     steadyStateCoilTempTolerance: steadyStateCoilTempTolerance,
-  }
+  };
 
   const Data = {
     group: group,
-    id: id
-
-  }
+    id: id,
+  };
   const set = async () => {
     try {
       const response = await axios.post(
@@ -326,29 +385,17 @@ function Settings() {
         }
       );
       if (response.data.success == true) {
-
-        setEnterpriseList([]);
-        setStateList([]);
-        setLocationList([]);
-        setGatewayList([]);
+        showToast(response.data.message, "success");
         setOptimizerList([]);
-        setSelectedEnterpriseId("");
-        setSelectedStateId("");
-        setSelectedLocationId("");
-        setSelectedGatewayId("");
         setSelectedOptimizerId("");
-        dispatch(clearEnterpriseResonse());
-        dispatch(clearResponse());
-        dispatch(clearLocationResponse());
-        dispatch(clearGatewaysResponse());
         dispatch(clearOptimizerResponse());
-
         setFormData((prevFormData) => ({
           ...prevFormData,
-          location: "", gatewayId: "", optimizerId: "", state: "", customer: ""
+          optimizerId: "",
         }));
       }
     } catch (error) {
+      showToast(error.response.data.message, "error");
     }
   };
 
@@ -364,36 +411,39 @@ function Settings() {
         }
       );
       if (response.data.success === true) {
-        setEnterpriseList([]);
-        setStateList([]);
-        setLocationList([]);
-        setGatewayList([]);
+        showToast(response.data.message, "success");
         setOptimizerList([]);
-        setSelectedEnterpriseId("");
-        setSelectedStateId("");
-        setSelectedLocationId("");
-        setSelectedGatewayId("");
         setSelectedOptimizerId("");
-        dispatch(clearEnterpriseResonse());
-        dispatch(clearResponse());
-        dispatch(clearLocationResponse());
-        dispatch(clearGatewaysResponse());
         dispatch(clearOptimizerResponse());
         setFormData((prevFormData) => ({
           ...prevFormData,
-          location: "", gatewayId: "", optimizerId: "", state: "", customer: ""
+          optimizerId: "",
         }));
       }
-
     } catch (error) {
+      showToast(error.response.data.message, "error");
     }
-  }
+  };
 
   // Setting  UI
 
   const updateSliderValue = (value, setterFunction, fieldName) => {
     setterFunction(parseFloat(value));
   };
+
+  // pop-up
+  const showToast = (message, type) => {
+    toast[type](message, {
+      position: "bottom-left",
+      autoClose: 3000,
+    });
+  };
+
+  // Get current Data
+  async function getCurrentData() {
+    setTriggerData(true);
+    dispatch(GetCurrentData({ selectedOptimizerName, header }));
+  }
 
   return (
     <div className="flex h-screen bg-gray-50 dark:bg-gray-900">
@@ -499,14 +549,10 @@ function Settings() {
                       ))}
                     </select>
                   </label>
-
-
                 </div>
 
                 <div className=" bg-white  shadow-xs dark:bg-gray-800 p-4">
                   <div className="w-full max-w-lg">
-
-
                     <div className="flex flex-wrap -mx-3 mb-6">
                       {/* Add similar sections for other sliders */}
                       <div className="w-full md:w-1/2 px-3">
@@ -514,8 +560,8 @@ function Settings() {
                           className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 flex"
                           htmlFor="firstPowerOnObservationTime"
                         >
-                          First Power On Observation Time
-                          <Tooltip text="After First Power On Intenlliserver Active Time">
+                          First Power On Observation Time in minutes
+                          <Tooltip text="After First Power On Intenlliserver Active Time in minutes">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               width="20"
@@ -566,8 +612,8 @@ function Settings() {
                           className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 flex"
                           htmlFor="maxObservatioTime"
                         >
-                          Max Observation Time
-                          <Tooltip text="In first Start Up and any other situation Intelliserver Maximum Observation Time">
+                          Max Observation Time in minutes
+                          <Tooltip text="In first Start Up and any other situation Intelliserver Maximum Observation Time in minutes">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               width="20"
@@ -618,8 +664,8 @@ function Settings() {
                           className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 flex"
                           htmlFor="optimizationOnTime"
                         >
-                          Optimization On Time
-                          <Tooltip text="When the Thermostat Comming Frequesntly Intelliserver Optimization ON Time">
+                          Optimization On Time in minutes
+                          <Tooltip text="When the Thermostat Comming Frequesntly Intelliserver Optimization ON Time in minutes">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               width="20"
@@ -670,7 +716,7 @@ function Settings() {
                           className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 flex"
                           htmlFor="thermostatMonitoringInterval"
                         >
-                          Thermostat Monitoring Interval
+                          Thermostat Monitoring Interval in seconds
                           <Tooltip text="When Thermostat Turn Off the Compressor after 2:45 Min Intelliserver Turn Off Monitoring Interval">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -722,8 +768,8 @@ function Settings() {
                           className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 flex"
                           htmlFor="thermostatMonitoringTimeIncrement"
                         >
-                          Thermostat Monitoring Time Increment
-                          <Tooltip text="Thermostate Monitoring Time Incremen">
+                          Thermostat Monitoring Time Increment in seconds
+                          <Tooltip text="Thermostate Monitoring Time Increment in seconds ">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               width="20"
@@ -774,8 +820,8 @@ function Settings() {
                           className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 flex"
                           htmlFor="steadyStateTimeRoomTempTolerance"
                         >
-                          Steady State Time Room Temperature Tolerance
-                          <Tooltip text="Steady State Time Room Temperature Tolerance">
+                          Steady State Time Room Temperature Tolerance °C
+                          <Tooltip text="Steady State Time Room Temperature Tolerance °C">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               width="20"
@@ -826,8 +872,8 @@ function Settings() {
                           className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 flex"
                           htmlFor="steadyStateCoilTempTolerance"
                         >
-                          STEADY STATECOIL TEMP TOLERANCE
-                          <Tooltip text="Steady State Time Room Temperature Tolerance">
+                          STEADY STATE COIL TEMP TOLERANCE °C
+                          <Tooltip text="Steady State Time Room Temperature Tolerance °C">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               width="20"
@@ -877,8 +923,17 @@ function Settings() {
                     <div className="flex justify-end">
                       <button
                         type="button"
+                        className="py-2 px-5 mr-3 px-3 mt-2 focus:outline-none text-white rounded-lg bg-purple-600 active:bg-purple-600"
+                        onClick={getCurrentData}
+                      >
+                        Get Current Data
+                      </button>
+                      <button
+                        type="button"
                         className="py-2 px-5 mr-3 px-3 mt-2 focus:outline-none text-gray-500 rounded-lg border-2 border-gray-300 active:bg-purple-600"
                         onClick={set}
+                        disabled={triggerData ? false : true}
+                        // disabled={true}
                       >
                         Set
                       </button>
@@ -886,10 +941,13 @@ function Settings() {
                         type="button"
                         className="py-2 px-5 mt-2 focus:outline-none text-white rounded-lg bg-purple-600 active:bg-purple-600"
                         onClick={reset}
+                        disabled={triggerData ? false : true}
+                        // disabled={true}
                       >
                         Reset
                       </button>
                     </div>
+                    <ToastContainer />
                   </div>
                 </div>
               </form>

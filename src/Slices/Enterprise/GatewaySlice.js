@@ -46,6 +46,7 @@ export const EditGateway = createAsyncThunk(
   "EditGateway",
 
   async ({ GatewayId, data, header }, { rejectWithValue }) => {
+   
     try {
       const response = await EDITGATEWAY(GatewayId, data, header);
      
