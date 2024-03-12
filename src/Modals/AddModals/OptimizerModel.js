@@ -51,7 +51,7 @@ function OptimizerModels({ closeModal, Data }) {
     }
 
     if (add_optimizerlist_response.message === "Optimizer added successfully.") {
-      dispatch(clearAddOptimizerResponse());
+      // dispatch(clearAddOptimizerResponse());
       closeModal();
     }
   }, [add_optimizerlist_error, add_optimizerlist_response])

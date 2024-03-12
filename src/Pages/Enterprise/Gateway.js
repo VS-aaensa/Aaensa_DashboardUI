@@ -5,7 +5,7 @@ import { Link} from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import GatewayModals from "../../Modals/AddModals/GatewayModals";
 import GatewayEditModel from "../../Modals/EditModals/GatewayEditModel";
-import { GatewayList, clearError, clearGatewaysResponse, } from "../../Slices/Enterprise/GatewaySlice";
+import {clearEdit_gateway_response, GatewayList, clearError, clearGatewaysResponse, clearGatewayResponse} from "../../Slices/Enterprise/GatewaySlice";
 import Loader from "../../utils/Loader";
 import ByPassModal from "../../Modals/AddModals/ByPassModal";
 import axios from "axios";
@@ -13,6 +13,8 @@ import {
   clearDelete_response,
 } from "../../Slices/Enterprise/enterpriseSlice";
 import DeleteModal from "../../Modals/DeleteModals/DeleteModal";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Gateway() {
   const dispatch = useDispatch();
@@ -33,7 +35,7 @@ function Gateway() {
   const STATENAME = window.localStorage.getItem("STATENAME");
   const LOCATIONNAME = window.localStorage.getItem("LOCATIONNAME");
 
-  const {  gateway_response, gateway_error, loading } = useSelector(
+  const { edit_gateway_response, gateway_response, gateway_error, add_gatewaylist_response,loading } = useSelector(
     (state) => state.gatewaySlice);
 
   const { allDelete_response } = useSelector(
@@ -51,10 +53,16 @@ function Gateway() {
       if (trigger) {
         dispatch(GatewayList({ LocationId, header }));
         setTrigger(false); // Reset trigger to prevent continuous API calls
+        showToast(add_gatewaylist_response.message, "success");
+        dispatch(clearGatewayResponse());
+        showToast(edit_gateway_response.message, "success");
+        dispatch(clearEdit_gateway_response());
       }
     }
     if (allDelete_response) {
       setTrigger(true);
+     
+      showToast(allDelete_response.message, "success");
     }
     dispatch(clearDelete_response());
 
@@ -104,11 +112,17 @@ function Gateway() {
     window.localStorage.setItem("GATEWAYNAME", item.GatewayID);
     if (route === "/optimizer") {
       console.log("this is optimizer wala working ");
+      // return (<Link 
+      // to="/optimizer"
+      // > </Link>)
       window.location.href = '/optimizer';
+      // navigate ("/optimizer");
     } else if (route === "/gatewaydetails") {
       return (<Link
         to="/gatewaydetails"
       > </Link>)
+      // window.location.href = '/gatewaydetails';
+      // navigate ("/gatewaydetails");
     }
   };
 
@@ -118,6 +132,7 @@ function Gateway() {
   };
 
   const openEditModal = (item) => {
+    // handleInputChange(item);
     setSelectedItem(item);
     setIsEditModelOpen(true);
   };
@@ -141,6 +156,7 @@ function Gateway() {
     setIsModalOpen(false);
     setIsModalbypass(false);
     setTrigger(true);
+    
   };
 
   // Ready to Config
@@ -171,7 +187,7 @@ function Gateway() {
       }
     }
   }
-  //Pagination+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  //Pagination
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 15;
   const paginationRange = 1;
@@ -270,6 +286,14 @@ function Gateway() {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const displayedData = gatewayList.slice(startIndex, endIndex);
+
+     // pop-up
+     const showToast = (message, type) => {
+      toast[type](message, {
+        position: "bottom-left",
+        autoClose: 3000,
+      });
+    };
 
   return (
     <>
@@ -633,6 +657,8 @@ function Gateway() {
                             <label htmlFor={`toggle-btn-3-${rowIndex}`} />
 
                           </div>)}
+
+
                         </td>
                         <td>
                           <button
@@ -784,6 +810,19 @@ function Gateway() {
             </div>
           </main>
         </div>
+        <ToastContainer
+        position="bottom-left"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        //  transition: Bounce
+      />
       </div>
     </>
   );

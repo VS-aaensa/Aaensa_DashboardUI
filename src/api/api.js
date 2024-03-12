@@ -10,31 +10,28 @@ export const LOGIN = (data) => api.post("/api/auth/login", data);
 export const FORGOTPASS = (data) => api.post("/api/auth/forget-password", data);
 
 // ENTERPRISE PAGE TABLE API
-export const ENTERPRISETABLE = (header) =>
-  api.get("/api/admin/get/enterprise/list/data", header);
+export const ENTERPRISETABLE = (header) => api.get("/api/admin/get/enterprise/list/data", header);
+
 // ADD ENTERPRISE MODEL PAGE API
-export const ADDENTERPRISE = (data, header) =>
-  api.post("/api/admin/add/enterprise", data, header);
+export const ADDENTERPRISE = (data, header) => api.post("/api/admin/add/enterprise", data, header);
 
 // EDIT ENTERPRISE
 export const EDITENTERPRISE = (EnterpriseId, data, header) => api.post(`/api/admin/update/enterprise/${EnterpriseId}`, data, header);
 
 // STATE TABLE API
-export const STATETABLE = (EnterpriseId, header) =>
-  api.get(`/api/admin/get/enterprise/state/list/${EnterpriseId}`, header);
+export const STATETABLE = (EnterpriseId, header) =>  api.get(`/api/admin/get/enterprise/state/list/${EnterpriseId}`, header);
+
 // STATE MODEL
-export const ADDSTATELIST = (header) =>
-  api.get(`/api/admin/get/all/states`, header);
+export const ADDSTATELIST = (header) =>  api.get(`/api/admin/get/all/states`, header);
+
 //    ADD STATE MODEL
-export const ADDSTATE = (data, header) =>
-  api.post(`/api/admin/add/enterprise/state`, data, header);
+export const ADDSTATE = (data, header) => api.post(`/api/admin/add/enterprise/state`, data, header);
 
 // LOCATION TABLE API
 export const LOCATIONTABLE = (EnterpriseId, StateId, header) => api.get(`/api/admin/get/enterprise/state/location/list/${EnterpriseId}/${StateId}`, header);
 
 // ADD LOCATION MODEL
-export const ADDLOCATION = (data, header) =>
-  api.post(`/api/admin/add/enterprise/state/location`, data, header);
+export const ADDLOCATION = (data, header) => api.post(`/api/admin/add/enterprise/state/location`, data, header);
 
 // GATEWAY TABLE API
 export const GATEWAYTABLE = (LocationId, header) => api.get(`/api/admin/get/enterprise/state/location/gateway/list/${LocationId}`, header);
@@ -60,22 +57,17 @@ export const EDITOPTIMIZER = (OptimizerId, data, header) => api.post(`/api/admin
 // OPTIMIZERDETAILS
 export const OPTIMIZERDETAILS = (optimizerId, header) => api.get(`/api/admin/get/optimizer/details/${optimizerId}`, header);
 
-
 // FOR USER PAGE TABLE API
-export const USERAPILIST = (header) =>
-  api.get("/api/admin/get/user/data", header);
+export const USERAPILIST = (header) => api.get("/api/admin/get/user/data", header);
 
 // ADD ENTERPRISEuSER PAGE MODEL API
-export const ADDENTERPRISELIST = (data, header) =>
-  api.post("/api/admin/add/enterprise/user", data, header);
+export const ADDENTERPRISELIST = (data, header) => api.post("/api/admin/add/enterprise/user", data, header);
+
 // ENTERPRISE LIST NAME MODEL API
-export const ENTERPRISEUSERLIST = (header) =>
-  api.get("/api/admin/get/enterprise/list/name", header);
+export const ENTERPRISEUSERLIST = (header) => api.get("/api/admin/get/enterprise/list/name", header);
+
 // ADD SYSTEM INTEGRATOR PAGE MODEL API
-export const ADDSYSTEMINTEGRATOR = (userData, header) =>
-  api.post("/api/admin/add/system/integrator", userData, header);
-
-
+export const ADDSYSTEMINTEGRATOR = (userData, header) => api.post("/api/admin/add/system/integrator", userData, header);
 
 // Settings
 export const SET = (data, header) => api.post(`/api/hardware/optimizer/setting/value/update`, data, header);

@@ -43,7 +43,7 @@ const EnterpriseEditModal = ({ closeModal, Data }) => {
     });
     if (edit_enterprise_response.message=="Enterprise updated successfully.") {
      closeModal();
-      dispatch(clearEdit_enterprise_response());
+      // dispatch(clearEdit_enterprise_response());
     }
 
     if (edit_enterprise_error) {

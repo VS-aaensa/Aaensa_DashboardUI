@@ -62,7 +62,6 @@ const Devicedetails = (Data) => {
 
         const Page = currentPage
         const data = Data.Data;
-console.log(data,"***********************");
         dispatch(DeviceData({ Page, data, header }));
     }, [currentPage, Data])
 
@@ -234,16 +233,25 @@ console.log(data,"***********************");
         }
     };
 
-    const handleDownloadDeviceData = () => {
-        const requestBody = Data.Data;
+    const [downloading, setDownloading] = useState(false);
 
-        downloadFile(
-            `${process.env.REACT_APP_API}/api/admin/download/all/devicedata/report`,
-            requestBody,
-            `DeviceDataReport_${new Date().toLocaleString("en-US", {
-                timeZone: "Asia/Kolkata",
-            })}.csv`
-        );
+    const handleDownloadDeviceData = async () => {
+        try {
+            setDownloading(true);
+            const requestBody = Data.Data;
+
+            await downloadFile(
+                `${process.env.REACT_APP_API}/api/admin/download/all/devicedata/report`,
+                requestBody,
+                `DeviceDataReport_${new Date().toLocaleString("en-US", {
+                    timeZone: "Asia/Kolkata",
+                })}.csv`
+            );
+        } catch (error) {
+            // Handle error if necessary
+        } finally {
+            setDownloading(false);
+        }
     };
     return (
         <>
@@ -272,7 +280,7 @@ console.log(data,"***********************");
                         </select>
                     </div>
 
-                    <div className="download_btn" style={{ position: "sticky", top: "0", zIndex: "1000" }}>
+                    <div className="download_btn" style={{ position: "sticky", top: "0", zIndex: "1000", display: "flex", flexDirection: "column" }}>
                         <button
                             type="button"
                             className="py-2 px-3 mt-2 focus:outline-none text-white rounded-lg   "
@@ -291,8 +299,11 @@ console.log(data,"***********************");
                             >
                                 <path d="M3 15v4c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2v-4M17 9l-5 5-5-5M12 12.8V2.5" />
                             </svg>
+
                         </button>
+
                     </div>
+
                 </div>
                 {/* <!-- table data --> */}
                 <table className="w-full whitespace-no-wrap">
