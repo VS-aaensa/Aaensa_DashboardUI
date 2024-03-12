@@ -62,7 +62,7 @@ const Devicedetails = (Data) => {
 
         const Page = currentPage
         const data = Data.Data;
-
+console.log(data,"***********************");
         dispatch(DeviceData({ Page, data, header }));
     }, [currentPage, Data])
 
@@ -257,9 +257,9 @@ const Devicedetails = (Data) => {
                         <select className="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray">
                             {/* <option></option> */}
                             <option>Actual</option>
-                            <option>1 Minute</option>
                             <option>15s</option>
                             <option>30s</option>
+                            <option>1 Minute</option>
                             <option>5 Minutes</option>
                             <option>10 Minutes</option>
                             <option>15 Minutes</option>
