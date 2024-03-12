@@ -280,12 +280,11 @@ const Devicedetails = (Data) => {
                         </select>
                     </div>
 
-                    <div className="download_btn" style={{ position: "sticky", top: "0", zIndex: "1000", display: "flex", flexDirection: "column"  }}>
-                        {downloading? <button
+                    <div className="download_btn" style={{ position: "sticky", top: "0", zIndex: "1000", display: "flex", flexDirection: "column" }}>
+                        <button
                             type="button"
                             className="py-2 px-3 mt-2 focus:outline-none text-white rounded-lg   "
                             onClick={handleDownloadDeviceData}
-                            
                         >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -300,31 +299,11 @@ const Devicedetails = (Data) => {
                             >
                                 <path d="M3 15v4c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2v-4M17 9l-5 5-5-5M12 12.8V2.5" />
                             </svg>
-                            
-                        </button>:<button
-                            type="button"
-                            className="py-2 px-3 mt-2 focus:outline-none text-white rounded-lg   "
-                            onClick={handleDownloadDeviceData}
-                            disabled={false}
-                        >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="#4a90e2"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                            >
-                                <path d="M3 15v4c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2v-4M17 9l-5 5-5-5M12 12.8V2.5" />
-                            </svg>
-                          
-                        </button>}
-                       
+
+                        </button>
+
                     </div>
-                   
+
                 </div>
                 {/* <!-- table data --> */}
                 <table className="w-full whitespace-no-wrap">
