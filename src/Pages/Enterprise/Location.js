@@ -5,10 +5,12 @@ import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import Loader from "../../utils/Loader";
 import LocationModals from "../../Modals/AddModals/LocationModals";
-import { locationList, clearError, clearLocationResponse } from "../../Slices/Enterprise/LocationSlice";
+import { locationList, clearError, clearLocationResponse, clearAddLoctation_response} from "../../Slices/Enterprise/LocationSlice";
 import { Bypass } from "../../Slices/Enterprise/ByPassSlice";
 import ByPassModal from "../../Modals/AddModals/ByPassModal";
 import { Delete, clearDelete_response, } from "../../Slices/Enterprise/enterpriseSlice";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import DeleteModal from "../../Modals/DeleteModals/DeleteModal";
 
 function Location() {
@@ -26,7 +28,7 @@ function Location() {
   const StateId = window.localStorage.getItem("State_Id");
   const EnterpriseId = window.localStorage.getItem("Enterprise_Id");
 
-  const {  location_response, location_error, loading } = useSelector(
+  const { add_locationlist_response, location_response, location_error, loading } = useSelector(
     (state) => state.locationSlice
   );
   const { allDelete_response, allDelete_error } = useSelector(
@@ -42,11 +44,14 @@ function Location() {
       if (trigger) {
         dispatch(locationList({ EnterpriseId, StateId, header }));
         setTrigger(false); // Reset trigger to prevent continuous API calls
+        showToast(add_locationlist_response.message, "success");
+        dispatch(clearAddLoctation_response());
       }
     }
 
     if (allDelete_response) {
       setTrigger(true);
+      showToast(allDelete_response.message, "success");
     }
     dispatch(clearDelete_response());
 
@@ -220,6 +225,14 @@ function Location() {
     dispatch(clearError());
     setErrorMessage("");
   }
+
+   // pop-up
+   const showToast = (message, type) => {
+    toast[type](message, {
+      position: "bottom-left",
+      autoClose: 3000,
+    });
+  };
 
   return (
     <>
@@ -640,6 +653,19 @@ function Location() {
             </div>
           </main>
         </div>
+        <ToastContainer
+        position="bottom-left"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        //  transition: Bounce
+      />
       </div>
     </>
   );

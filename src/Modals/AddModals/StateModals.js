@@ -25,7 +25,7 @@ function StateModals({ closeModal }) {
     }
     if (add_state_response ) {
       closeModal();
-      dispatch(clearAdd_state_response());
+      // dispatch(clearAdd_state_response());
  }
 //  if (add_state_error ) {
 //   closeModal();

@@ -61,7 +61,7 @@ function LocationModals({ closeModal }) {
       add_locationlist_response.message ==
       "Enterprise Location added successfully."
     ) {
-      dispatch(clearAddLoctation_response());
+      // dispatch(clearAddLoctation_response());
       closeModal();
     }
   }, [dispatch, add_locationlist_error, add_locationlist_response]);

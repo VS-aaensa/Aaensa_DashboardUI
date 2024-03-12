@@ -1,4 +1,3 @@
-import axios from "axios";
 
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
@@ -55,7 +54,7 @@ function OptimizerEditModal({ closeModal, Data }) {
     }
 
     if (edit_optimizer_response.message==="Optimizer Updated successfully.") {
-      dispatch(clearEditOptimizerResponse());
+      // dispatch(clearEditOptimizerResponse());
       closeModal();
     }
   },[edit_optimizer_response,edit_optimizer_error,dispatch])

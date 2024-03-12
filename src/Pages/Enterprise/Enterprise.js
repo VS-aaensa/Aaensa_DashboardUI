@@ -5,7 +5,7 @@ import EnterpriseModal from "../../Modals/AddModals/EnterpriseModal";
 import EnterpriseEditModal from "../../Modals/EditModals/EnterpriseEditmodel";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import {enterpriseList,clearDelete_response} from "../../Slices/Enterprise/enterpriseSlice";
+import {enterpriseList,clearDelete_response,clearAdd_enterprise_response,clearEdit_enterprise_response} from "../../Slices/Enterprise/enterpriseSlice";
 import { clearResponse, clearError } from "../../Slices/Enterprise/StateSlices";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -30,7 +30,7 @@ function Enterprise() {
     },
   };
 
-  const { status, customer_response,allDelete_response,allDelete_error, error, loading } = useSelector(
+  const { status,add_enterprise_response,edit_enterprise_response, customer_response,allDelete_response,allDelete_error, error, loading } = useSelector(
     (state) => state.enterpriseSlice
   );
  
@@ -71,7 +71,7 @@ function Enterprise() {
 
     // notify();
   };
-  //Pagination___________-------------------------------------------------------------------------
+  //Pagination
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const paginationRange = 1;
@@ -168,6 +168,10 @@ function Enterprise() {
   useEffect(() => {
     if (trigger) {
       dispatch(enterpriseList({ header }));
+      showToast(add_enterprise_response.message, "success");
+      dispatch(clearAdd_enterprise_response());
+      showToast(edit_enterprise_response.message, "success");
+      dispatch(clearEdit_enterprise_response());
       setTrigger(false); // Reset trigger to prevent continuous API calls
     }
     dispatch(clearResponse());
@@ -179,17 +183,22 @@ function Enterprise() {
 
     if (allDelete_response) {
           setTrigger(true);
+          showToast(allDelete_response.message, "success"); 
     }
     dispatch(clearDelete_response());
     
   }, [trigger, customer_response, header, dispatch,  status]);
 
 
+  // pop-up
+  const showToast = (message, type) => {
+    toast[type](message, {
+      position: "bottom-left",
+      autoClose: 3000,
+    });
+  };
 
-  function notify() {
-    toast.success("Enterprise added successfully");
-  }
-// <></>
+
   return (
     <>
     {loading &&<Loader/>}

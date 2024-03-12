@@ -39,7 +39,7 @@ const UserModal = ({ closeModal }) => {
 
     loading,
   } = useSelector((state) => state.userSlice);
- 
+
   const handleInputEnterpriseChange = (e) => {
     const { name, value } = e.target;
     // Assuming that your enterprise data includes an "EnterpriseId" field
@@ -91,24 +91,24 @@ const UserModal = ({ closeModal }) => {
 
   const handleAddEnterpriseButtonClick = async (e) => {
     e.preventDefault();
-// Dispatch the async action and wait for it to complete
-dispatch(addEnterpriseList({ data, navigate, header }));
-if (add_enterprise_user_error) {
-  setErrorLog(add_enterprise_user_error);
-  setTimeout(() => {
-    setErrorLog([]);
-  }, 2000);
-} else {
-  closeModal();
-}
-   };
+    // Dispatch the async action and wait for it to complete
+    dispatch(addEnterpriseList({ data, navigate, header }));
+    if (add_enterprise_user_error) {
+      setErrorLog(add_enterprise_user_error);
+      setTimeout(() => {
+        setErrorLog([]);
+      }, 2000);
+    } else {
+      closeModal();
+    }
+  };
 
   const handleAddButtonClick = async (e) => {
     e.preventDefault();
     // Log the user data
 
     dispatch(addSystemIntegrator({ dataa, navigate, header }));
- };
+  };
 
   const handleRadioChange = (value) => {
     setUserType(value);
@@ -116,7 +116,7 @@ if (add_enterprise_user_error) {
   useEffect(() => {
     async function reportApi() {
       dispatch(EnterpriseName({ header }));
-       }
+    }
     reportApi();
   }, []);
 

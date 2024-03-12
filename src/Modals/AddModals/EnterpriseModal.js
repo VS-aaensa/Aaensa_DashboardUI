@@ -107,7 +107,7 @@ const EnterpriseModal = ({ closeModal }) => {
       dispatch(clearEnterprise_Add_error());
     }
     if(add_enterprise_response){
-      dispatch(clearAdd_enterprise_response());
+      // dispatch(clearAdd_enterprise_response());
       closeModal();
     }
   },[dispatch,add_enterprise_error,add_enterprise_response])

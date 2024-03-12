@@ -4,10 +4,17 @@ import TopNavbar from "../../Common/TopNavbar";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import StateModals from "../../Modals/AddModals/StateModals";
-import { stateList, clearResponse, clearError, } from "../../Slices/Enterprise/StateSlices";
+import {
+  stateList,
+  clearResponse,
+  clearError,
+  clearAdd_state_response
+} from "../../Slices/Enterprise/StateSlices";
 import Loader from "../../utils/Loader";
-import {clearDelete_response} from "../../Slices/Enterprise/enterpriseSlice";
+import { clearDelete_response } from "../../Slices/Enterprise/enterpriseSlice";
 import DeleteModal from "../../Modals/DeleteModals/DeleteModal";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 function State() {
   const ENTERPRISENAME = window.localStorage.getItem("ENTERPRISENAME");
   const dispatch = useDispatch();
@@ -23,7 +30,7 @@ function State() {
       Authorization: `Bearer ${window.localStorage.getItem("token")}`,
     },
   };
-  const { status, state_response, state_error, loading } = useSelector(
+  const { status,add_state_response, state_response, state_error, loading } = useSelector(
     (state) => state.stateSlices
   );
   const { allDelete_response, allDelete_error } = useSelector(
@@ -36,24 +43,28 @@ function State() {
     if (trigger) {
       dispatch(stateList({ EnterpriseId, header }));
       setTrigger(false); // Reset trigger to prevent continuous API calls
+      showToast(add_state_response.message, "success");
+      dispatch(clearAdd_state_response());
     }
     if (allDelete_response) {
       setTrigger(true);
+
+      showToast(allDelete_response.message, "success");
     }
     dispatch(clearDelete_response());
-  }, [trigger, allDelete_response,state_response,state_error]);
+  }, [trigger, allDelete_response, state_response, state_error, dispatch]);
 
-useEffect(()=>{
-  if (state_error) {
-    setErrorMessage(state_error.message);
-    dispatch(clearResponse());
-    setStateList([]);
-  }
-  if (state_response && Array.isArray(state_response.AllEntState)) {
-    setErrorMessage("");
-    setStateList(state_response.AllEntState);
+  useEffect(() => {
+    if (state_error) {
+      setErrorMessage(state_error.message);
+      dispatch(clearResponse());
+      setStateList([]);
     }
-},[ state_response, state_error,allDelete_response])
+    if (state_response && Array.isArray(state_response.AllEntState)) {
+      setErrorMessage("");
+      setStateList(state_response.AllEntState);
+    }
+  }, [state_response, state_error]);
 
   const clear = () => {
     dispatch(clearResponse());
@@ -65,7 +76,7 @@ useEffect(()=>{
     const deleteData = {
       group: "state",
       id: item._id,
-    }
+    };
     setSelectedDeleteItem(deleteData);
   };
 
@@ -89,6 +100,7 @@ useEffect(()=>{
     setIsModalOpen(false);
     setTrigger(true);
     setIsDeleteModelOpen(false);
+    // showToast(allDelete_response.message, "success");
   };
 
   //Pagination
@@ -112,10 +124,11 @@ useEffect(()=>{
       return Array.from({ length: totalPages }, (_, i) => i + 1).map((i) => (
         <li key={i}>
           <button
-            className={`px-3 py-1 rounded-md ${currentPage === i
+            className={`px-3 py-1 rounded-md ${
+              currentPage === i
                 ? "text-white bg-purple-600 border border-r-0 border-purple-600"
                 : "focus:outline-none focus:shadow-outline-purple"
-              }`}
+            }`}
             onClick={() => handlePageChange(i)}
           >
             {i}
@@ -148,10 +161,11 @@ useEffect(()=>{
       pages.push(
         <li key={i}>
           <button
-            className={`px-3 py-1 rounded-md ${currentPage === i
+            className={`px-3 py-1 rounded-md ${
+              currentPage === i
                 ? "text-white bg-purple-600 border border-r-0 border-purple-600"
                 : "focus:outline-none focus:shadow-outline-purple"
-              }`}
+            }`}
             onClick={() => handlePageChange(i)}
           >
             {i}
@@ -179,11 +193,19 @@ useEffect(()=>{
 
     return pages;
   };
- 
+
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const displayedData = statelist.slice(startIndex, endIndex);
- 
+
+  // pop-up
+  const showToast = (message, type) => {
+    toast[type](message, {
+      position: "bottom-left",
+      autoClose: 3000,
+    });
+  };
+
   return (
     <>
       {loading && <Loader />}
@@ -209,7 +231,9 @@ useEffect(()=>{
                       +
                     </span>
                   </button>
-                  {isModalOpen && <StateModals closeModal={() => closeModal()} />}
+                  {isModalOpen && (
+                    <StateModals closeModal={() => closeModal()} />
+                  )}
                 </div>
               </div>
 
@@ -301,7 +325,12 @@ useEffect(()=>{
                       >
                         <td className="px-4 py-3">
                           <Link
-                            onClick={() => handleInputChange(item?.State_ID._id, item.State_ID.name)}
+                            onClick={() =>
+                              handleInputChange(
+                                item?.State_ID._id,
+                                item.State_ID.name
+                              )
+                            }
                             // to="/location"
                             className="hover:underline"
                           >
@@ -344,7 +373,7 @@ useEffect(()=>{
                           {isDeleteModelOpen && (
                             <div
                               className="fixed inset-0 z-30 flex items-end bg-black bg-opacity-50 sm:items-center sm:justify-center"
-                            // onClick={closeModal}
+                              // onClick={closeModal}
                             >
                               <DeleteModal
                                 closeModal={() => closeModal()}
@@ -352,9 +381,14 @@ useEffect(()=>{
                               />
                             </div>
                           )}
-                          <Link >
+                          <Link>
                             <button
-                              onClick={() => handleInputChange(item?.State_ID._id, item.State_ID.name)}
+                              onClick={() =>
+                                handleInputChange(
+                                  item?.State_ID._id,
+                                  item.State_ID.name
+                                )
+                              }
                               className="px-2 py-2 border-2 border-purple-600 text-purple-600 rounded-md"
                             >
                               <svg
@@ -382,7 +416,9 @@ useEffect(()=>{
 
               <div className="grid px-4 py-3 text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800">
                 <span className="flex items-center col-span-3">
-                  {`Showing ${startIndex + 1}-${statelist.length} of ${endIndex}`}
+                  {`Showing ${startIndex + 1}-${
+                    statelist.length
+                  } of ${endIndex}`}
                 </span>
                 <span className="col-span-2"></span>
 
@@ -437,6 +473,19 @@ useEffect(()=>{
             </div>
           </main>
         </div>
+        <ToastContainer
+          position="bottom-left"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+          //  transition: Bounce
+        />
       </div>
     </>
   );

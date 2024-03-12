@@ -5,11 +5,13 @@ import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import Loader from "../../utils/Loader";
 import OptimizerModel from "../../Modals/AddModals/OptimizerModel";
-import { OptimizerList, clearError, clearOptimizerResponse, } from "../../Slices/Enterprise/OptimizerSlice";
+import { OptimizerList, clearError, clearOptimizerResponse,clearEditOptimizerResponse,clearAddOptimizerResponse  } from "../../Slices/Enterprise/OptimizerSlice";
 import ByPassModal from "../../Modals/AddModals/ByPassModal";
 import OptimizerEditModal from "../../Modals/EditModals/OptimizerEditModal";
 import { clearDelete_response, } from "../../Slices/Enterprise/enterpriseSlice";
 import DeleteModal from "../../Modals/DeleteModals/DeleteModal";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Optimizer() {
   const ENTERPRISENAME = window.localStorage.getItem("ENTERPRISENAME");
@@ -28,7 +30,7 @@ function Optimizer() {
   const [isDeleteModelOpen, setIsDeleteModelOpen] = useState(false);
   const [selectedDeleteItem, setSelectedDeleteItem] = useState(null);
   const GatewayId = window.localStorage.getItem("Gateway_id");
-  const { optimizer_response, optimizer_error, loading } = useSelector(
+  const { add_optimizerlist_response,edit_optimizer_response,optimizer_response, optimizer_error, loading } = useSelector(
     (state) => state.optimizerSlice
   );
   const { allDelete_response, allDelete_error } = useSelector(
@@ -44,11 +46,16 @@ function Optimizer() {
       if (trigger) {
         dispatch(OptimizerList({ GatewayId, header }));
         setTrigger(false); // Reset trigger to prevent continuous API calls
+        showToast(edit_optimizer_response.message, "success");
+        dispatch(clearEditOptimizerResponse());
+        showToast(add_optimizerlist_response.message, "success");
+        dispatch(clearAddOptimizerResponse());
       }
     }
 
     if (allDelete_response) {
       setTrigger(true);
+      showToast(allDelete_response.message, "success");
     }
     dispatch(clearDelete_response());
 
@@ -222,6 +229,14 @@ function Optimizer() {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const displayedData = optimizerList.slice(startIndex, endIndex);
+
+     // pop-up
+     const showToast = (message, type) => {
+      toast[type](message, {
+        position: "bottom-left",
+        autoClose: 3000,
+      });
+    };
 
   return (
     <>
@@ -757,6 +772,19 @@ function Optimizer() {
             </div>
           </main>
         </div>
+        <ToastContainer
+        position="bottom-left"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        //  transition: Bounce
+      />
       </div>
     </>
   );
