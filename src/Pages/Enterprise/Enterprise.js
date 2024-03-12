@@ -71,7 +71,7 @@ function Enterprise() {
 
     // notify();
   };
-  //Pagination
+  //Pagination___________-------------------------------------------------------------------------
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const paginationRange = 1;

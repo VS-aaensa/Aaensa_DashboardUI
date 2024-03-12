@@ -36,7 +36,7 @@ const Tooltip = ({ text, children }) => {
       {showTooltip && (
         <div
           className="absolute bg-black text-white p-2 rounded z-10"
-          style={{ width: "180px", textAlign: "center", padding: "5px 0" }}
+          style={{ width: "175px", textAlign: "center", padding: "5px 0" }}
         >
           {text}
         </div>
@@ -68,7 +68,6 @@ function Settings() {
   const [StateId, setSelectedStateId] = useState(""); //this is state id
   const [LocationId, setSelectedLocationId] = useState(""); //this is Location id
   const [GatewayId, setSelectedGatewayId] = useState(""); //this is Gateway id
-  const [selectedGatewayName, setSelectedGatewayName] = useState(""); //this is Gateway Name
   const [selectedOptimizerId, setSelectedOptimizerId] = useState(""); //this is Optimizer id
   const [selectedOptimizerName, setSelectedOptimizerName] = useState(""); //this is Optimizer Name
 
@@ -324,9 +323,10 @@ function Settings() {
       setTriggerData(false);
     }
 
-    if (add_getCurentData_response.success === true) {
+    if (add_getCurentData_response.success === true && add_getCurentData_response.data != null ) {
       setTriggerData(true);
       const data = add_getCurentData_response.data;
+      showToast(add_getCurentData_response.message, "success");
 
       setOptimizationOnTime(parseInt(data.OptimizationOnTime) / 60);
       setFirstPowerOnObservationTime(
@@ -347,6 +347,9 @@ function Settings() {
       );
       // dispatch(clearCurrentResponse());
     }
+    // if(add_getCurentData_response.data == null){
+    //   showToast("Previous Data of this Optimizer is not Available", "error");
+    // }
   }, [
     customer_response,
     state_response,

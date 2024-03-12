@@ -104,17 +104,11 @@ function Gateway() {
     window.localStorage.setItem("GATEWAYNAME", item.GatewayID);
     if (route === "/optimizer") {
       console.log("this is optimizer wala working ");
-      // return (<Link 
-      // to="/optimizer"
-      // > </Link>)
       window.location.href = '/optimizer';
-      // navigate ("/optimizer");
     } else if (route === "/gatewaydetails") {
       return (<Link
         to="/gatewaydetails"
       > </Link>)
-      // window.location.href = '/gatewaydetails';
-      // navigate ("/gatewaydetails");
     }
   };
 
@@ -124,7 +118,6 @@ function Gateway() {
   };
 
   const openEditModal = (item) => {
-    // handleInputChange(item);
     setSelectedItem(item);
     setIsEditModelOpen(true);
   };
@@ -178,7 +171,7 @@ function Gateway() {
       }
     }
   }
-  //Pagination
+  //Pagination+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 15;
   const paginationRange = 1;
@@ -640,8 +633,6 @@ function Gateway() {
                             <label htmlFor={`toggle-btn-3-${rowIndex}`} />
 
                           </div>)}
-
-
                         </td>
                         <td>
                           <button
