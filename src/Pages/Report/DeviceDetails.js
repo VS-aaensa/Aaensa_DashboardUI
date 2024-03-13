@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { DeviceData } from "../../Slices/ReportSlices";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
