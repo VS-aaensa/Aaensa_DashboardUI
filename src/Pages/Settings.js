@@ -19,7 +19,7 @@ import {
   OptimizerList,
   clearOptimizerResponse,
 } from "../Slices/Enterprise/OptimizerSlice";
-import { GetCurrentData } from "../Slices/SettingsSlice";
+import { GetCurrentData,clearCurrentResponse } from "../Slices/SettingsSlice";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -95,7 +95,6 @@ function Settings() {
   const { add_getCurentData_response, add_getCurentData_error } = useSelector(
     (state) => state.settingsSlice
   );
-
   // CUSTOMER ------------------
 
   const header = {
@@ -125,7 +124,7 @@ function Settings() {
 
   const handleFormChange = (e) => {
     const { name, value } = e.target;
-
+    setTriggerData(true);
     // for customer id
     const selectedEnterprise = EnterpriseList.find(
       (enterprise) => enterprise.EnterpriseName === value
@@ -166,7 +165,7 @@ function Settings() {
 
   const handleFormChange1 = (e) => {
     const { name, value } = e.target;
-
+    setTriggerData(true);
     // for customer id
     const selectedState = statelist.find(
       (state) => state.State_ID.name === value
@@ -204,7 +203,7 @@ function Settings() {
 
   const handleFormChange2 = (e) => {
     const { name, value } = e.target;
-
+    setTriggerData(true);
     // for customer id
     const selectedLocation = locationlist.find(
       (state) => state.LocationName === value
@@ -239,6 +238,7 @@ function Settings() {
 
   const handleFormChange3 = (e) => {
     const { name, value } = e.target;
+    setTriggerData(true);
 
     // for Gateway id
     const selectedGateway = gatewayList.find(
@@ -294,11 +294,10 @@ function Settings() {
   // End Id's
   useEffect(() => {
     if (customer_response && Array.isArray(customer_response)) {
-      setTriggerData(true);
+      
       setEnterpriseList(customer_response);
     }
     if (state_response && Array.isArray(state_response.AllEntState)) {
-      setTriggerData(true);
       setStateList(state_response.AllEntState);
     }
 
@@ -307,12 +306,10 @@ function Settings() {
     }
 
     if (location_response && location_response.AllEntStateLocation) {
-      setTriggerData(true);
       setLocationList(location_response.AllEntStateLocation);
     }
 
     if (gateway_response && gateway_response.AllEntStateLocationGateway) {
-      setTriggerData(true);
       setGatewayList(gateway_response.AllEntStateLocationGateway);
     }
     if (
@@ -321,9 +318,10 @@ function Settings() {
     ) {
       setOptimizerList(optimizer_response.AllEntStateLocationGatewayOptimizer);
       setTriggerData(false);
+      dispatch(clearOptimizerResponse());
     }
 
-    if (add_getCurentData_response.success === true && add_getCurentData_response.data != null ) {
+    if (add_getCurentData_response.success === true && add_getCurentData_response.data != "No previous data" ) {
       setTriggerData(true);
       const data = add_getCurentData_response.data;
       showToast(add_getCurentData_response.message, "success");
@@ -345,7 +343,15 @@ function Settings() {
       setSteadyStateCoilTempTolerance(
         parseInt(data.steadyStateCoilTempTolerance)
       );
-      // dispatch(clearCurrentResponse());
+      dispatch(clearCurrentResponse());
+    }
+    else  {
+
+      if (add_getCurentData_response.data === "No previous data") {
+        setTriggerData(true);
+        showToast(add_getCurentData_response.data, "error");
+      }
+      dispatch(clearCurrentResponse());
     }
     // if(add_getCurentData_response.data == null){
     //   showToast("Previous Data of this Optimizer is not Available", "error");
@@ -935,7 +941,7 @@ function Settings() {
                         type="button"
                         className="py-2 px-5 mr-3 px-3 mt-2 focus:outline-none text-gray-500 rounded-lg border-2 border-gray-300 active:bg-purple-600"
                         onClick={set}
-                        disabled={triggerData ? false : true}
+                        disabled={triggerData ?  false:true }
                         // disabled={true}
                       >
                         Set
@@ -944,7 +950,7 @@ function Settings() {
                         type="button"
                         className="py-2 px-5 mt-2 focus:outline-none text-white rounded-lg bg-purple-600 active:bg-purple-600"
                         onClick={reset}
-                        disabled={triggerData ? false : true}
+                        disabled={triggerData ?  false:true }
                         // disabled={true}
                       >
                         Reset

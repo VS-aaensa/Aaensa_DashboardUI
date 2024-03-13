@@ -60,7 +60,7 @@ export const GetCurrentData = createAsyncThunk(
       const response = await GETCURRENTDATA(selectedOptimizerName, header);
       return response.data;
     } catch (error) {
-      console.log(error,"error");
+      // console.log(error,"error");
       if (
         error.response.data.message === "Invalid token" ||
         error.response.data.message === "Access denied"
@@ -273,5 +273,5 @@ export const SettingSlice = createSlice({
   },
 });
 
-export const { clearCurrentResponse } = SettingSlice.actions;
+export const { clearResponse,clearCurrentResponse } = SettingSlice.actions;
 export default SettingSlice.reducer;
