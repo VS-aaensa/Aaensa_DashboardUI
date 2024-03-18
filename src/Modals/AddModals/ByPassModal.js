@@ -21,8 +21,9 @@ const YourComponent = ({ Data, closeModal }) => {
     },
   };
 
+
   function scheduleConfirmation(event) {
-    if (selectedDateTime == "") {
+    if (selectedDateTime === "") {
       alert("Please Select Date&Time");
     } else {
       // Display a confirmation dialog
@@ -30,7 +31,7 @@ const YourComponent = ({ Data, closeModal }) => {
     }
 
     // Check the user's choice
-    if (isConfirmed && selectedDateTime != "") {
+    if (isConfirmed && selectedDateTime !== "") {
       // If the user clicks "OK", perform the apply action
       // alert("Applying...");
       schedule(event);
@@ -86,9 +87,10 @@ useEffect(()=>{
     dispatch(clearError());
   }
   if (bypass_response) {
+    dispatch(clearResponse());
     closeModal();
   }
-},[bypass_error,bypass_response])
+},[bypass_error,bypass_response,closeModal,dispatch])
   //Date & Time
 
   const handleDateTimeChange = (event) => {
@@ -104,7 +106,6 @@ useEffect(()=>{
       )}`;
 
     setSelectedDateTime(formattedDateTime);
-
   };
 
   return (
@@ -146,7 +147,6 @@ useEffect(()=>{
             </h1>
             <ul
               className="relative flex flex-wrap p-1 list-none rounded-xl"
-              role="list"
             >
               <li
                 className={`z-30 flex-auto text-center ${activeTab === "schedule" ? "active" : ""

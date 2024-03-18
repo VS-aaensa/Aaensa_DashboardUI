@@ -17,7 +17,7 @@ function LeftMenuList({ isSideMenuOpen }) {
       const newSelectedItem = Object.fromEntries(
         Object.keys(prevSelectedItem).map((key) => [key, false])
       );
-  
+
       // Set the clicked item to true
       newSelectedItem[itemName] = true;
   

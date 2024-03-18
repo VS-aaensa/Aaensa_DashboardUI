@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import MuiAlert from "@mui/material/Alert";
 import Snackbar from "@mui/material/Snackbar";
-import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import {Addenterprise,clearEnterprise_Add_error,clearAdd_enterprise_response} from "../../Slices/Enterprise/enterpriseSlice";
-import { ToastContainer, toast } from 'react-toastify';
+import {Addenterprise,clearEnterprise_Add_error} from "../../Slices/Enterprise/enterpriseSlice";
 import 'react-toastify/dist/ReactToastify.css';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
@@ -36,14 +33,13 @@ const EnterpriseModal = ({ closeModal }) => {
     },
   };
 
-  const { status, add_enterprise_response, add_enterprise_error, loading } = useSelector(
+  const {  add_enterprise_response, add_enterprise_error } = useSelector(
     (state) => state.enterpriseSlice
   );
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
     }
-
     setOpen(false);
   };
 
@@ -86,7 +82,7 @@ const EnterpriseModal = ({ closeModal }) => {
     e.preventDefault();
     if(isValid && isValidPhone){
       dispatch(Addenterprise({data, header }));
-    }else if(isValidPhone==false){
+    }else if(isValidPhone===false){
       setphoneMessage("Invalid Phone No.");
       setTimeout(() => {
         setphoneMessage("")
@@ -110,7 +106,7 @@ const EnterpriseModal = ({ closeModal }) => {
       // dispatch(clearAdd_enterprise_response());
       closeModal();
     }
-  },[dispatch,add_enterprise_error,add_enterprise_response])
+  },[dispatch,add_enterprise_error,add_enterprise_response,closeModal])
 
 
   return (

@@ -14,11 +14,11 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function Optimizer() {
+  const dispatch = useDispatch();
   const ENTERPRISENAME = window.localStorage.getItem("ENTERPRISENAME");
   const GATEWAYNAME = window.localStorage.getItem("GATEWAYNAME");
   const STATENAME = window.localStorage.getItem("STATENAME");
   const LOCATIONNAME = window.localStorage.getItem("LOCATIONNAME");
-  const dispatch = useDispatch();
   const token = window.localStorage.getItem("token");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModelOpen, setIsEditModelOpen] = useState(false);
@@ -30,12 +30,9 @@ function Optimizer() {
   const [isDeleteModelOpen, setIsDeleteModelOpen] = useState(false);
   const [selectedDeleteItem, setSelectedDeleteItem] = useState(null);
   const GatewayId = window.localStorage.getItem("Gateway_id");
-  const { add_optimizerlist_response,edit_optimizer_response,optimizer_response, optimizer_error, loading } = useSelector(
-    (state) => state.optimizerSlice
-  );
-  const { allDelete_response, allDelete_error } = useSelector(
-    (state) => state.enterpriseSlice
-  );
+  const { add_optimizerlist_response,edit_optimizer_response,optimizer_response, optimizer_error, loading } = useSelector((state) => state.optimizerSlice);
+
+  const { allDelete_response, allDelete_error } = useSelector((state) => state.enterpriseSlice);
   const header = {
     headers: {
       Authorization: `Bearer ${window.localStorage.getItem("token")}`,

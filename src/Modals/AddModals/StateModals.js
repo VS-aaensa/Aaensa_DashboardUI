@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { AddstateList, Addstate,clearAdd_state_response,clearAdd_state_error } from "../../Slices/Enterprise/StateSlices";
+import { AddstateList, Addstate,clearAdd_state_error } from "../../Slices/Enterprise/StateSlices";
 
 function StateModals({ closeModal }) {
   const dispatch = useDispatch();
@@ -14,11 +14,11 @@ function StateModals({ closeModal }) {
       Authorization: `Bearer ${window.localStorage.getItem("token")}`,
     },
   };
-  const { add_state_error, add_state_response, add_statelist_response, error, loading } =
+  const { add_state_error, add_state_response, add_statelist_response } =
     useSelector((state) => state.stateSlices);
   useEffect(() => {
     dispatch(AddstateList({ header }));
-  }, []);
+  }, [dispatch]);
   useEffect(() => {
     if (add_statelist_response) {
       setgetStateList(add_statelist_response);
@@ -27,10 +27,7 @@ function StateModals({ closeModal }) {
       closeModal();
       // dispatch(clearAdd_state_response());
  }
-//  if (add_state_error ) {
-//   closeModal();
-//   dispatch(clearAdd_state_error());
-// }
+
 
     if (add_state_error) {
       setErrorMessage(add_state_error.message);
@@ -40,7 +37,7 @@ function StateModals({ closeModal }) {
       dispatch(clearAdd_state_error());
     }
 
-  }, [dispatch,add_statelist_response,add_state_error,add_state_response,add_state_error])
+  }, [dispatch,add_statelist_response,add_state_error,add_state_response,add_state_error,closeModal])
 
   const handleStoreChange = (event) => {
     setStateId(event.target.value);

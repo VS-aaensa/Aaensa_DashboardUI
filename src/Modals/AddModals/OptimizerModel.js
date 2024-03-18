@@ -1,11 +1,9 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { OptimizerModel,clearAddOptimizerResponse } from "../../Slices/Enterprise/OptimizerSlice";
+import { OptimizerModel } from "../../Slices/Enterprise/OptimizerSlice";
 
 function OptimizerModels({ closeModal, Data }) {
   const dispatch = useDispatch();
-  const token = window.localStorage.getItem("token");
   const [optimizerData, setOptimizerData] = useState({
     optimizerId: "",
     optimizerName: "",
@@ -21,14 +19,13 @@ function OptimizerModels({ closeModal, Data }) {
       [name]: value,
     }));
   };
-
   const data = {
     GatewayId: GatewayId,
     OptimizerID: optimizerData.optimizerId.trim(),
     OptimizerName: optimizerData.optimizerName,
   };
 
-  const { status, add_optimizerlist_response, add_optimizerlist_error, loading } = useSelector(
+  const {  add_optimizerlist_response, add_optimizerlist_error } = useSelector(
     (state) => state.optimizerSlice
   );
   const header = {
@@ -54,7 +51,7 @@ function OptimizerModels({ closeModal, Data }) {
       // dispatch(clearAddOptimizerResponse());
       closeModal();
     }
-  }, [add_optimizerlist_error, add_optimizerlist_response])
+  }, [add_optimizerlist_error, add_optimizerlist_response,closeModal])
 
   return (
     <div

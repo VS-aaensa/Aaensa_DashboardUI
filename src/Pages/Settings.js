@@ -68,7 +68,6 @@ function Settings() {
   const [StateId, setSelectedStateId] = useState(""); //this is state id
   const [LocationId, setSelectedLocationId] = useState(""); //this is Location id
   const [GatewayId, setSelectedGatewayId] = useState(""); //this is Gateway id
-  const [selectedOptimizerId, setSelectedOptimizerId] = useState(""); //this is Optimizer id
   const [selectedOptimizerName, setSelectedOptimizerName] = useState(""); //this is Optimizer Name
 
   // Setting UI
@@ -76,18 +75,10 @@ function Settings() {
     useState(45);
   const [maxObservatioTime, setMaxObservatioTime] = useState(30);
   const [optimizationOnTime, setOptimizationOnTime] = useState(40);
-  const [thermostatMonitoringInterval, setThermostatMonitoringInterval] =
-    useState(45);
-  const [
-    thermostatMonitoringTimeIncrement,
-    setThermostatMonitoringTimeIncrement,
-  ] = useState(5);
-  const [
-    steadyStateTimeRoomTempTolerance,
-    setSteadyStateTimeRoomTempTolerance,
-  ] = useState(1);
-  const [steadyStateCoilTempTolerance, setSteadyStateCoilTempTolerance] =
-    useState(0.1);
+  const [thermostatMonitoringInterval, setThermostatMonitoringInterval] = useState(45);
+  const [thermostatMonitoringTimeIncrement,setThermostatMonitoringTimeIncrement] = useState(5);
+  const [steadyStateTimeRoomTempTolerance,setSteadyStateTimeRoomTempTolerance] = useState(1);
+  const [steadyStateCoilTempTolerance, setSteadyStateCoilTempTolerance] =  useState(0.1);
   const [group, setGroup] = useState("");
   const [id, setId] = useState("");
 
@@ -95,6 +86,7 @@ function Settings() {
   const { add_getCurentData_response, add_getCurentData_error } = useSelector(
     (state) => state.settingsSlice
   );
+  console.log({add_getCurentData_response});
   // CUSTOMER ------------------
 
   const header = {
@@ -102,7 +94,7 @@ function Settings() {
       Authorization: `Bearer ${window.localStorage.getItem("token")}`,
     },
   };
-  const { customer_response, error } = useSelector(
+  const { customer_response } = useSelector(
     (state) => state.enterpriseSlice
   );
   const customer = async () => {
@@ -113,7 +105,6 @@ function Settings() {
     setSelectedStateId("");
     setSelectedLocationId("");
     setSelectedGatewayId("");
-    setSelectedOptimizerId("");
     dispatch(clearResponse());
     dispatch(clearLocationResponse());
     dispatch(clearGatewaysResponse());
@@ -146,7 +137,7 @@ function Settings() {
 
   // STATE--------------------
 
-  const { status, state_response, state_error, loading } = useSelector(
+  const { state_response} = useSelector(
     (state) => state.stateSlices
   );
 
@@ -187,7 +178,7 @@ function Settings() {
   // endstate
 
   //Location
-  const { location_response, location_error } = useSelector(
+  const { location_response } = useSelector(
     (state) => state.locationSlice
   );
 
@@ -226,7 +217,7 @@ function Settings() {
 
   //Gateway
 
-  const { gateway_response, gateway_error } = useSelector(
+  const { gateway_response } = useSelector(
     (state) => state.gatewaySlice
   );
 
@@ -284,7 +275,7 @@ function Settings() {
       setGroup("optimizer");
       setId(selectedOptimizer._id);
       // Set the selected enterprise ID in the state
-      setSelectedOptimizerId(selectedOptimizer._id);
+      // setSelectedOptimizerId(selectedOptimizer._id);
     }
     setFormData((prevData) => ({
       ...prevData,
@@ -301,9 +292,6 @@ function Settings() {
       setStateList(state_response.AllEntState);
     }
 
-    if (location_error) {
-      // setErrorMessage(location_error.message);
-    }
 
     if (location_response && location_response.AllEntStateLocation) {
       setLocationList(location_response.AllEntStateLocation);
@@ -321,27 +309,27 @@ function Settings() {
       dispatch(clearOptimizerResponse());
     }
 
-    if (add_getCurentData_response.success === true && add_getCurentData_response.data != "No previous data" ) {
+    if (add_getCurentData_response.success === true && add_getCurentData_response.data !== "No previous data" ) {
       setTriggerData(true);
       const data = add_getCurentData_response.data;
       showToast(add_getCurentData_response.message, "success");
 
       setOptimizationOnTime(parseInt(data.OptimizationOnTime) / 60);
       setFirstPowerOnObservationTime(
-        parseInt(data.firstPowerOnObservationTime) / 60
+        parseFloat(data.firstPowerOnObservationTime) / 60
       );
       setMaxObservatioTime(parseInt(data.maxObservatioTime) / 60);
       setThermostatMonitoringInterval(
-        parseInt(data.thermostatMonitoringInterval)
+        parseFloat(data.thermostatMonitoringInterval)
       );
       setThermostatMonitoringTimeIncrement(
-        parseInt(data.thermostatMonitoringTimeIncrement)
+        parseFloat(data.thermostatMonitoringTimeIncrement)
       );
       setSteadyStateTimeRoomTempTolerance(
-        parseInt(data.steadyStateTimeRoomTempTolerance)
+        parseFloat(data.steadyStateTimeRoomTempTolerance)
       );
       setSteadyStateCoilTempTolerance(
-        parseInt(data.steadyStateCoilTempTolerance)
+        parseFloat(data.steadyStateCoilTempTolerance)
       );
       dispatch(clearCurrentResponse());
     }
@@ -357,6 +345,7 @@ function Settings() {
     //   showToast("Previous Data of this Optimizer is not Available", "error");
     // }
   }, [
+    dispatch,
     customer_response,
     state_response,
     location_response,
@@ -393,10 +382,9 @@ function Settings() {
           },
         }
       );
-      if (response.data.success == true) {
+      if (response.data.success === true) {
         showToast(response.data.message, "success");
         setOptimizerList([]);
-        setSelectedOptimizerId("");
         dispatch(clearOptimizerResponse());
         setFormData((prevFormData) => ({
           ...prevFormData,
@@ -409,8 +397,16 @@ function Settings() {
   };
 
   const reset = async () => {
+    setFirstPowerOnObservationTime(45)
+    setMaxObservatioTime(30);
+    setOptimizationOnTime(40);
+    setThermostatMonitoringInterval(45);
+    setThermostatMonitoringTimeIncrement(5);
+    setSteadyStateTimeRoomTempTolerance(1);
+    setSteadyStateCoilTempTolerance(0.1);
     try {
-      const response = await axios.post(
+      const response = await axios.post
+      (
         `${process.env.REACT_APP_API}/api/hardware/reset/optimizer`,
         Data,
         {
@@ -422,7 +418,6 @@ function Settings() {
       if (response.data.success === true) {
         showToast(response.data.message, "success");
         setOptimizerList([]);
-        setSelectedOptimizerId("");
         dispatch(clearOptimizerResponse());
         setFormData((prevFormData) => ({
           ...prevFormData,
@@ -640,6 +635,7 @@ function Settings() {
                             </svg>
                           </Tooltip>
                         </label>
+                        
                         <div className="flex justify-between items-center">
                           <input
                             className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
@@ -749,7 +745,7 @@ function Settings() {
                             className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                             id="thermostatMonitoringInterval"
                             type="range"
-                            step="0.1"
+                            step="1"
                             min="45"
                             max="125"
                             value={thermostatMonitoringInterval}
@@ -801,7 +797,7 @@ function Settings() {
                             className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                             id="thermostatMonitoringTimeIncrement"
                             type="range"
-                            step="0.1"
+                            step="1"
                             min="5"
                             max="15"
                             value={thermostatMonitoringTimeIncrement}
