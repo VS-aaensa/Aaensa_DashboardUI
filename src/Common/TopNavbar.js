@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
 import logo from "./logo.png";
 
 function TopNavbar() {
@@ -9,7 +10,7 @@ function TopNavbar() {
   const [isSideMenuOpen, setSideMenuOpen] = useState(false);
   const [isNotificationsMenuOpen, setNotificationsMenuOpen] = useState(false);
   const [isProfileMenuOpen, setProfileMenuOpen] = useState(false);
-  const [darkMode, setDarkMode] = useState(false);
+  // const [darkMode, setDarkMode] = useState(false);
 
   const toggleSideMenu = () => setSideMenuOpen(!isSideMenuOpen);
   const toggleNotificationsMenu = () =>
@@ -17,7 +18,7 @@ function TopNavbar() {
   const closeNotificationsMenu = () => setNotificationsMenuOpen(false);
   const toggleProfileMenu = () => setProfileMenuOpen(!isProfileMenuOpen);
   const closeProfileMenu = () => setProfileMenuOpen(false);
-  const toggleTheme = () => setDarkMode(!darkMode);
+  // const toggleTheme = () => setDarkMode(!darkMode);
 
 
 
@@ -54,7 +55,6 @@ function TopNavbar() {
 
   return (
     <>
-
       <header className="z-10 py-4 bg-white shadow-md dark:bg-gray-800">
         <div className="container flex items-center justify-between h-full px-6 mx-auto text-purple-600 dark:text-purple-300">
           {/* Mobile hamburger */}
@@ -148,7 +148,7 @@ function TopNavbar() {
                 >
                   {/* Notifications menu items */}
                   <li className="flex">
-                    <a
+                    <Link
                       className="inline-flex items-center justify-between w-full px-2 py-1 text-sm font-semibold transition-colors duration-150 rounded-md hover:bg-gray-100 hover:text-gray-800 dark:hover:bg-gray-800 dark:hover:text-gray-200"
                       href="#"
                     >
@@ -156,10 +156,10 @@ function TopNavbar() {
                       <span className="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-600 bg-red-100 rounded-full dark:text-red-100 dark:bg-red-600">
                         13
                       </span>
-                    </a>
+                    </Link>
                   </li>
                   <li className="flex">
-                    <a
+                    <Link
                       className="inline-flex items-center justify-between w-full px-2 py-1 text-sm font-semibold transition-colors duration-150 rounded-md hover:bg-gray-100 hover:text-gray-800 dark:hover:bg-gray-800 dark:hover:text-gray-200"
                       href="#"
                     >
@@ -167,15 +167,15 @@ function TopNavbar() {
                       <span className="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-600 bg-red-100 rounded-full dark:text-red-100 dark:bg-red-600">
                         2
                       </span>
-                    </a>
+                    </Link>
                   </li>
                   <li className="flex">
-                    <a
+                    <Link
                       className="inline-flex items-center justify-between w-full px-2 py-1 text-sm font-semibold transition-colors duration-150 rounded-md hover:bg-gray-100 hover:text-gray-800 dark:hover:bg-gray-800 dark:hover:text-gray-200"
                       href="#"
                     >
                       <span>Alerts</span>
-                    </a>
+                    </Link>
                   </li>
                 </ul>
               )}
@@ -206,7 +206,7 @@ function TopNavbar() {
                 >
                   {/* Profile menu items */}
                   <li className="flex">
-                    <a
+                    <Link
                       className="inline-flex items-center w-full px-2 py-1 text-sm font-semibold transition-colors duration-150 rounded-md hover:bg-gray-100 hover:text-gray-800 dark:hover:bg-gray-800 dark:hover:text-gray-200"
                       href="#"
                     >
@@ -223,10 +223,10 @@ function TopNavbar() {
                         <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                       </svg>
                       <span>Profile</span>
-                    </a>
+                    </Link>
                   </li>
                   <li className="flex">
-                    <a
+                    <Link
                       className="inline-flex items-center w-full px-2 py-1 text-sm font-semibold transition-colors duration-150 rounded-md hover:bg-gray-100 hover:text-gray-800 dark:hover:bg-gray-800 dark:hover:text-gray-200"
                       href="#"
                     >
@@ -244,10 +244,10 @@ function TopNavbar() {
                         <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                       </svg>
                       <span>Settings</span>
-                    </a>
+                    </Link>
                   </li>
                   <li className="flex">
-                    <a
+                    <Link
                       className="inline-flex items-center w-full px-2 py-1 text-sm font-semibold transition-colors duration-150 rounded-md hover:bg-gray-100 hover:text-gray-800 dark:hover:bg-gray-800 dark:hover:text-gray-200"
                       // href='./'
 
@@ -267,7 +267,7 @@ function TopNavbar() {
                       </svg>
 
                       <span>Log out</span>
-                    </a>
+                    </Link>
                   </li>
                 </ul>
               )}
@@ -301,15 +301,15 @@ function TopNavbar() {
           }`}
       >
         <div className="py-4 text-gray-500 dark:text-gray-400">
-          <a
+          <Link
             className=" text-lg font-bold text-gray-800 dark:text-gray-200"
             href="#"
           >
             <img src={logo} alt="" className="w-56" />
-          </a>
+          </Link>
           <ul className="mt-6">
             <li className="relative px-6 py-3">
-              <a
+              <Link
                 className="inline-flex items-center w-full text-sm font-semibold text-gray-800 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200 dark:text-gray-100"
                 href="#"
               >
@@ -326,12 +326,12 @@ function TopNavbar() {
                   <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
                 </svg>
                 <span className="ml-4">Dashboard</span>
-              </a>
+              </Link>
             </li>
           </ul>
           <ul>
             <li className="relative px-6 py-3">
-              <a
+              <Link
                 className="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200 "
                 href="./report"
               >
@@ -348,10 +348,10 @@ function TopNavbar() {
                   <path d="M4 6h16M4 10h16M4 14h16M4 18h16"></path>
                 </svg>
                 <span className="ml-4">Report</span>
-              </a>
+              </Link>
             </li>
             <li className="relative px-6 py-3">
-              <a
+              <Link
                 className="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
                 href="./enterprise"
               >
@@ -370,10 +370,10 @@ function TopNavbar() {
                   <circle cx="12" cy="7" r="4"></circle>
                 </svg>
                 <span className="ml-4">Enterprise</span>
-              </a>
+              </Link>
             </li>
             <li className="relative px-6 py-3">
-              <a
+              <Link
                 className="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
                 href="#"
               >
@@ -395,11 +395,11 @@ function TopNavbar() {
                 </svg>
 
                 <span className="ml-4">User</span>
-              </a>
+              </Link>
             </li>
 
             <li className="relative px-6 py-3">
-              <a
+              <Link
                 className="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
                 href="#"
               >
@@ -418,7 +418,7 @@ function TopNavbar() {
                   <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
                 </svg>
                 <span className="ml-4">Settings</span>
-              </a>
+              </Link>
             </li>
           </ul>
         </div>

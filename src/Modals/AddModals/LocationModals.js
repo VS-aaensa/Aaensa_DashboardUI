@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   locationModel,
-  clearAddLoctation_response,
   clearAddLoctation_error,
 } from "../../Slices/Enterprise/LocationSlice";
 
@@ -13,10 +12,9 @@ function LocationModals({ closeModal }) {
   const [errorlog, setErrorLog] = useState([]);
   const [location, setLocation] = useState("");
   const [address, setAddress] = useState("");
-  const token = window.localStorage.getItem("token"); //token
 
 
-  const { status, add_locationlist_response, add_locationlist_error, loading } =
+  const {  add_locationlist_response, add_locationlist_error } =
     useSelector((state) => state.locationSlice);
 
   
@@ -46,7 +44,6 @@ function LocationModals({ closeModal }) {
 
   async function AddLocation() {
     dispatch(locationModel({ data, header }));
-
   }
   useEffect(() => {
     if (add_locationlist_error) {
@@ -58,13 +55,11 @@ function LocationModals({ closeModal }) {
     }
 
     if (
-      add_locationlist_response.message ==
-      "Enterprise Location added successfully."
-    ) {
+      add_locationlist_response.message ==="Enterprise Location added successfully.") {
       // dispatch(clearAddLoctation_response());
       closeModal();
     }
-  }, [dispatch, add_locationlist_error, add_locationlist_response]);
+  }, [dispatch, add_locationlist_error, add_locationlist_response,closeModal]);
 
 
   return (

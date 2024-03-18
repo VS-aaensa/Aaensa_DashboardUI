@@ -41,7 +41,7 @@ function Gateway() {
   const { allDelete_response } = useSelector(
     (state) => state.enterpriseSlice
   );
-
+console.log({gateway_response});
   const header = {
     headers: {
       Authorization: `Bearer ${window.localStorage.getItem("token")}`,

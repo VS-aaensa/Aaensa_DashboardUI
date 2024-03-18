@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { GatewayModel, clearGatewayerror, clearGatewayResponse, } from "../../Slices/Enterprise/GatewaySlice";
+import { GatewayModel, clearGatewayerror } from "../../Slices/Enterprise/GatewaySlice";
 
 function GatewayModals({ closeModal, data1 }) {
   const dispatch = useDispatch();
@@ -81,7 +81,7 @@ function GatewayModals({ closeModal, data1 }) {
 
   const validatePassword = (password) => {
     const regex = /^[@_!#*]+$/;
-    return (password.length >= 8 && regex.test(password) || password === "12345678");
+    return ((password.length >= 8 && regex.test(password)) || password === "12345678");
   };
 
   const EnterpriseId = window.localStorage.getItem("Enterprise_Id");
@@ -95,7 +95,7 @@ function GatewayModals({ closeModal, data1 }) {
     EnterpriseUserID: EnterpriseId,
   };
 
-  const { status, add_gatewaylist_response, add_gatewaylist_error, loading } =
+  const { add_gatewaylist_response, add_gatewaylist_error } =
     useSelector((state) => state.gatewaySlice);
   const header = {
     headers: {
@@ -115,11 +115,11 @@ function GatewayModals({ closeModal, data1 }) {
 
       dispatch(clearGatewayerror());
     }
-    if (add_gatewaylist_response.message == "Gateway added successfully.") {
+    if (add_gatewaylist_response.message === "Gateway added successfully.") {
       closeModal();
       // dispatch(clearGatewayResponse());
     }
-  }, [add_gatewaylist_error, add_gatewaylist_response, dispatch]);
+  }, [add_gatewaylist_error, add_gatewaylist_response, dispatch,closeModal]);
 
   return (
     <div

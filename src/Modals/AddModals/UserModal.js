@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 import {
   addEnterpriseList,
   addSystemIntegrator,
@@ -119,7 +119,7 @@ const UserModal = ({ closeModal }) => {
     }
     reportApi();
   }, []);
-
+ 
   return (
     /* Your modal JSX code here */
     <div
@@ -198,7 +198,7 @@ const UserModal = ({ closeModal }) => {
                   className="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                   placeholder="Add User Name"
                 />
-                {errorlog.key == "username" && (
+                {errorlog.key === "username" && (
                   <p
                     className="mt-2 text-xs text-red-500"
                     style={{ color: "red" }}
@@ -295,7 +295,7 @@ const UserModal = ({ closeModal }) => {
                   className="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                   placeholder="Add Email Address"
                 />
-                {errorlog.key == "email" && (
+                {errorlog.key === "email" && (
                   <p
                     className="mt-2 text-xs text-red-500"
                     style={{ color: "red" }}
@@ -317,7 +317,7 @@ const UserModal = ({ closeModal }) => {
                   className="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                   placeholder="Add Phone Number"
                 />
-                {errorlog.key == "phone" && (
+                {errorlog.key === "phone" && (
                   <p
                     className="mt-2 text-xs text-red-500"
                     style={{ color: "red" }}

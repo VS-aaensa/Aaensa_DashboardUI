@@ -39,11 +39,9 @@ export const Bypass = createAsyncThunk(
       clearError: (state) => {
         state.error = null;
       },
-      //   clearState_list_error: (state) => {
-      //     state.error = null;
-      //   },
+     
       clearResponse: (state) => {
-        state.response = " ";
+        state.bypass_response = "";
       },
     },
     extraReducers: (builder) => {
