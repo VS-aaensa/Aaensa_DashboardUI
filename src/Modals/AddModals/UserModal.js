@@ -6,7 +6,7 @@ import {
   addSystemIntegrator,
   EnterpriseName,
 } from "../../Slices/UserSlice";
-import { enterpriseList, clearDelete_response, clearAdd_enterprise_response, clearEdit_enterprise_response } from "../../Slices/Enterprise/enterpriseSlice";
+import { enterpriseList } from "../../Slices/Enterprise/enterpriseSlice";
 
 const UserModal = ({ closeModal }) => {
   const dispatch = useDispatch();
@@ -16,10 +16,7 @@ const UserModal = ({ closeModal }) => {
       Authorization: `Bearer ${window.localStorage.getItem("token")}`,
     },
   };
-  const {  add_enterprise_response, edit_enterprise_response, customer_response, allDelete_response, allDelete_error, error} = useSelector(
-    (state) => state.enterpriseSlice
-  );
-
+  const {customer_response} = useSelector((state) => state.enterpriseSlice);
   const [errorlog, setErrorLog] = useState([]);
   const [userType, setUserType] = useState(""); // State to store the selected user type
   const [userData, setUserData] = useState({
@@ -35,19 +32,7 @@ const UserModal = ({ closeModal }) => {
   const [enterpriseLists, setEnterpriseList] = useState([]);
   const [selectedEnterpriseId, setSelectedEnterpriseId] = useState(""); // New state for the selected enterprise ID
 
-  const {
-    status,
-    // add_SyetemIntegrator,
-    add_SyetemIntegrator_error,
-
-    add_enterprise_user_error,
-    // add_enterprise_user,
-
-    add_enterprise_name,
-    add_enterprise_name_error,
-
-    loading,
-  } = useSelector((state) => state.userSlice);
+  const {add_SyetemIntegrator_error,add_SyetemIntegrator,add_enterprise_user_error,add_enterprise_user} = useSelector((state) => state.userSlice);
 
   const handleInputEnterpriseChange = (e) => {
     const { name, value } = e.target;
@@ -98,23 +83,31 @@ const UserModal = ({ closeModal }) => {
     e.preventDefault();
     // Dispatch the async action and wait for it to complete
     dispatch(addEnterpriseList({ data, navigate, header }));
+  };
+  
+  const handleAddButtonClick = async (e) => {
+    e.preventDefault();
+    dispatch(addSystemIntegrator({ dataa, navigate, header }));
+    
+  };
+  useEffect(()=>{
     if (add_enterprise_user_error) {
       setErrorLog(add_enterprise_user_error);
       setTimeout(() => {
         setErrorLog([]);
       }, 2000);
-    } else {
+    } 
+    if (add_SyetemIntegrator_error) {
+      setErrorLog(add_SyetemIntegrator_error);
+      setTimeout(() => {
+        setErrorLog([]);
+      }, 2000);
+    } 
+    if(add_enterprise_user||add_SyetemIntegrator){
       closeModal();
     }
-  };
 
-  const handleAddButtonClick = async (e) => {
-    e.preventDefault();
-    // Log the user data
-
-    dispatch(addSystemIntegrator({ dataa, navigate, header }));
-    closeModal();
-  };
+  },[dispatch,add_SyetemIntegrator_error, add_enterprise_user_error,add_SyetemIntegrator,add_enterprise_user])
 
   const handleRadioChange = (value) => {
     setUserType(value);

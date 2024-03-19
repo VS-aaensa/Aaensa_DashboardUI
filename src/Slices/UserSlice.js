@@ -116,14 +116,14 @@ const initialState = {
   delete_response: "",
   delete_error: null,
 
-  add_enterprise_user: " ",
+  add_enterprise_user: "",
   add_enterprise_user_error: null,
 
-  add_SyetemIntegrator: " ",
+  add_SyetemIntegrator: "",
   add_SyetemIntegrator_error: null,
 
-  add_enterprise_name: " ",
-  add_enterprise_name_error: " ",
+  add_enterprise_name: "",
+  add_enterprise_name_error: "",
 
 };
 
