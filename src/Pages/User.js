@@ -21,11 +21,11 @@ function User() {
   const { response, loading } = useSelector(
     (state) => state.userSlice
   );
-  console.log({response});
+  // console.log({response});
   const { delete_response, delete_error } = useSelector(
     (state) => state.userSlice
   );
-console.log({delete_response});
+// console.log({delete_response});
   const header = {
     headers: {
       Authorization: `Bearer ${window.localStorage.getItem("token")}`,

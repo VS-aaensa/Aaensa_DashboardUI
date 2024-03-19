@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 // import { Delete,clearDelete_response, clearDelete_error } from "../../Slices/Enterprise/enterpriseSlice";
-import{userDelete} from "../../Slices/UserSlice"
+import{userDelete,clearDeleteResponse} from "../../Slices/UserSlice"
 function UserDeleteModal({ closeModal, Id }) {
   const header = {
     headers: {
       Authorization: `Bearer ${window.localStorage.getItem("token")}`,
     },
   };
-  console.log(Id);
   const { delete_response, delete_error } = useSelector(
     (state) => state.userSlice
-  );
+    );
+    console.log({delete_response});
   const dispatch = useDispatch();
   async function allDelete() {
    
@@ -20,11 +20,12 @@ function UserDeleteModal({ closeModal, Id }) {
   }
   useEffect(() => {
     if (delete_response) {
+      dispatch(clearDeleteResponse());
       closeModal();
     }
 
     if (delete_error) {
-      closeModal();
+      // closeModal();
     }
   }, [delete_response]);
 

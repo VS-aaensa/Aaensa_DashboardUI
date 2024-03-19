@@ -32,8 +32,7 @@ export const userDelete = createAsyncThunk(
     console.log(Id);
     try {
       const response = await USERDELETE(Id, header);
-console.log({response});
-      // return response.data.data;
+      return response.data;
     } catch (error) {
       if (
         error.response.data.message === "Invalid token" ||
@@ -138,7 +137,10 @@ export const UserSlice = createSlice({
       state.add_enterprise_user_error = null;
     },
     clearResponse: (state) => {
-      state.response = " ";
+      state.response = "";
+    },
+    clearDeleteResponse: (state) => {
+      state.delete_response = "";
     },
   },
   extraReducers: (builder) => {
@@ -240,17 +242,17 @@ export const UserSlice = createSlice({
       // Add user to the state array
       state.status = "Success";
       state.loading = false;
-      state.add_enterprise_name = payload;
-      state.add_enterprise_name_error = null;
+      state.delete_response = payload;
+      state.delete_error = null;
     });
     builder.addCase(userDelete.rejected, (state, { payload }) => {
       // Add user to the state array
       state.status = "Failed";
       state.loading = false;
-      state.add_enterprise_name = null;
-      state.add_enterprise_name_error = payload;
+      state.delete_response = null;
+      state.delete_error = payload;
     });
   },
 });
-
+export const {  clearDeleteResponse } = UserSlice.actions;
 export default UserSlice.reducer;
