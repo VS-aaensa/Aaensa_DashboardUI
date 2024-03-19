@@ -12,9 +12,10 @@ export const userList = createAsyncThunk(
   async ({ header, navigate }, { rejectWithValue }) => {
     try {
       const response = await USERAPILIST(header);
-
+console.log(response.data.data,"this is working");
       return response.data.data;
     } catch (error) {
+      console.log(error,"8765432!@$%^&*");
       if (
         error.response.data.message === "Invalid token" ||
         error.response.data.message === "Access denied"
@@ -72,6 +73,7 @@ export const addSystemIntegrator = createAsyncThunk(
       const response = await ADDSYSTEMINTEGRATOR(dataa, header);
       return response;
     } catch (error) {
+      console.log(error,"this is sysint");
       if (
         error.response.data.message === "Invalid token" ||
         error.response.data.message === "Access denied"

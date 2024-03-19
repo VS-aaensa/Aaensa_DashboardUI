@@ -11,7 +11,6 @@ function UserDeleteModal({ closeModal, Id }) {
   const { delete_response, delete_error } = useSelector(
     (state) => state.userSlice
     );
-    console.log({delete_response});
   const dispatch = useDispatch();
   async function allDelete() {
    
