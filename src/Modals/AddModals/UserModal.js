@@ -6,10 +6,19 @@ import {
   addSystemIntegrator,
   EnterpriseName,
 } from "../../Slices/UserSlice";
+import { enterpriseList, clearDelete_response, clearAdd_enterprise_response, clearEdit_enterprise_response } from "../../Slices/Enterprise/enterpriseSlice";
 
 const UserModal = ({ closeModal }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const header = {
+    headers: {
+      Authorization: `Bearer ${window.localStorage.getItem("token")}`,
+    },
+  };
+  const {  add_enterprise_response, edit_enterprise_response, customer_response, allDelete_response, allDelete_error, error} = useSelector(
+    (state) => state.enterpriseSlice
+  );
 
   const [errorlog, setErrorLog] = useState([]);
   const [userType, setUserType] = useState(""); // State to store the selected user type
@@ -23,7 +32,7 @@ const UserModal = ({ closeModal }) => {
     email: "",
     phone: "",
   });
-  const [enterpriseList, setEnterpriseList] = useState([]);
+  const [enterpriseLists, setEnterpriseList] = useState([]);
   const [selectedEnterpriseId, setSelectedEnterpriseId] = useState(""); // New state for the selected enterprise ID
 
   const {
@@ -43,7 +52,7 @@ const UserModal = ({ closeModal }) => {
   const handleInputEnterpriseChange = (e) => {
     const { name, value } = e.target;
     // Assuming that your enterprise data includes an "EnterpriseId" field
-    const selectedEnterprise = enterpriseList.find(
+    const selectedEnterprise = enterpriseLists.find(
       (enterprise) => enterprise.EnterpriseName === value
     );
 
@@ -74,11 +83,7 @@ const UserModal = ({ closeModal }) => {
     email: userData.email,
     phone: userData.phoneNumber,
   };
-  const header = {
-    headers: {
-      Authorization: `Bearer ${window.localStorage.getItem("token")}`,
-    },
-  };
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -108,17 +113,22 @@ const UserModal = ({ closeModal }) => {
     // Log the user data
 
     dispatch(addSystemIntegrator({ dataa, navigate, header }));
+    closeModal();
   };
 
   const handleRadioChange = (value) => {
     setUserType(value);
   };
+  async function reportApi() {
+    dispatch(enterpriseList({ header }));
+  }
   useEffect(() => {
-    async function reportApi() {
-      dispatch(EnterpriseName({ header }));
+ 
+    if (customer_response && Array.isArray(customer_response)) {
+    setEnterpriseList(customer_response);
     }
-    reportApi();
-  }, []);
+    // reportApi();
+  }, [customer_response,handleAddEnterpriseButtonClick,handleAddButtonClick,dispatch]);
  
   return (
     /* Your modal JSX code here */
@@ -269,9 +279,11 @@ const UserModal = ({ closeModal }) => {
                   value={enterpriseData.username}
                   onChange={handleInputEnterpriseChange}
                   id="enterpriseSelect"
+                  onFocus={reportApi}
                   className="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
                 >
-                  {enterpriseList.map((enterprise, index) => (
+                 <option></option>
+                  {enterpriseLists.map((enterprise, index) => (
                     <option key={index}>{enterprise.EnterpriseName}</option>
                   ))}
                 </select>

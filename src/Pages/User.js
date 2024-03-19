@@ -25,7 +25,7 @@ function User() {
   const { delete_response, delete_error } = useSelector(
     (state) => state.userSlice
   );
-console.log({delete_response});
+// console.log({delete_response});
   const header = {
     headers: {
       Authorization: `Bearer ${window.localStorage.getItem("token")}`,
@@ -149,11 +149,13 @@ const user =()=>{
       setTrigger(false); // Reset trigger to prevent continuous API calls
     }
 
-    if (response && Array.isArray(response)) {
-      setReportData(response);
-    }
-  }, [trigger, response, header, navigate, dispatch]);
+  }, [trigger,closeModalAddUser,delete_response]);
+  useEffect(()=>{
+  if (response && Array.isArray(response)) {
+    setReportData(response);
+  }
 
+},[response,delete_response])
 
  // pop-up
  const showToast = (message, type) => {
@@ -216,8 +218,7 @@ const user =()=>{
                   </thead>
                   <tbody className="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
                     {displayedData.map((item, index) => (
-                      item.isDelete===false &&
-                      (
+                      
                       <tr
                         className="text-gray-700 dark:text-gray-400"
                         key={index}
@@ -300,7 +301,7 @@ const user =()=>{
                           )}
                         </td>
                       </tr>
-                      )
+                    
                     ))}
                   </tbody>
                 </table>

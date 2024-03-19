@@ -12,9 +12,10 @@ export const userList = createAsyncThunk(
   async ({ header, navigate }, { rejectWithValue }) => {
     try {
       const response = await USERAPILIST(header);
-
+console.log(response.data.data,"this is working");
       return response.data.data;
     } catch (error) {
+      console.log(error,"8765432!@$%^&*");
       if (
         error.response.data.message === "Invalid token" ||
         error.response.data.message === "Access denied"
@@ -32,8 +33,7 @@ export const userDelete = createAsyncThunk(
     console.log(Id);
     try {
       const response = await USERDELETE(Id, header);
-console.log({response});
-      // return response.data.data;
+      return response.data;
     } catch (error) {
       if (
         error.response.data.message === "Invalid token" ||
@@ -73,6 +73,7 @@ export const addSystemIntegrator = createAsyncThunk(
       const response = await ADDSYSTEMINTEGRATOR(dataa, header);
       return response;
     } catch (error) {
+      console.log(error,"this is sysint");
       if (
         error.response.data.message === "Invalid token" ||
         error.response.data.message === "Access denied"
@@ -138,7 +139,10 @@ export const UserSlice = createSlice({
       state.add_enterprise_user_error = null;
     },
     clearResponse: (state) => {
-      state.response = " ";
+      state.response = "";
+    },
+    clearDeleteResponse: (state) => {
+      state.delete_response = "";
     },
   },
   extraReducers: (builder) => {
@@ -240,17 +244,17 @@ export const UserSlice = createSlice({
       // Add user to the state array
       state.status = "Success";
       state.loading = false;
-      state.add_enterprise_name = payload;
-      state.add_enterprise_name_error = null;
+      state.delete_response = payload;
+      state.delete_error = null;
     });
     builder.addCase(userDelete.rejected, (state, { payload }) => {
       // Add user to the state array
       state.status = "Failed";
       state.loading = false;
-      state.add_enterprise_name = null;
-      state.add_enterprise_name_error = payload;
+      state.delete_response = null;
+      state.delete_error = payload;
     });
   },
 });
-
+export const {  clearDeleteResponse } = UserSlice.actions;
 export default UserSlice.reducer;
