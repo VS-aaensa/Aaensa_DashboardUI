@@ -41,7 +41,6 @@ function Gateway() {
   const { allDelete_response } = useSelector(
     (state) => state.enterpriseSlice
   );
-console.log({gateway_response});
   const header = {
     headers: {
       Authorization: `Bearer ${window.localStorage.getItem("token")}`,
@@ -137,16 +136,14 @@ console.log({gateway_response});
     setIsEditModelOpen(true);
   };
 
-  const handleDeleteChange = async (item) => {
+  
+
+  const openDeleteModal = (item) => {
     const deleteData = {
       group: "gateway",
       id: item._id,
     };
     setSelectedDeleteItem(deleteData);
-  };
-
-  const openDeleteModal = (item) => {
-    handleDeleteChange(item);
     setIsDeleteModelOpen(true);
   };
 

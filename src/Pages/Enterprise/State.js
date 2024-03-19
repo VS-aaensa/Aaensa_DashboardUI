@@ -48,7 +48,6 @@ function State() {
     }
     if (allDelete_response) {
       setTrigger(true);
-
       showToast(allDelete_response.message, "success");
     }
     dispatch(clearDelete_response());
@@ -72,16 +71,12 @@ function State() {
     setErrorMessage("");
   };
 
-  const handleDeleteChange = async (item) => {
+  const openDeleteModal = (item) => {
     const deleteData = {
       group: "state",
       id: item._id,
     };
     setSelectedDeleteItem(deleteData);
-  };
-
-  const openDeleteModal = (item) => {
-    handleDeleteChange(item);
     setIsDeleteModelOpen(true);
   };
 

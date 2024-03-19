@@ -108,16 +108,14 @@ function Optimizer() {
     setIsEditModelOpen(true);
   };
 
-  const handleDeleteChange = async (item) => {
+
+
+  const openDeleteModal = (item) => {
     const deleteData = {
       group: "optimizer",
       id: item._id,
     };
     setSelectedDeleteItem(deleteData);
-  };
-
-  const openDeleteModal = (item) => {
-    handleDeleteChange(item);
     setIsDeleteModelOpen(true);
   };
 

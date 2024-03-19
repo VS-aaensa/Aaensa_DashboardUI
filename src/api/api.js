@@ -57,17 +57,20 @@ export const EDITOPTIMIZER = (OptimizerId, data, header) => api.post(`/api/admin
 // OPTIMIZERDETAILS
 export const OPTIMIZERDETAILS = (optimizerId, header) => api.get(`/api/admin/get/optimizer/details/${optimizerId}`, header);
 
-// FOR USER PAGE TABLE API
+// USER PAGE TABLE LIST API
 export const USERAPILIST = (header) => api.get("/api/admin/get/user/data", header);
 
-// ADD ENTERPRISEuSER PAGE MODEL API
+// USER ADD ENTERPRISEuSER PAGE MODEL API
 export const ADDENTERPRISELIST = (data, header) => api.post("/api/admin/add/enterprise/user", data, header);
 
-// ENTERPRISE LIST NAME MODEL API
+// USER ENTERPRISE LIST NAME MODEL API
 export const ENTERPRISEUSERLIST = (header) => api.get("/api/admin/get/enterprise/list/name", header);
 
-// ADD SYSTEM INTEGRATOR PAGE MODEL API
+// USER ADD SYSTEM INTEGRATOR PAGE MODEL API
 export const ADDSYSTEMINTEGRATOR = (userData, header) => api.post("/api/admin/add/system/integrator", userData, header);
+
+// USER DELETE
+export const USERDELETE = (Id, header) => api.post(`/api/admin/delete/user/${Id}`,{},  header);
 
 // Settings
 export const SET = (data, header) => api.post(`/api/hardware/optimizer/setting/value/update`, data, header);
