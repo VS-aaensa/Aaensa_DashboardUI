@@ -4,6 +4,7 @@ import {
   ADDENTERPRISELIST,
   ADDSYSTEMINTEGRATOR,
   ENTERPRISEUSERLIST,
+  USERDELETE,
 } from "../api/api";
 
 export const userList = createAsyncThunk(
@@ -25,13 +26,32 @@ export const userList = createAsyncThunk(
     }
   }
 );
-
+export const userDelete = createAsyncThunk(
+  "user/userDelete",
+  async ({ Id, header }, { rejectWithValue }) => {
+    console.log(Id);
+    try {
+      const response = await USERDELETE(Id, header);
+console.log({response});
+      // return response.data.data;
+    } catch (error) {
+      if (
+        error.response.data.message === "Invalid token" ||
+        error.response.data.message === "Access denied"
+      ) {
+        window.localStorage.clear();
+        window.location.href = "./";
+      }
+      return rejectWithValue(error);
+    }
+  }
+);
 export const addEnterpriseList = createAsyncThunk(
   "user/addEnterpriseList",
   async ({ data, navigate, header }, { rejectWithValue }) => {
     try {
       const response = await ADDENTERPRISELIST(data, header);
-    
+
       return response;
     } catch (error) {
       if (
@@ -60,7 +80,7 @@ export const addSystemIntegrator = createAsyncThunk(
         window.localStorage.clear();
         window.location.href = "./";
       }
-    
+
       return rejectWithValue(error.response.data);
     }
   }
@@ -88,13 +108,16 @@ export const EnterpriseName = createAsyncThunk(
 const initialState = {
   status: "",
   loading: false,
- 
+
   response: "",
   error: null,
- 
+
+  delete_response: "",
+  delete_error: null,
+
   add_enterprise_user: " ",
   add_enterprise_user_error: null,
- 
+
   add_SyetemIntegrator: " ",
   add_SyetemIntegrator_error: null,
 
@@ -125,7 +148,6 @@ export const UserSlice = createSlice({
       state.status = "Loading...";
       state.loading = true;
     });
-
     builder.addCase(userList.fulfilled, (state, { payload }) => {
       // Add user to the state array
       state.status = "Success";
@@ -170,7 +192,6 @@ export const UserSlice = createSlice({
       state.status = "Loading...";
       state.loading = true;
     });
-
     builder.addCase(addSystemIntegrator.fulfilled, (state, { payload }) => {
       // Add user to the state array
       state.status = "Success";
@@ -184,7 +205,7 @@ export const UserSlice = createSlice({
       state.loading = false;
       state.add_SyetemIntegrator = null;
       state.add_SyetemIntegrator_error = payload;
-      });
+    });
 
     // ENTERPRISE NAME-------------------------------------------------------------------------
 
@@ -193,7 +214,6 @@ export const UserSlice = createSlice({
       state.status = "Loading...";
       state.loading = true;
     });
-
     builder.addCase(EnterpriseName.fulfilled, (state, { payload }) => {
       // Add user to the state array
       state.status = "Success";
@@ -202,6 +222,28 @@ export const UserSlice = createSlice({
       state.add_enterprise_name_error = null;
     });
     builder.addCase(EnterpriseName.rejected, (state, { payload }) => {
+      // Add user to the state array
+      state.status = "Failed";
+      state.loading = false;
+      state.add_enterprise_name = null;
+      state.add_enterprise_name_error = payload;
+    });
+
+    // USER DELETE-------------------------------------------------------------------------
+
+    builder.addCase(userDelete.pending, (state, { payload }) => {
+      // Add user to the state array
+      state.status = "Loading...";
+      state.loading = true;
+    });
+    builder.addCase(userDelete.fulfilled, (state, { payload }) => {
+      // Add user to the state array
+      state.status = "Success";
+      state.loading = false;
+      state.add_enterprise_name = payload;
+      state.add_enterprise_name_error = null;
+    });
+    builder.addCase(userDelete.rejected, (state, { payload }) => {
       // Add user to the state array
       state.status = "Failed";
       state.loading = false;

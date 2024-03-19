@@ -1,33 +1,32 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Delete,clearDelete_response, clearDelete_error } from "../../Slices/Enterprise/enterpriseSlice";
-
-function DeleteModals({ closeModal, Data }) {
+// import { Delete,clearDelete_response, clearDelete_error } from "../../Slices/Enterprise/enterpriseSlice";
+import{userDelete} from "../../Slices/UserSlice"
+function UserDeleteModal({ closeModal, Id }) {
   const header = {
     headers: {
       Authorization: `Bearer ${window.localStorage.getItem("token")}`,
     },
   };
-  const { allDelete_response, allDelete_error } = useSelector(
-    (state) => state.enterpriseSlice
+  console.log(Id);
+  const { delete_response, delete_error } = useSelector(
+    (state) => state.userSlice
   );
   const dispatch = useDispatch();
   async function allDelete() {
-    const deleteData = Data;
-    dispatch(Delete({ deleteData, header }));
+   
+    dispatch(userDelete({ Id, header }));
     // closeModal();
   }
   useEffect(() => {
-    if (allDelete_response) {
+    if (delete_response) {
       closeModal();
-      dispatch(clearDelete_response());
     }
 
-    if (allDelete_error) {
+    if (delete_error) {
       closeModal();
-      dispatch(clearDelete_error());
     }
-  }, [allDelete_response]);
+  }, [delete_response]);
 
   return (
     <div
@@ -85,4 +84,4 @@ function DeleteModals({ closeModal, Data }) {
   );
 }
 
-export default DeleteModals;
+export default UserDeleteModal;
