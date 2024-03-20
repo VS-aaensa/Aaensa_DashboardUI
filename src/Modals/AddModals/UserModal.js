@@ -33,7 +33,6 @@ const UserModal = ({ closeModal }) => {
   const [selectedEnterpriseId, setSelectedEnterpriseId] = useState(""); // New state for the selected enterprise ID
 
   const {add_SyetemIntegrator_error,add_SyetemIntegrator,add_enterprise_user_error,add_enterprise_user} = useSelector((state) => state.userSlice);
-
   const handleInputEnterpriseChange = (e) => {
     const { name, value } = e.target;
     // Assuming that your enterprise data includes an "EnterpriseId" field

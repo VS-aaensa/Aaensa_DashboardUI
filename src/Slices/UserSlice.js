@@ -9,10 +9,9 @@ import {
 
 export const userList = createAsyncThunk(
   "user/userList",
-  async ({ header, navigate }, { rejectWithValue }) => {
+  async ({ header }, { rejectWithValue }) => {
     try {
       const response = await USERAPILIST(header);
-console.log(response.data.data,"this is working");
       return response.data.data;
     } catch (error) {
       console.log(error,"8765432!@$%^&*");
@@ -141,6 +140,12 @@ export const UserSlice = createSlice({
     clearResponse: (state) => {
       state.response = "";
     },
+    clearSystemIntegratorResponse: (state) => {
+      state.add_SyetemIntegrator = "";
+    },
+    clearEnterpriseResponse: (state) => {
+      state.add_enterprise_user = "";
+    },
     clearDeleteResponse: (state) => {
       state.delete_response = "";
     },
@@ -256,5 +261,5 @@ export const UserSlice = createSlice({
     });
   },
 });
-export const {  clearDeleteResponse } = UserSlice.actions;
+export const {  clearDeleteResponse,clearSystemIntegratorResponse,clearEnterpriseResponse } = UserSlice.actions;
 export default UserSlice.reducer;
