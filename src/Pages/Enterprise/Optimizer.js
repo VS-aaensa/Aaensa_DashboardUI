@@ -19,7 +19,7 @@ function Optimizer() {
   const GATEWAYNAME = window.localStorage.getItem("GATEWAYNAME");
   const STATENAME = window.localStorage.getItem("STATENAME");
   const LOCATIONNAME = window.localStorage.getItem("LOCATIONNAME");
-  const token = window.localStorage.getItem("token");
+  const GatewayId = window.localStorage.getItem("Gateway_id");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModelOpen, setIsEditModelOpen] = useState(false);
   const [isModalbypass, setIsModalbypass] = useState(false);
@@ -29,7 +29,6 @@ function Optimizer() {
   const [errorMessage, setErrorMessage] = useState("");
   const [isDeleteModelOpen, setIsDeleteModelOpen] = useState(false);
   const [selectedDeleteItem, setSelectedDeleteItem] = useState(null);
-  const GatewayId = window.localStorage.getItem("Gateway_id");
   const { add_optimizerlist_response,edit_optimizer_response,optimizer_response, optimizer_error, loading } = useSelector((state) => state.optimizerSlice);
 
   const { allDelete_response, allDelete_error } = useSelector((state) => state.enterpriseSlice);
@@ -58,7 +57,7 @@ function Optimizer() {
 
     fetchData();
 
-  }, [token, trigger, optimizer_response, allDelete_response,]);
+  }, [ trigger, optimizer_response, allDelete_response,]);
 
   useEffect(() => {
     if (optimizer_error) {

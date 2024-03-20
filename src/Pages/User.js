@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import LeftMenuList from "../Common/LeftMenuList";
 import TopNavbar from "../Common/TopNavbar";
-import { Link, useNavigate } from "react-router-dom";
 import UserModal from "../Modals/AddModals/UserModal";
-import { userList } from "../Slices/UserSlice";
+import { userList,clearSystemIntegratorResponse,clearEnterpriseResponse,clearDeleteResponse } from "../Slices/UserSlice";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../utils/Loader";
 import UserDeleteModal from "../Modals/DeleteModals/UserdeleteModel"
@@ -12,7 +11,6 @@ import "react-toastify/dist/ReactToastify.css";
 
 function User() {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const [isModalOpenAddUser, setIsModalOpenAddUser] = useState(false);
   const [reportData, setReportData] = useState([]);
   const [trigger, setTrigger] = useState(true);
@@ -21,17 +19,16 @@ function User() {
   const { response, loading } = useSelector(
     (state) => state.userSlice
   );
-  console.log({response});
-  const { delete_response, delete_error } = useSelector(
+  const { delete_response } = useSelector(
     (state) => state.userSlice
   );
-// console.log({delete_response});
+  const {add_SyetemIntegrator,add_enterprise_user} = useSelector((state) => state.userSlice);
   const header = {
     headers: {
       Authorization: `Bearer ${window.localStorage.getItem("token")}`,
     },
   };
-
+        
  const openDeleteModal = (item) => {
     setSelectedDeleteItem(item._id);
     setIsDeleteModelOpen(true);
@@ -133,10 +130,6 @@ function User() {
   const openModalAddUser = () => {
     setIsModalOpenAddUser(true);
   };
-const user =()=>{
-  console.log(" this is working this is the stuff ");
-  // console.log;
-}
   const closeModalAddUser = () => {
     setTrigger(true);
     setIsModalOpenAddUser(false);
@@ -145,17 +138,28 @@ const user =()=>{
   //Api Calling
   useEffect(() => {
     if (trigger) {
-      dispatch(userList({ header, navigate }));
+      dispatch(userList({ header}));
       setTrigger(false); // Reset trigger to prevent continuous API calls
     }
 
-  }, [trigger,closeModalAddUser,delete_response]);
+  }, [trigger,closeModalAddUser,delete_response,dispatch,header]);
   useEffect(()=>{
+    if(add_SyetemIntegrator){
+      showToast(add_SyetemIntegrator.data.message, "success");
+      dispatch(clearSystemIntegratorResponse());
+    }
+    if(add_enterprise_user){
+      showToast(add_enterprise_user.data.message, "success");
+      dispatch(clearEnterpriseResponse());
+    }
+    if(delete_response){
+      showToast(delete_response.message, "success");
+      dispatch(clearDeleteResponse());
+    }
   if (response && Array.isArray(response)) {
     setReportData(response);
   }
-
-},[response,delete_response])
+},[response,delete_response,dispatch,add_SyetemIntegrator,add_enterprise_user])
 
  // pop-up
  const showToast = (message, type) => {
@@ -218,7 +222,6 @@ const user =()=>{
                   </thead>
                   <tbody className="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
                     {displayedData.map((item, index) => (
-                      
                       <tr
                         className="text-gray-700 dark:text-gray-400"
                         key={index}
@@ -300,8 +303,7 @@ const user =()=>{
                             </div>
                           )}
                         </td>
-                      </tr>
-                    
+                      </tr>                    
                     ))}
                   </tbody>
                 </table>
