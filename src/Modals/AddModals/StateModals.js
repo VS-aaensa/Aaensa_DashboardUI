@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { AddstateList, Addstate,clearAdd_state_error } from "../../Slices/Enterprise/StateSlices";
+import { AddstateList, Addstate, clearAdd_state_error } from "../../Slices/Enterprise/StateSlices";
 
 function StateModals({ closeModal }) {
   const dispatch = useDispatch();
@@ -8,14 +8,52 @@ function StateModals({ closeModal }) {
   const [getStateList, setgetStateList] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
   const [stateId, setStateId] = useState("");
-  // const token = window.localStorage.getItem("token");  //token
+  // const [logoutTimer, setLogoutTimer] = useState(60000); // Timer for logout
+
   const header = {
     headers: {
       Authorization: `Bearer ${window.localStorage.getItem("token")}`,
     },
   };
-  const { add_state_error, add_state_response, add_statelist_response } =
-    useSelector((state) => state.stateSlices);
+  const { add_state_error, add_state_response, add_statelist_response } = useSelector((state) => state.stateSlices);
+
+                                                       
+
+  // const resetLogoutTimer = () => {
+  //   setLogoutTimer(60000) // Clear previous timer
+  //   console.log({logoutTimer});
+  //   // console.log(`${logoutTimer/600}`,"this is time in min ");
+  //   setTimeout(() => {
+  //     logoutUser()
+  //   }, logoutTimer);
+
+  // };
+
+  // // Function to logout the user
+  // const logoutUser = () => {
+  //   // For example:
+  //   // window.localStorage.clear();
+  //   // Redirect to login page
+  //   // window.location.href = "/"; 
+  // };
+
+  // // Event listeners to reset the timer on user activity
+  // useEffect(() => {
+  //   const resetTimerOnActivity = () => {
+  //     resetLogoutTimer();
+  //   };
+
+  //   window.addEventListener("mousemove", resetTimerOnActivity);
+  //   window.addEventListener("keypress", resetTimerOnActivity);
+
+  //   return () => {
+  //     window.removeEventListener("mousemove", resetTimerOnActivity);
+  //     window.removeEventListener("keypress", resetTimerOnActivity);
+  //   };
+  // }, []);
+
+
+  // -------------------------------------------------------------------------------------------------------------------------
   useEffect(() => {
     dispatch(AddstateList({ header }));
   }, [dispatch]);
@@ -23,10 +61,10 @@ function StateModals({ closeModal }) {
     if (add_statelist_response) {
       setgetStateList(add_statelist_response);
     }
-    if (add_state_response ) {
+    if (add_state_response) {
       closeModal();
       // dispatch(clearAdd_state_response());
- }
+    }
 
 
     if (add_state_error) {
@@ -37,7 +75,7 @@ function StateModals({ closeModal }) {
       dispatch(clearAdd_state_error());
     }
 
-  }, [dispatch,add_statelist_response,add_state_error,add_state_response,add_state_error,closeModal])
+  }, [dispatch, add_statelist_response, add_state_error, add_state_response, add_state_error, closeModal])
 
   const handleStoreChange = (event) => {
     setStateId(event.target.value);
@@ -52,7 +90,7 @@ function StateModals({ closeModal }) {
 
   async function AddState() {
     dispatch(Addstate({ data, header }));
-    
+
   }
 
   return (
@@ -104,10 +142,10 @@ function StateModals({ closeModal }) {
                 )}
               </select>
               {errorMessage && (
-              <p className="mt-2 text-xs text-red-500" style={{ color: "red" }}>
-                {errorMessage}
-              </p>
-            )}
+                <p className="mt-2 text-xs text-red-500" style={{ color: "red" }}>
+                  {errorMessage}
+                </p>
+              )}
             </label>
           </form>
         </div>

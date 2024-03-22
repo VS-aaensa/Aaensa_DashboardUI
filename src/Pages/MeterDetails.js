@@ -29,6 +29,10 @@ function MeterDetails() {
   // let formattedTime="";
 
   const { status, gateway_details_response, gateway_details_error, loading } = useSelector((state) => state.gatewaySlice);
+
+                        
+
+  console.log({gateway_details_error},"--------------");
  const Gateway_ID = window.localStorage.getItem("Gateway_id")
   const header = {
     headers: {

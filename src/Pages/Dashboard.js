@@ -1,18 +1,36 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import LeftMenuList from "../Common/LeftMenuList";
 import TopNavbar from "../Common/TopNavbar";
 import "daterangepicker";
 import $ from "jquery";
 import moment from "moment";
 import Chart from "chart.js/auto";
+import { useSelector, useDispatch } from "react-redux";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
-
+import { DashboardApi } from "../Slices/DashboardSlice"
 function Dashboard() {
+  const dispatch = useDispatch();
   const chartRef = useRef(null);
   const lineChartRef = useRef(null);
+  const [deviceNum, setDeviceNum] = useState({
+    totalGateway: '',
+    totalOptimizer: '',
+    totalCustomer: '',
+    state: '',
+  });
 
+  // console.log("thisisworking ");
   const percentage = 50;
+
+  const { dashboard_response, dashboard_error } = useSelector(
+    (state) => state.dashboardSlice
+  );
+  const header = {
+    headers: {
+      Authorization: `Bearer ${window.localStorage.getItem("token")}`,
+    },
+  };
 
   useEffect(() => {
     // Your jQuery code to initialize the date range picker
@@ -31,7 +49,7 @@ function Dashboard() {
         const startDate = picker.startDate.format("M/DD/YYYY hh:mm A");
         const endDate = picker.endDate.format("M/DD/YYYY hh:mm A");
 
-       
+
       }
     );
     // Clean up the date range picker when the component unmounts
@@ -142,6 +160,24 @@ function Dashboard() {
     return () => LineChart.destroy();
   }, []);
 
+  useEffect(() => {
+    dispatch(DashboardApi({ header }));
+  }, [dispatch])
+  useEffect(() => {
+    if (dashboard_response) {
+      const { TotalGateway, TotalOptimizer, TotalEnterprise, TotalEnterpriseState } = dashboard_response;
+      setDeviceNum(prev => ({
+        ...prev,
+        totalGateway: TotalGateway,
+        totalOptimizer: TotalOptimizer,
+        totalCustomer: TotalEnterprise,
+        state: TotalEnterpriseState,
+      }));
+
+    }
+  }
+    , [dispatch, dashboard_response, dashboard_error])
+
   return (
     <div className="flex h-screen bg-gray-50 dark:bg-gray-900">
       <LeftMenuList />
@@ -247,7 +283,7 @@ function Dashboard() {
                       Total Gateway
                     </p>
                     <p className="text-lg font-semibold text-gray-700 dark:text-gray-200">
-                      6389
+                      {deviceNum.totalGateway}
                     </p>
                   </div>
                 </div>
@@ -275,7 +311,7 @@ function Dashboard() {
                       Total Optimizers
                     </p>
                     <p className="text-lg font-semibold text-gray-700 dark:text-gray-200">
-                      8923
+                      {deviceNum.totalOptimizer}
                     </p>
                   </div>
                 </div>
@@ -304,7 +340,7 @@ function Dashboard() {
                       Total Customer
                     </p>
                     <p className="text-lg font-semibold text-gray-700 dark:text-gray-200">
-                      376
+                      {deviceNum.totalCustomer}
                     </p>
                   </div>
                 </div>
@@ -331,7 +367,7 @@ function Dashboard() {
                       States
                     </p>
                     <p className="text-lg font-semibold text-gray-700 dark:text-gray-200">
-                      12
+                      {deviceNum.state}
                     </p>
                   </div>
                 </div>
@@ -399,7 +435,7 @@ function Dashboard() {
                 </div>
               </div>
             </div>
- 
+
             <div className="grid gap-6 mb-8 md:grid-cols-2">
               <div className="min-w-0 p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
                 <h4 className="mb-4 font-semibold text-gray-800 dark:text-gray-300">

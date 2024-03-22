@@ -111,7 +111,7 @@ const UserModal = ({ closeModal }) => {
   const handleRadioChange = (value) => {
     setUserType(value);
   };
-  async function reportApi() {
+  async function Enterprise_List() {
     dispatch(enterpriseList({ header }));
   }
   useEffect(() => {
@@ -119,7 +119,7 @@ const UserModal = ({ closeModal }) => {
     if (customer_response && Array.isArray(customer_response)) {
     setEnterpriseList(customer_response);
     }
-    // reportApi();
+    // Enterprise_List();
   }, [customer_response,handleAddEnterpriseButtonClick,handleAddButtonClick,dispatch]);
  
   return (
@@ -271,7 +271,7 @@ const UserModal = ({ closeModal }) => {
                   value={enterpriseData.username}
                   onChange={handleInputEnterpriseChange}
                   id="enterpriseSelect"
-                  onFocus={reportApi}
+                  onFocus={Enterprise_List}
                   className="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
                 >
                  <option></option>

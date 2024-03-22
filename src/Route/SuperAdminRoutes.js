@@ -1,9 +1,5 @@
 import React from "react";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-} from "react-router-dom";
+import {BrowserRouter as Router, Route, Routes,} from "react-router-dom";
 import Forgot from "../Pages/Authentication/Forgot";
 import Login from "../Pages/Authentication/Login";
 import Reports from "../Pages/Report/Reports";
@@ -18,6 +14,7 @@ import Dashboard from "../Pages/Dashboard";
 import MeterDetails from "../Pages/MeterDetails";
 import ProtectedRouteOne from "./protectedroute/ProtectedRouteOne";
 import Enterprise from "../Pages/Enterprise/Enterprise";
+import IdelTimer from "../IdelTimer/idelTimer";
 function SuperAdminRoutes() {
   return (
     <Router>
@@ -39,6 +36,7 @@ function SuperAdminRoutes() {
           <Route path="/gatewaydetails" element={<MeterDetails />} />
           <Route path="/settings" element={<Settings />} />
         </Route>
+        <Route path="/idleTimer" element={<IdelTimer />} />
       </Routes>
     </Router>
   );

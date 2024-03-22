@@ -16,13 +16,13 @@ function User() {
   const [trigger, setTrigger] = useState(true);
   const [isDeleteModelOpen, setIsDeleteModelOpen] = useState(false);
   const [selectedDeleteItem, setSelectedDeleteItem] = useState(null);
-  const { response, loading } = useSelector(
-    (state) => state.userSlice
-  );
-  const { delete_response } = useSelector(
-    (state) => state.userSlice
-  );
+
+  // // Redux selectors
+  const { response, loading } = useSelector((state) => state.userSlice);
+  const { delete_response } = useSelector((state) => state.userSlice);
   const {add_SyetemIntegrator,add_enterprise_user} = useSelector((state) => state.userSlice);
+  
+  // Header for API calls
   const header = {
     headers: {
       Authorization: `Bearer ${window.localStorage.getItem("token")}`,
@@ -130,19 +130,24 @@ function User() {
   const openModalAddUser = () => {
     setIsModalOpenAddUser(true);
   };
+
+  // Function to close modals and reset states
   const closeModalAddUser = () => {
     setTrigger(true);
     setIsModalOpenAddUser(false);
     setIsDeleteModelOpen(false);
   };
+
   //Api Calling
   useEffect(() => {
     if (trigger) {
       dispatch(userList({ header}));
-      setTrigger(false); // Reset trigger to prevent continuous API calls
+     // Reset trigger to prevent continuous API calls 
+      setTrigger(false); 
     }
-
   }, [trigger,closeModalAddUser,delete_response,dispatch,header]);
+
+  // Handling API responses
   useEffect(()=>{
     if(add_SyetemIntegrator){
       showToast(add_SyetemIntegrator.data.message, "success");
@@ -161,7 +166,7 @@ function User() {
   }
 },[response,delete_response,dispatch,add_SyetemIntegrator,add_enterprise_user])
 
- // pop-up
+ // Function to show toast messages
  const showToast = (message, type) => {
   toast[type](message, {
     position: "bottom-left",

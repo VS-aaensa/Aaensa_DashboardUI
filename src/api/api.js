@@ -9,6 +9,9 @@ export const LOGIN = (data) => api.post("/api/auth/login", data);
 // FORGOT PAGE APIss
 export const FORGOTPASS = (data) => api.post("/api/auth/forget-password", data);
 
+// DASHBOARD API
+export const DASHBOARD = (header) => api.get("/api/admin/get/dashboard/details/data", header);
+
 // ENTERPRISE PAGE TABLE API
 export const ENTERPRISETABLE = (header) => api.get("/api/admin/get/enterprise/list/data", header);
 

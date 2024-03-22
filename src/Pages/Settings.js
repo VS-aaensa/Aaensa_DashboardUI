@@ -71,8 +71,7 @@ function Settings() {
   const [selectedOptimizerName, setSelectedOptimizerName] = useState(""); //this is Optimizer Name
 
   // Setting UI
-  const [firstPowerOnObservationTime, setFirstPowerOnObservationTime] =
-    useState(45);
+  const [firstPowerOnObservationTime, setFirstPowerOnObservationTime] = useState(45);
   const [maxObservatioTime, setMaxObservatioTime] = useState(30);
   const [optimizationOnTime, setOptimizationOnTime] = useState(40);
   const [thermostatMonitoringInterval, setThermostatMonitoringInterval] = useState(45);
@@ -83,9 +82,7 @@ function Settings() {
   const [id, setId] = useState("");
 
   //Setting Slice
-  const { add_getCurentData_response, add_getCurentData_error } = useSelector(
-    (state) => state.settingsSlice
-  );
+  const { add_getCurentData_response, add_getCurentData_error } = useSelector((state) => state.settingsSlice);
   console.log({add_getCurentData_response});
   // CUSTOMER ------------------
 
