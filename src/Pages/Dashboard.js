@@ -26,6 +26,7 @@ function Dashboard() {
   const { dashboard_response, dashboard_error } = useSelector(
     (state) => state.dashboardSlice
   );
+  console.log({dashboard_response});
   const header = {
     headers: {
       Authorization: `Bearer ${window.localStorage.getItem("token")}`,
